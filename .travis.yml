@@ -112,7 +112,7 @@ jobs:
         - docker push wordpressdevelop/phpunit:7.3-fpm
         - docker push wordpressdevelop/phpunit:latest
 
-      name: "cli 5.2"
+    - name: "cli 5.2"
       script:
         - docker build -t wordpressdevelop/cli:5.2-fpm 5.2/cli
         - docker images

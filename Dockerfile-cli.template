@@ -2,6 +2,7 @@ FROM wordpressdevelop/php:%%VERSION_TAG%%
 
 %%GENERATED_WARNING%%
 
+%%NEW_PHP%%
 # install wp-cli dependences
 RUN set -ex; \
 	\
@@ -20,8 +21,13 @@ RUN set -ex; \
 	\
 	wp --allow-root --version;
 
-WORKDIR /var/www
-
 ENTRYPOINT [ "/usr/local/bin/wp", "--allow-root" ]
+%%/NEW_PHP%%
+
+%%OLD_PHP%%
+ENTRYPOINT [ "echo", "WP-CLI is not available for PHP %%VERSION_TAG%%." ]
+%%/OLD_PHP%%
+
+WORKDIR /var/www
 
 CMD [ "shell" ]

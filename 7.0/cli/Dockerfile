@@ -6,6 +6,7 @@ FROM wordpressdevelop/php:7.0-fpm
 #
 #
 
+
 # install wp-cli dependences
 RUN set -ex; \
 	\
@@ -24,8 +25,9 @@ RUN set -ex; \
 	\
 	wp --allow-root --version;
 
-WORKDIR /var/www
-
 ENTRYPOINT [ "/usr/local/bin/wp", "--allow-root" ]
+
+
+WORKDIR /var/www
 
 CMD [ "shell" ]

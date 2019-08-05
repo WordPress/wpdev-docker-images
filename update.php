@@ -17,7 +17,7 @@ $latest = '7.3';
  *
  * @param int $phpunit The major version branch of PHPUnit to install on this image.
  *
- * @param array $cli {
+ * @param array|false $cli {
  *     @type string $mysql_client The name of the MySQL client Ubuntu package on this image.
  *     @type string $download_url The download URL for the version of WP-CLI to install on this image.
  * }
@@ -31,10 +31,7 @@ $php_versions = array(
 			'pecl_extensions' => array(),
 		),
 		'phpunit' => 3,
-		'cli' => array(
-			'mysql_client' => 'mysql-client',
-			'download_url' => 'https://github.com/wp-cli/wp-cli/releases/download/v1.5.1/wp-cli-1.5.1.phar',
-		),
+		'cli' => false
 	),
 	'5.3' => array(
 		'php' => array(
@@ -212,7 +209,7 @@ foreach ( $php_versions as $version => $images ) {
 		$dockerfile = str_replace( '%%VERSION_TAG%%', $version_tag, $dockerfile );
 
 		if ( $image === 'php' ) {
-			// Repace tags inside the PHP Dockerfile template.
+			// Replace tags inside the PHP Dockerfile template.
 			$dockerfile = str_replace( '%%BASE_NAME%%', $config['base_name'], $dockerfile );
 
 			if ( $config['gd'] || $config['extensions'] || $config['pecl_extensions'] ) {
@@ -240,12 +237,18 @@ foreach ( $php_versions as $version => $images ) {
 				$dockerfile = str_replace( '%%PECL_EXTENSIONS%%', $pecl_extensions, $dockerfile );
 			}
 		} elseif ( $image === 'phpunit' ) {
-			// Repace tags inside the PHPUnit Dockerfile template.
+			// Replace tags inside the PHPUnit Dockerfile template.
 			$dockerfile = str_replace( '%%PHPUNIT_VERSION%%', $config, $dockerfile );
 		} elseif ( $image === 'cli' ) {
-			// Repace tags inside the WP-CLI Dockerfile template.
-			$dockerfile = str_replace( '%%MYSQL_CLIENT%%', $config['mysql_client'], $dockerfile );
-			$dockerfile = str_replace( '%%DOWNLOAD_URL%%', $config['download_url'], $dockerfile );
+			// Replace tags inside the WP-CLI Dockerfile template.
+			if ( $config ) {
+				$dockerfile = preg_replace( '|\n%%OLD_PHP%%.*%%/OLD_PHP%%\n|s', '', $dockerfile );
+				$dockerfile = str_replace( '%%MYSQL_CLIENT%%', $config['mysql_client'], $dockerfile );
+				$dockerfile = str_replace( '%%DOWNLOAD_URL%%', $config['download_url'], $dockerfile );
+			} else {
+				// WP-CLI isn't available for this version of PHP.
+				$dockerfile = preg_replace( '|\n%%NEW_PHP%%.*%%/NEW_PHP%%\n|s', '', $dockerfile );
+			}
 		}
 
 		// Cleanup any leftover tags.
@@ -287,9 +290,9 @@ foreach ( $php_versions as $version => $images ) {
 
 	// Generate the YML-formatted list of build commands for each of the images.
 	foreach ( array( 'php', 'phpunit', 'cli' ) as $image ) {
-		$build_strings[ $image ] = array_reduce( $build_cmds[ $image ], function( $string, $cmds ) {
+		$build_strings[ $image ] = array_reduce( $build_cmds[ $image ], function( $string, $cmds ) use ( $image ) {
 			$name = array_shift( $cmds );
-			if ( $string === '' ) {
+			if ( $string === '' && $image !== 'cli' ) {
 				$string .= "      name: \"$name\"\n";
 			} else {
 				$string .= "    - name: \"$name\"\n";

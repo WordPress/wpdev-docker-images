@@ -6,26 +6,10 @@ FROM wordpressdevelop/php:5.2-fpm
 #
 #
 
-# install wp-cli dependences
-RUN set -ex; \
-	\
-	apt-get update; \
-	\
-	apt-get install -y --no-install-recommends \
-		less \
-		mysql-client \
-	;
 
-RUN set -ex; \
-	\
-	curl -L -o /usr/local/bin/wp https://github.com/wp-cli/wp-cli/releases/download/v1.5.1/wp-cli-1.5.1.phar; \
-	\
-	chmod +x /usr/local/bin/wp; \
-	\
-	wp --allow-root --version;
+ENTRYPOINT [ "echo", "WP-CLI is not available for PHP 5.2-fpm." ]
+
 
 WORKDIR /var/www
-
-ENTRYPOINT [ "/usr/local/bin/wp", "--allow-root" ]
 
 CMD [ "shell" ]
