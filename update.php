@@ -266,12 +266,17 @@ foreach ( $php_versions as $version => $images ) {
 		if ( $version === $latest ) {
 			$build_cmd .= " -t wordpressdevelop/$image:latest";
 		}
-		$build_cmds[ $image ][] = "$build_cmd $version/$image";
-		$build_cmds[ $image ][] = 'docker images';
-		$build_cmds[ $image ][] = "docker push wordpressdevelop/$image:$version-fpm";
+		$build_cmd_list = array(
+			"$image $version",
+			"$build_cmd $version/$image",
+			'docker images',
+			"docker push wordpressdevelop/$image:$version-fpm",
+		);
 		if ( $version === $latest ) {
-			$build_cmds[ $image ][] = "docker push wordpressdevelop/$image:latest";
+			$build_cmd_list[] = "docker push wordpressdevelop/$image:latest";
 		}
+
+		$build_cmds[ $image ][] = $build_cmd_list;
 
 		echo "✅\n";
 	}
@@ -282,8 +287,19 @@ foreach ( $php_versions as $version => $images ) {
 
 	// Generate the YML-formatted list of build commands for each of the images.
 	foreach ( array( 'php', 'phpunit', 'cli' ) as $image ) {
-		$build_strings[ $image ] = array_reduce( $build_cmds[ $image ], function( $string, $cmd ) {
-			return "$string      - $cmd\n";
+		$build_strings[ $image ] = array_reduce( $build_cmds[ $image ], function( $string, $cmds ) {
+			$name = array_shift( $cmds );
+			if ( $string === '' ) {
+				$string .= "      name: \"$name\"\n";
+			} else {
+				$string .= "    - name: \"$name\"\n";
+			}
+			$string .= "      script:\n";
+			foreach( $cmds as $cmd ) {
+				$string .= "        - $cmd\n";
+			}
+
+			return $string;
 		}, '' );
 	}
 	$travis_template = str_replace( '%%BUILD_PHP_IMAGES%%', $build_strings['php'], $travis_template );
