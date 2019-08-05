@@ -63,6 +63,11 @@ jobs:
         - docker images
         - docker push wordpressdevelop/php:7.3-fpm
         - docker push wordpressdevelop/php:latest
+    - name: "php 7.4"
+      script:
+        - docker build -t wordpressdevelop/php:7.4-fpm 7.4/php
+        - docker images
+        - docker push wordpressdevelop/php:7.4-fpm
 
     - stage: "Build child images"
       name: "phpunit 5.2"
@@ -111,6 +116,11 @@ jobs:
         - docker images
         - docker push wordpressdevelop/phpunit:7.3-fpm
         - docker push wordpressdevelop/phpunit:latest
+    - name: "phpunit 7.4"
+      script:
+        - docker build -t wordpressdevelop/phpunit:7.4-fpm 7.4/phpunit
+        - docker images
+        - docker push wordpressdevelop/phpunit:7.4-fpm
 
     - name: "cli 5.2"
       script:
@@ -158,4 +168,9 @@ jobs:
         - docker images
         - docker push wordpressdevelop/cli:7.3-fpm
         - docker push wordpressdevelop/cli:latest
+    - name: "cli 7.4"
+      script:
+        - docker build -t wordpressdevelop/cli:7.4-fpm 7.4/cli
+        - docker images
+        - docker push wordpressdevelop/cli:7.4-fpm
 
