@@ -1,0 +1,13 @@
+FROM %%BASE_NAME%%
+
+%%GENERATED_WARNING%%
+
+%%INSTALL_EXTENSIONS%%
+
+COPY entrypoint.sh /entrypoint.sh
+
+RUN chmod +x /entrypoint.sh
+
+ENTRYPOINT [ "/entrypoint.sh" ]
+
+CMD [ "php-fpm" ]

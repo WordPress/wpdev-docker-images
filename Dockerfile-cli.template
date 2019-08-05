@@ -1,0 +1,27 @@
+FROM garypendergast/wordpress-develop-php:%%VERSION_TAG%%
+
+%%GENERATED_WARNING%%
+
+# install wp-cli dependences
+RUN set -ex; \
+	\
+	apt-get update; \
+	\
+	apt-get install -y --no-install-recommends \
+		less \
+		%%MYSQL_CLIENT%% \
+	;
+
+RUN set -ex; \
+	\
+	curl -L -o /usr/local/bin/wp %%DOWNLOAD_URL%%; \
+	\
+	chmod +x /usr/local/bin/wp; \
+	\
+	wp --allow-root --version;
+
+WORKDIR /var/www
+
+ENTRYPOINT [ "/usr/local/bin/wp", "--allow-root" ]
+
+CMD [ "shell" ]

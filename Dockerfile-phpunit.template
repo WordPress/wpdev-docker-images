@@ -1,0 +1,9 @@
+FROM garypendergast/wordpress-develop-php:%%VERSION_TAG%%
+
+%%GENERATED_WARNING%%
+
+RUN curl -sL https://phar.phpunit.de/phpunit-%%PHPUNIT_VERSION%%.phar > /usr/local/bin/phpunit && chmod +x /usr/local/bin/phpunit
+
+WORKDIR /wordpress-develop
+
+CMD /usr/local/bin/phpunit
