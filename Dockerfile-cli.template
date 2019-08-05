@@ -25,7 +25,7 @@ ENTRYPOINT [ "/usr/local/bin/wp", "--allow-root" ]
 %%/NEW_PHP%%
 
 %%OLD_PHP%%
-ENTRYPOINT [ "echo", "WP-CLI is not available for PHP %%VERSION_TAG%%." ]
+ENTRYPOINT [ "echo", "WP-CLI is not available for PHP %%VERSION_TAG%%.\nCommand was not executed:" ]
 %%/OLD_PHP%%
 
 WORKDIR /var/www

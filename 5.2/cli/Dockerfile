@@ -7,7 +7,7 @@ FROM wordpressdevelop/php:5.2-fpm
 #
 
 
-ENTRYPOINT [ "echo", "WP-CLI is not available for PHP 5.2-fpm." ]
+ENTRYPOINT [ "echo", "WP-CLI is not available for PHP 5.2-fpm.\nCommand was not executed:" ]
 
 
 WORKDIR /var/www
