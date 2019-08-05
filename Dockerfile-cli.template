@@ -1,4 +1,4 @@
-FROM garypendergast/wordpress-develop-php:%%VERSION_TAG%%
+FROM wordpressdevelop/php:%%VERSION_TAG%%
 
 %%GENERATED_WARNING%%
 

@@ -1,4 +1,4 @@
-FROM garypendergast/wordpress-develop-php:5.6-fpm
+FROM wordpressdevelop/php:5.6-fpm
 
 ##########################################################################
 #

@@ -1,0 +1,22 @@
+%%GENERATED_WARNING%%
+
+services:
+  - docker
+
+env:
+  global:
+    DOCKER_USERNAME: garypendergast
+    secure: Fw5mRjdzDkwfsqiePDCXA+gFVFMvi7qyfLNJMcL2DJbRgSKkzk5vCJe9V9zjMBC0Y9jUWvQbBCFvBk+ydjSBKnRxysart/ahf9vWRV+zU2NtjbMukC74YypeEbpA5nKn3mLzewGJFFunydRtpS26J3aGCCAtD/4VTIao9LptPpsDyYdmJVjbKqxCShTGzOpZQQyGYk5ReaLCmRrKIiet3LcOJUeT3TVGDr9gT/tKjNHRCSx7wPWzwz9uYMD9KJR5MOE72quTKS4uXuekLpECdQ4eDW3EoDu9Bor7NXXy2iEz8fINqVisnXiQwRizG7vu0bImzw5KHMH7vDvXL66i+1yyhyBo2+6IIaB1cMtLM6OaihmDwa3GmKOEyr2G0TSY9nbwRtI2tw5vBBovm20FmJ5n19/fsaUvaXqS81MNJhluNO4ZqYYXICXHTfWxRdt4BH5l40STNzwPZhDavHjhTpodsUFBP8J5awOSAAhVWfTnoFI6cdOgY33fKT7cB8b7cMQq0lTVdtTOg9z+WxM+pBLNhLDFC5FmWFAY7PH2DDM8IkexV3xurRpNlMpL5amS64aqmvP/sHNiEFr5CujCrJTpeyf/pAjC/7QdUW7Gti5vat/omWg6KqNKpZrtxxb5VS1OohAD+8g1SoKUTx5nVR0Ukl6vNOfycFUBko/6jjw=
+
+before_script: echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+
+jobs:
+  include:
+    - stage: build base php images
+      script:
+%%BUILD_PHP_IMAGES%%
+    - stage: build child images
+      script:
+%%BUILD_PHPUNIT_IMAGES%%
+    - script:
+%%BUILD_CLI_IMAGES%%

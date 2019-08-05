@@ -1,4 +1,4 @@
-FROM garypendergast/wordpress-develop-php:7.0-fpm
+FROM wordpressdevelop/php:7.0-fpm
 
 ##########################################################################
 #

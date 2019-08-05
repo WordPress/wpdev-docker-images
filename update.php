@@ -142,8 +142,6 @@ $php_versions = array(
 	),
 );
 
-$php_versions['latest'] = $php_versions[ $latest ];
-
 // A warning that will be added to each Dockerfile, to ensure folks don't edit them directly.
 $generated_warning = <<<EOT
 ##########################################################################
@@ -182,6 +180,12 @@ $templates = array(
 	'php'     => file_get_contents( 'Dockerfile-php.template' ),
 	'phpunit' => file_get_contents( 'Dockerfile-phpunit.template' ),
 	'cli'     => file_get_contents( 'Dockerfile-cli.template' ),
+);
+
+$build_cmds = array(
+	'php'     => array(),
+	'phpunit' => array(),
+	'cli'     => array(),
 );
 
 // Loop through each PHP version, and generate the Dockerfiles.
@@ -257,6 +261,36 @@ foreach ( $php_versions as $version => $images ) {
 			copy( "entrypoint-$image.sh", "$version/$image/entrypoint.sh" );
 		}
 
+		// Generate the build and push commands for this image/version.
+		$build_cmd = "docker build -t wordpressdevelop/$image:$version-fpm";
+		if ( $version === $latest ) {
+			$build_cmd .= " -t wordpressdevelop/$image:latest";
+		}
+		$build_cmds[ $image ][] = "$build_cmd $version/$image";
+		$build_cmds[ $image ][] = 'docker images';
+		$build_cmds[ $image ][] = "docker push wordpressdevelop/$image:$version-fpm";
+		if ( $version === $latest ) {
+			$build_cmds[ $image ][] = "docker push wordpressdevelop/$image:latest";
+		}
+
 		echo "✅\n";
 	}
+
+	// Load the .travis.yml template.
+	$travis_template = file_get_contents( '.travis.yml-template' );
+	$travis_template = str_replace( '%%GENERATED_WARNING%%', $generated_warning, $travis_template );
+
+	// Generate the YML-formatted list of build commands for each of the images.
+	foreach ( array( 'php', 'phpunit', 'cli' ) as $image ) {
+		$build_strings[ $image ] = array_reduce( $build_cmds[ $image ], function( $string, $cmd ) {
+			return "$string      - $cmd\n";
+		}, '' );
+	}
+	$travis_template = str_replace( '%%BUILD_PHP_IMAGES%%', $build_strings['php'], $travis_template );
+	$travis_template = str_replace( '%%BUILD_PHPUNIT_IMAGES%%', $build_strings['phpunit'], $travis_template );
+	$travis_template = str_replace( '%%BUILD_CLI_IMAGES%%', $build_strings['cli'], $travis_template );
+
+	$fh = fopen( ".travis.yml", 'w' );
+	fwrite( $fh, $travis_template );
+	fclose( $fh );
 }
