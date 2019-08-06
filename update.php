@@ -142,7 +142,7 @@ $php_versions = array(
 			'base_name'       => 'php:7.4-rc-fpm',
 			'gd'              => true,
 			'extensions'      => array( 'gd', 'opcache', 'mysqli', 'zip' ),
-			'pecl_extensions' => array( 'xdebug-2.7.2' ),
+			'pecl_extensions' => array( 'xdebug-2.8.0beta1' ),
 		),
 		'phpunit' => 7,
 		'cli' => array(
