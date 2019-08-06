@@ -20,7 +20,7 @@ RUN set -ex; \
 	docker-php-ext-configure gd --with-png-dir=/usr --with-jpeg-dir=/usr; \
 	docker-php-ext-install gd opcache mysqli zip; \
 	\
-	pecl install xdebug-2.7.2;
+	pecl install xdebug-2.8.0beta1;
 
 COPY entrypoint.sh /entrypoint.sh
 
