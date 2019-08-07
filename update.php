@@ -150,6 +150,19 @@ $php_versions = array(
 			'download_url' => 'https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar',
 		),
 	),
+	'8.0' => array(
+		'php' => array(
+			'base_name'       => 'devilbox/php-fpm-8.0:latest',
+			'gd'              => true,
+			'extensions'      => array(),
+			'pecl_extensions' => array(),
+		),
+		'phpunit' => 7,
+		'cli' => array(
+			'mysql_client' => 'virtual-mysql-client',
+			'download_url' => 'https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar',
+		),
+	),
 );
 
 // A warning that will be added to each Dockerfile, to ensure folks don't edit them directly.
