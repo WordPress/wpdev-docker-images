@@ -150,6 +150,19 @@ $php_versions = array(
 			'download_url' => 'https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar',
 		),
 	),
+	'8.0' => array(
+		'php' => array(
+			'base_name'       => 'devilbox/php-fpm-8.0:latest',
+			'gd'              => false,
+			'extensions'      => array( 'mysqli' ),
+			'pecl_extensions' => array(),
+		),
+		'phpunit' => 7,
+		'cli' => array(
+			'mysql_client' => 'virtual-mysql-client',
+			'download_url' => 'https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar',
+		),
+	),
 );
 
 // A warning that will be added to each Dockerfile, to ensure folks don't edit them directly.
@@ -166,10 +179,7 @@ $install_extensions = <<<EOT
 # install the PHP extensions we need
 RUN set -ex; \
 	\
-%%INSTALL_GD%%
-	%%EXTENSIONS%% \
-	\
-%%PECL_EXTENSIONS%%
+%%INSTALL_GD%%%%EXTENSIONS%%%%PECL_EXTENSIONS%%
 EOT;
 
 $install_gd = <<<EOT
@@ -181,7 +191,7 @@ $install_gd = <<<EOT
 		libzip-dev \
 	; \
 	\
-	docker-php-ext-configure gd --with-png-dir=/usr --with-jpeg-dir=/usr; \
+	docker-php-ext-configure gd --with-png-dir=/usr --with-jpeg-dir=/usr;
 EOT;
 
 
@@ -234,7 +244,7 @@ foreach ( $php_versions as $version => $images ) {
 			}
 
 			if ( $config['extensions'] ) {
-				$extensions = 'docker-php-ext-install ' . implode( $config['extensions'], ' ' ) . ";";
+				$extensions = " \\\n\tdocker-php-ext-install " . implode( $config['extensions'], ' ' ) . ";";
 				$dockerfile = str_replace( '%%EXTENSIONS%%', $extensions, $dockerfile );
 			}
 
@@ -247,7 +257,7 @@ foreach ( $php_versions as $version => $images ) {
 					return "$command\tpecl install $extension;";
 				}, '' );
 
-				$dockerfile = str_replace( '%%PECL_EXTENSIONS%%', $pecl_extensions, $dockerfile );
+				$dockerfile = str_replace( '%%PECL_EXTENSIONS%%', " \\\n\t\\\n$pecl_extensions", $dockerfile );
 			}
 		} elseif ( $image === 'phpunit' ) {
 			// Replace tags inside the PHPUnit Dockerfile template.
