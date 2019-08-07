@@ -278,7 +278,8 @@ foreach ( $php_versions as $version => $images ) {
 		}
 
 		// Generate the build and push commands for this image/version.
-		$build_cmd = "docker build -t \$PACKAGE_REGISTRY/$image:$version-fpm\$PR_TAG";
+		$build_cmd  = "docker build --build-arg PACKAGE_REGISTRY=\$PACKAGE_REGISTRY --build-arg PR_TAG=\$PR_TAG";
+		$build_cmd .= " -t \$PACKAGE_REGISTRY/$image:$version-fpm\$PR_TAG";
 		if ( $version === $latest ) {
 			$build_cmd .= " -t \$PACKAGE_REGISTRY/$image:latest\$PR_TAG";
 		}

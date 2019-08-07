@@ -1,5 +1,7 @@
 %%GENERATED_WARNING%%
 
+if: tag IS blank
+
 services:
   - docker
 
