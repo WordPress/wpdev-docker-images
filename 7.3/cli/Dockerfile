@@ -1,4 +1,6 @@
-FROM wordpressdevelop/php:7.3-fpm
+ARG PACKAGE_REGISTRY
+ARG PR_TAG
+FROM $PACKAGE_REGISTRY/php:7.3-fpm$PR_TAG
 
 ##########################################################################
 #
