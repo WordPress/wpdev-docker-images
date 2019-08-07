@@ -1,4 +1,6 @@
-FROM wordpressdevelop/php:5.2-fpm
+ARG PACKAGE_REGISTRY
+ARG PR_TAG
+FROM $PACKAGE_REGISTRY/php:5.2-fpm$PR_TAG
 
 ##########################################################################
 #
