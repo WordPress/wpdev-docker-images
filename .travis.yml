@@ -24,10 +24,6 @@ env:
     - PACKAGE_REGISTRY: $(if [ "$PACKAGE_REGISTRY_HOST" != "" ]; then echo "${PACKAGE_REGISTRY_HOST}/wordpress/wpdev-docker-images"; else echo "wordpressdevelop"; fi)
 
 before_script:
-  - echo $TRAVIS_PULL_REQUEST
-  - echo $PR_TAG
-  - echo $PACKAGE_REGISTRY_HOST
-  - echo $PACKAGE_REGISTRY
   - |
     if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then
       echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
@@ -40,158 +36,158 @@ jobs:
     - stage: "Build base PHP images"
       name: "php 5.2"
       script:
-        - docker build -t $PACKAGE_REGISTRY/php:5.2-fpm 5.2/php
+        - docker build -t $PACKAGE_REGISTRY/php:5.2-fpm$PR_TAG 5.2/php
         - docker images
-        - docker push $PACKAGE_REGISTRY/php:5.2-fpm
+        - docker push $PACKAGE_REGISTRY/php:5.2-fpm$PR_TAG
     - name: "php 5.3"
       script:
-        - docker build -t $PACKAGE_REGISTRY/php:5.3-fpm 5.3/php
+        - docker build -t $PACKAGE_REGISTRY/php:5.3-fpm$PR_TAG 5.3/php
         - docker images
-        - docker push $PACKAGE_REGISTRY/php:5.3-fpm
+        - docker push $PACKAGE_REGISTRY/php:5.3-fpm$PR_TAG
     - name: "php 5.4"
       script:
-        - docker build -t $PACKAGE_REGISTRY/php:5.4-fpm 5.4/php
+        - docker build -t $PACKAGE_REGISTRY/php:5.4-fpm$PR_TAG 5.4/php
         - docker images
-        - docker push $PACKAGE_REGISTRY/php:5.4-fpm
+        - docker push $PACKAGE_REGISTRY/php:5.4-fpm$PR_TAG
     - name: "php 5.5"
       script:
-        - docker build -t $PACKAGE_REGISTRY/php:5.5-fpm 5.5/php
+        - docker build -t $PACKAGE_REGISTRY/php:5.5-fpm$PR_TAG 5.5/php
         - docker images
-        - docker push $PACKAGE_REGISTRY/php:5.5-fpm
+        - docker push $PACKAGE_REGISTRY/php:5.5-fpm$PR_TAG
     - name: "php 5.6"
       script:
-        - docker build -t $PACKAGE_REGISTRY/php:5.6-fpm 5.6/php
+        - docker build -t $PACKAGE_REGISTRY/php:5.6-fpm$PR_TAG 5.6/php
         - docker images
-        - docker push $PACKAGE_REGISTRY/php:5.6-fpm
+        - docker push $PACKAGE_REGISTRY/php:5.6-fpm$PR_TAG
     - name: "php 7.0"
       script:
-        - docker build -t $PACKAGE_REGISTRY/php:7.0-fpm 7.0/php
+        - docker build -t $PACKAGE_REGISTRY/php:7.0-fpm$PR_TAG 7.0/php
         - docker images
-        - docker push $PACKAGE_REGISTRY/php:7.0-fpm
+        - docker push $PACKAGE_REGISTRY/php:7.0-fpm$PR_TAG
     - name: "php 7.1"
       script:
-        - docker build -t $PACKAGE_REGISTRY/php:7.1-fpm 7.1/php
+        - docker build -t $PACKAGE_REGISTRY/php:7.1-fpm$PR_TAG 7.1/php
         - docker images
-        - docker push $PACKAGE_REGISTRY/php:7.1-fpm
+        - docker push $PACKAGE_REGISTRY/php:7.1-fpm$PR_TAG
     - name: "php 7.2"
       script:
-        - docker build -t $PACKAGE_REGISTRY/php:7.2-fpm 7.2/php
+        - docker build -t $PACKAGE_REGISTRY/php:7.2-fpm$PR_TAG 7.2/php
         - docker images
-        - docker push $PACKAGE_REGISTRY/php:7.2-fpm
+        - docker push $PACKAGE_REGISTRY/php:7.2-fpm$PR_TAG
     - name: "php 7.3"
       script:
-        - docker build -t $PACKAGE_REGISTRY/php:7.3-fpm -t $PACKAGE_REGISTRY/php:latest 7.3/php
+        - docker build -t $PACKAGE_REGISTRY/php:7.3-fpm$PR_TAG -t $PACKAGE_REGISTRY/php:latest$PR_TAG 7.3/php
         - docker images
-        - docker push $PACKAGE_REGISTRY/php:7.3-fpm
-        - docker push $PACKAGE_REGISTRY/php:latest
+        - docker push $PACKAGE_REGISTRY/php:7.3-fpm$PR_TAG
+        - docker push $PACKAGE_REGISTRY/php:latest$PR_TAG
     - name: "php 7.4"
       script:
-        - docker build -t $PACKAGE_REGISTRY/php:7.4-fpm 7.4/php
+        - docker build -t $PACKAGE_REGISTRY/php:7.4-fpm$PR_TAG 7.4/php
         - docker images
-        - docker push $PACKAGE_REGISTRY/php:7.4-fpm
+        - docker push $PACKAGE_REGISTRY/php:7.4-fpm$PR_TAG
 
     - stage: "Build child images"
       name: "phpunit 5.2"
       script:
-        - docker build -t $PACKAGE_REGISTRY/phpunit:5.2-fpm 5.2/phpunit
+        - docker build -t $PACKAGE_REGISTRY/phpunit:5.2-fpm$PR_TAG 5.2/phpunit
         - docker images
-        - docker push $PACKAGE_REGISTRY/phpunit:5.2-fpm
+        - docker push $PACKAGE_REGISTRY/phpunit:5.2-fpm$PR_TAG
     - name: "phpunit 5.3"
       script:
-        - docker build -t $PACKAGE_REGISTRY/phpunit:5.3-fpm 5.3/phpunit
+        - docker build -t $PACKAGE_REGISTRY/phpunit:5.3-fpm$PR_TAG 5.3/phpunit
         - docker images
-        - docker push $PACKAGE_REGISTRY/phpunit:5.3-fpm
+        - docker push $PACKAGE_REGISTRY/phpunit:5.3-fpm$PR_TAG
     - name: "phpunit 5.4"
       script:
-        - docker build -t $PACKAGE_REGISTRY/phpunit:5.4-fpm 5.4/phpunit
+        - docker build -t $PACKAGE_REGISTRY/phpunit:5.4-fpm$PR_TAG 5.4/phpunit
         - docker images
-        - docker push $PACKAGE_REGISTRY/phpunit:5.4-fpm
+        - docker push $PACKAGE_REGISTRY/phpunit:5.4-fpm$PR_TAG
     - name: "phpunit 5.5"
       script:
-        - docker build -t $PACKAGE_REGISTRY/phpunit:5.5-fpm 5.5/phpunit
+        - docker build -t $PACKAGE_REGISTRY/phpunit:5.5-fpm$PR_TAG 5.5/phpunit
         - docker images
-        - docker push $PACKAGE_REGISTRY/phpunit:5.5-fpm
+        - docker push $PACKAGE_REGISTRY/phpunit:5.5-fpm$PR_TAG
     - name: "phpunit 5.6"
       script:
-        - docker build -t $PACKAGE_REGISTRY/phpunit:5.6-fpm 5.6/phpunit
+        - docker build -t $PACKAGE_REGISTRY/phpunit:5.6-fpm$PR_TAG 5.6/phpunit
         - docker images
-        - docker push $PACKAGE_REGISTRY/phpunit:5.6-fpm
+        - docker push $PACKAGE_REGISTRY/phpunit:5.6-fpm$PR_TAG
     - name: "phpunit 7.0"
       script:
-        - docker build -t $PACKAGE_REGISTRY/phpunit:7.0-fpm 7.0/phpunit
+        - docker build -t $PACKAGE_REGISTRY/phpunit:7.0-fpm$PR_TAG 7.0/phpunit
         - docker images
-        - docker push $PACKAGE_REGISTRY/phpunit:7.0-fpm
+        - docker push $PACKAGE_REGISTRY/phpunit:7.0-fpm$PR_TAG
     - name: "phpunit 7.1"
       script:
-        - docker build -t $PACKAGE_REGISTRY/phpunit:7.1-fpm 7.1/phpunit
+        - docker build -t $PACKAGE_REGISTRY/phpunit:7.1-fpm$PR_TAG 7.1/phpunit
         - docker images
-        - docker push $PACKAGE_REGISTRY/phpunit:7.1-fpm
+        - docker push $PACKAGE_REGISTRY/phpunit:7.1-fpm$PR_TAG
     - name: "phpunit 7.2"
       script:
-        - docker build -t $PACKAGE_REGISTRY/phpunit:7.2-fpm 7.2/phpunit
+        - docker build -t $PACKAGE_REGISTRY/phpunit:7.2-fpm$PR_TAG 7.2/phpunit
         - docker images
-        - docker push $PACKAGE_REGISTRY/phpunit:7.2-fpm
+        - docker push $PACKAGE_REGISTRY/phpunit:7.2-fpm$PR_TAG
     - name: "phpunit 7.3"
       script:
-        - docker build -t $PACKAGE_REGISTRY/phpunit:7.3-fpm -t $PACKAGE_REGISTRY/phpunit:latest 7.3/phpunit
+        - docker build -t $PACKAGE_REGISTRY/phpunit:7.3-fpm$PR_TAG -t $PACKAGE_REGISTRY/phpunit:latest$PR_TAG 7.3/phpunit
         - docker images
-        - docker push $PACKAGE_REGISTRY/phpunit:7.3-fpm
-        - docker push $PACKAGE_REGISTRY/phpunit:latest
+        - docker push $PACKAGE_REGISTRY/phpunit:7.3-fpm$PR_TAG
+        - docker push $PACKAGE_REGISTRY/phpunit:latest$PR_TAG
     - name: "phpunit 7.4"
       script:
-        - docker build -t $PACKAGE_REGISTRY/phpunit:7.4-fpm 7.4/phpunit
+        - docker build -t $PACKAGE_REGISTRY/phpunit:7.4-fpm$PR_TAG 7.4/phpunit
         - docker images
-        - docker push $PACKAGE_REGISTRY/phpunit:7.4-fpm
+        - docker push $PACKAGE_REGISTRY/phpunit:7.4-fpm$PR_TAG
 
     - name: "cli 5.2"
       script:
-        - docker build -t $PACKAGE_REGISTRY/cli:5.2-fpm 5.2/cli
+        - docker build -t $PACKAGE_REGISTRY/cli:5.2-fpm$PR_TAG 5.2/cli
         - docker images
-        - docker push $PACKAGE_REGISTRY/cli:5.2-fpm
+        - docker push $PACKAGE_REGISTRY/cli:5.2-fpm$PR_TAG
     - name: "cli 5.3"
       script:
-        - docker build -t $PACKAGE_REGISTRY/cli:5.3-fpm 5.3/cli
+        - docker build -t $PACKAGE_REGISTRY/cli:5.3-fpm$PR_TAG 5.3/cli
         - docker images
-        - docker push $PACKAGE_REGISTRY/cli:5.3-fpm
+        - docker push $PACKAGE_REGISTRY/cli:5.3-fpm$PR_TAG
     - name: "cli 5.4"
       script:
-        - docker build -t $PACKAGE_REGISTRY/cli:5.4-fpm 5.4/cli
+        - docker build -t $PACKAGE_REGISTRY/cli:5.4-fpm$PR_TAG 5.4/cli
         - docker images
-        - docker push $PACKAGE_REGISTRY/cli:5.4-fpm
+        - docker push $PACKAGE_REGISTRY/cli:5.4-fpm$PR_TAG
     - name: "cli 5.5"
       script:
-        - docker build -t $PACKAGE_REGISTRY/cli:5.5-fpm 5.5/cli
+        - docker build -t $PACKAGE_REGISTRY/cli:5.5-fpm$PR_TAG 5.5/cli
         - docker images
-        - docker push $PACKAGE_REGISTRY/cli:5.5-fpm
+        - docker push $PACKAGE_REGISTRY/cli:5.5-fpm$PR_TAG
     - name: "cli 5.6"
       script:
-        - docker build -t $PACKAGE_REGISTRY/cli:5.6-fpm 5.6/cli
+        - docker build -t $PACKAGE_REGISTRY/cli:5.6-fpm$PR_TAG 5.6/cli
         - docker images
-        - docker push $PACKAGE_REGISTRY/cli:5.6-fpm
+        - docker push $PACKAGE_REGISTRY/cli:5.6-fpm$PR_TAG
     - name: "cli 7.0"
       script:
-        - docker build -t $PACKAGE_REGISTRY/cli:7.0-fpm 7.0/cli
+        - docker build -t $PACKAGE_REGISTRY/cli:7.0-fpm$PR_TAG 7.0/cli
         - docker images
-        - docker push $PACKAGE_REGISTRY/cli:7.0-fpm
+        - docker push $PACKAGE_REGISTRY/cli:7.0-fpm$PR_TAG
     - name: "cli 7.1"
       script:
-        - docker build -t $PACKAGE_REGISTRY/cli:7.1-fpm 7.1/cli
+        - docker build -t $PACKAGE_REGISTRY/cli:7.1-fpm$PR_TAG 7.1/cli
         - docker images
-        - docker push $PACKAGE_REGISTRY/cli:7.1-fpm
+        - docker push $PACKAGE_REGISTRY/cli:7.1-fpm$PR_TAG
     - name: "cli 7.2"
       script:
-        - docker build -t $PACKAGE_REGISTRY/cli:7.2-fpm 7.2/cli
+        - docker build -t $PACKAGE_REGISTRY/cli:7.2-fpm$PR_TAG 7.2/cli
         - docker images
-        - docker push $PACKAGE_REGISTRY/cli:7.2-fpm
+        - docker push $PACKAGE_REGISTRY/cli:7.2-fpm$PR_TAG
     - name: "cli 7.3"
       script:
-        - docker build -t $PACKAGE_REGISTRY/cli:7.3-fpm -t $PACKAGE_REGISTRY/cli:latest 7.3/cli
+        - docker build -t $PACKAGE_REGISTRY/cli:7.3-fpm$PR_TAG -t $PACKAGE_REGISTRY/cli:latest$PR_TAG 7.3/cli
         - docker images
-        - docker push $PACKAGE_REGISTRY/cli:7.3-fpm
-        - docker push $PACKAGE_REGISTRY/cli:latest
+        - docker push $PACKAGE_REGISTRY/cli:7.3-fpm$PR_TAG
+        - docker push $PACKAGE_REGISTRY/cli:latest$PR_TAG
     - name: "cli 7.4"
       script:
-        - docker build -t $PACKAGE_REGISTRY/cli:7.4-fpm 7.4/cli
+        - docker build -t $PACKAGE_REGISTRY/cli:7.4-fpm$PR_TAG 7.4/cli
         - docker images
-        - docker push $PACKAGE_REGISTRY/cli:7.4-fpm
+        - docker push $PACKAGE_REGISTRY/cli:7.4-fpm$PR_TAG
 
