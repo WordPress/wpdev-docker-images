@@ -10,7 +10,7 @@ FROM devilbox/php-fpm-8.0:latest
 RUN set -ex; \
 	\
  \
-	docker-php-ext-install mysqli;
+	docker-php-ext-install mysqli memcached;
 
 COPY entrypoint.sh /entrypoint.sh
 

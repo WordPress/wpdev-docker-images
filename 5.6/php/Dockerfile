@@ -18,7 +18,7 @@ RUN set -ex; \
 	; \
 	\
 	docker-php-ext-configure gd --with-png-dir=/usr --with-jpeg-dir=/usr; \
-	docker-php-ext-install gd mysql mysqli zip; \
+	docker-php-ext-install gd mysql mysqli zip memcached; \
 	\
 	pecl install xdebug-2.5.5;
 

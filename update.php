@@ -50,7 +50,7 @@ $php_versions = array(
 		'php' => array(
 			'base_name'       => 'php:5.4-fpm',
 			'gd'              => true,
-			'extensions'      => array( 'gd', 'mysql', 'mysqli', 'zip' ),
+			'extensions'      => array( 'gd', 'mysql', 'mysqli', 'zip', 'memcached' ),
 			'pecl_extensions' => array( 'xdebug-2.4.1' ),
 		),
 		'phpunit' => 4,
@@ -63,7 +63,7 @@ $php_versions = array(
 		'php' => array(
 			'base_name'       => 'php:5.5-fpm',
 			'gd'              => true,
-			'extensions'      => array( 'gd', 'mysql', 'mysqli', 'zip' ),
+			'extensions'      => array( 'gd', 'mysql', 'mysqli', 'zip', 'memcached' ),
 			'pecl_extensions' => array( 'xdebug-2.5.5' ),
 		),
 		'phpunit' => 4,
@@ -76,7 +76,7 @@ $php_versions = array(
 		'php' => array(
 			'base_name'       => 'php:5.6-fpm',
 			'gd'              => true,
-			'extensions'      => array( 'gd', 'mysql', 'mysqli', 'zip' ),
+			'extensions'      => array( 'gd', 'mysql', 'mysqli', 'zip', 'memcached' ),
 			'pecl_extensions' => array( 'xdebug-2.5.5' ),
 		),
 		'phpunit' => 5,
@@ -89,7 +89,7 @@ $php_versions = array(
 		'php' => array(
 			'base_name'       => 'php:7.0-fpm',
 			'gd'              => true,
-			'extensions'      => array( 'gd', 'opcache', 'mysqli', 'zip' ),
+			'extensions'      => array( 'gd', 'opcache', 'mysqli', 'zip', 'memcached' ),
 			'pecl_extensions' => array( 'xdebug-2.7.2' ),
 		),
 		'phpunit' => 6,
@@ -102,7 +102,7 @@ $php_versions = array(
 		'php' => array(
 			'base_name'       => 'php:7.1-fpm',
 			'gd'              => true,
-			'extensions'      => array( 'gd', 'opcache', 'mysqli', 'zip' ),
+			'extensions'      => array( 'gd', 'opcache', 'mysqli', 'zip', 'memcached' ),
 			'pecl_extensions' => array( 'xdebug-2.7.2' ),
 		),
 		'phpunit' => 7,
@@ -115,7 +115,7 @@ $php_versions = array(
 		'php' => array(
 			'base_name'       => 'php:7.2-fpm',
 			'gd'              => true,
-			'extensions'      => array( 'gd', 'opcache', 'mysqli', 'zip' ),
+			'extensions'      => array( 'gd', 'opcache', 'mysqli', 'zip', 'memcached' ),
 			'pecl_extensions' => array( 'xdebug-2.7.2' ),
 		),
 		'phpunit' => 7,
@@ -128,7 +128,7 @@ $php_versions = array(
 		'php' => array(
 			'base_name'       => 'php:7.3-fpm',
 			'gd'              => true,
-			'extensions'      => array( 'gd', 'opcache', 'mysqli', 'zip' ),
+			'extensions'      => array( 'gd', 'opcache', 'mysqli', 'zip', 'memcached' ),
 			'pecl_extensions' => array( 'xdebug-2.7.2' ),
 		),
 		'phpunit' => 7,
@@ -141,7 +141,7 @@ $php_versions = array(
 		'php' => array(
 			'base_name'       => 'php:7.4-rc-fpm',
 			'gd'              => true,
-			'extensions'      => array( 'gd', 'opcache', 'mysqli', 'zip' ),
+			'extensions'      => array( 'gd', 'opcache', 'mysqli', 'zip', 'memcached' ),
 			'pecl_extensions' => array( 'xdebug-2.8.0beta1' ),
 		),
 		'phpunit' => 7,
@@ -154,7 +154,7 @@ $php_versions = array(
 		'php' => array(
 			'base_name'       => 'devilbox/php-fpm-8.0:latest',
 			'gd'              => false,
-			'extensions'      => array( 'mysqli' ),
+			'extensions'      => array( 'mysqli', 'memcached' ),
 			'pecl_extensions' => array(),
 		),
 		'phpunit' => 7,
