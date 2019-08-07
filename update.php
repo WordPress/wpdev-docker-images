@@ -26,7 +26,7 @@ $php_versions = array(
 	'5.2' => array(
 		'php' => array(
 			'base_name'       => 'devilbox/php-fpm-5.2:latest',
-			'gd'              => false,
+			'apt'             => array(),
 			'extensions'      => array(),
 			'pecl_extensions' => array(),
 		),
@@ -36,7 +36,7 @@ $php_versions = array(
 	'5.3' => array(
 		'php' => array(
 			'base_name'       => 'devilbox/php-fpm-5.3:latest',
-			'gd'              => false,
+			'apt'             => array(),
 			'extensions'      => array(),
 			'pecl_extensions' => array(),
 		),
@@ -49,9 +49,9 @@ $php_versions = array(
 	'5.4' => array(
 		'php' => array(
 			'base_name'       => 'php:5.4-fpm',
-			'gd'              => true,
-			'extensions'      => array( 'gd', 'mysql', 'mysqli', 'zip', 'memcached' ),
-			'pecl_extensions' => array( 'xdebug-2.4.1' ),
+			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libzip-dev', 'libmemcached-dev' ),
+			'extensions'      => array( 'gd', 'mysql', 'mysqli', 'zip' ),
+			'pecl_extensions' => array( 'xdebug-2.4.1', 'memcached-2.2.0' ),
 		),
 		'phpunit' => 4,
 		'cli' => array(
@@ -62,9 +62,9 @@ $php_versions = array(
 	'5.5' => array(
 		'php' => array(
 			'base_name'       => 'php:5.5-fpm',
-			'gd'              => true,
-			'extensions'      => array( 'gd', 'mysql', 'mysqli', 'zip', 'memcached' ),
-			'pecl_extensions' => array( 'xdebug-2.5.5' ),
+			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libzip-dev', 'libmemcached-dev' ),
+			'extensions'      => array( 'gd', 'mysql', 'mysqli', 'zip' ),
+			'pecl_extensions' => array( 'xdebug-2.5.5', 'memcached-2.2.0' ),
 		),
 		'phpunit' => 4,
 		'cli' => array(
@@ -75,9 +75,9 @@ $php_versions = array(
 	'5.6' => array(
 		'php' => array(
 			'base_name'       => 'php:5.6-fpm',
-			'gd'              => true,
-			'extensions'      => array( 'gd', 'mysql', 'mysqli', 'zip', 'memcached' ),
-			'pecl_extensions' => array( 'xdebug-2.5.5' ),
+			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libzip-dev', 'libmemcached-dev' ),
+			'extensions'      => array( 'gd', 'mysql', 'mysqli', 'zip' ),
+			'pecl_extensions' => array( 'xdebug-2.5.5', 'memcached-2.2.0' ),
 		),
 		'phpunit' => 5,
 		'cli' => array(
@@ -88,9 +88,9 @@ $php_versions = array(
 	'7.0' => array(
 		'php' => array(
 			'base_name'       => 'php:7.0-fpm',
-			'gd'              => true,
-			'extensions'      => array( 'gd', 'opcache', 'mysqli', 'zip', 'memcached' ),
-			'pecl_extensions' => array( 'xdebug-2.7.2' ),
+			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libzip-dev', 'libmemcached-dev' ),
+			'extensions'      => array( 'gd', 'opcache', 'mysqli', 'zip' ),
+			'pecl_extensions' => array( 'xdebug-2.7.2', 'memcached-3.1.3' ),
 		),
 		'phpunit' => 6,
 		'cli' => array(
@@ -101,9 +101,9 @@ $php_versions = array(
 	'7.1' => array(
 		'php' => array(
 			'base_name'       => 'php:7.1-fpm',
-			'gd'              => true,
-			'extensions'      => array( 'gd', 'opcache', 'mysqli', 'zip', 'memcached' ),
-			'pecl_extensions' => array( 'xdebug-2.7.2' ),
+			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libzip-dev', 'libmemcached-dev' ),
+			'extensions'      => array( 'gd', 'opcache', 'mysqli', 'zip' ),
+			'pecl_extensions' => array( 'xdebug-2.7.2', 'memcached-3.1.3' ),
 		),
 		'phpunit' => 7,
 		'cli' => array(
@@ -114,9 +114,9 @@ $php_versions = array(
 	'7.2' => array(
 		'php' => array(
 			'base_name'       => 'php:7.2-fpm',
-			'gd'              => true,
-			'extensions'      => array( 'gd', 'opcache', 'mysqli', 'zip', 'memcached' ),
-			'pecl_extensions' => array( 'xdebug-2.7.2' ),
+			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libzip-dev', 'libmemcached-dev' ),
+			'extensions'      => array( 'gd', 'opcache', 'mysqli', 'zip' ),
+			'pecl_extensions' => array( 'xdebug-2.7.2', 'memcached-3.1.3' ),
 		),
 		'phpunit' => 7,
 		'cli' => array(
@@ -127,9 +127,9 @@ $php_versions = array(
 	'7.3' => array(
 		'php' => array(
 			'base_name'       => 'php:7.3-fpm',
-			'gd'              => true,
-			'extensions'      => array( 'gd', 'opcache', 'mysqli', 'zip', 'memcached' ),
-			'pecl_extensions' => array( 'xdebug-2.7.2' ),
+			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libzip-dev', 'libmemcached-dev' ),
+			'extensions'      => array( 'gd', 'opcache', 'mysqli', 'zip' ),
+			'pecl_extensions' => array( 'xdebug-2.7.2', 'memcached-3.1.3' ),
 		),
 		'phpunit' => 7,
 		'cli' => array(
@@ -140,9 +140,9 @@ $php_versions = array(
 	'7.4' => array(
 		'php' => array(
 			'base_name'       => 'php:7.4-rc-fpm',
-			'gd'              => true,
-			'extensions'      => array( 'gd', 'opcache', 'mysqli', 'zip', 'memcached' ),
-			'pecl_extensions' => array( 'xdebug-2.8.0beta1' ),
+			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libzip-dev', 'libmemcached-dev' ),
+			'extensions'      => array( 'gd', 'opcache', 'mysqli', 'zip' ),
+			'pecl_extensions' => array( 'xdebug-2.8.0beta1', 'memcached-3.1.3' ),
 		),
 		'phpunit' => 7,
 		'cli' => array(
@@ -153,8 +153,8 @@ $php_versions = array(
 	'8.0' => array(
 		'php' => array(
 			'base_name'       => 'devilbox/php-fpm-8.0:latest',
-			'gd'              => false,
-			'extensions'      => array( 'mysqli', 'memcached' ),
+			'apt'             => array(),
+			'extensions'      => array( 'mysqli' ),
 			'pecl_extensions' => array(),
 		),
 		'phpunit' => 7,
@@ -173,27 +173,6 @@ $generated_warning = <<<EOT
 #
 #
 EOT;
-
-// Bonus Templates that may be added to the PHP Dockerfile template, when needed.
-$install_extensions = <<<EOT
-# install the PHP extensions we need
-RUN set -ex; \
-	\
-%%INSTALL_GD%%%%EXTENSIONS%%%%PECL_EXTENSIONS%%
-EOT;
-
-$install_gd = <<<EOT
-	apt-get update; \
-	\
-	apt-get install -y --no-install-recommends \
-		libjpeg-dev \
-		libpng-dev \
-		libzip-dev \
-	; \
-	\
-	docker-php-ext-configure gd --with-png-dir=/usr --with-jpeg-dir=/usr;
-EOT;
-
 
 // Load the templates.
 $templates = array(
@@ -235,30 +214,38 @@ foreach ( $php_versions as $version => $images ) {
 			// Replace tags inside the PHP Dockerfile template.
 			$dockerfile = str_replace( '%%BASE_NAME%%', $config['base_name'], $dockerfile );
 
-			if ( $config['gd'] || $config['extensions'] || $config['pecl_extensions'] ) {
+			if ( $config['apt'] || $config['extensions'] || $config['pecl_extensions'] ) {
+				$install_extensions = "# install the PHP extensions we need\nRUN set -ex;";
+
+				if ( $config['apt'] ) {
+					$install_extensions .= " \\\n\t\\\n\t";
+					$install_extensions .= "apt-get update; \\\n\t\\\n\tapt-get install -y --no-install-recommends " . implode( $config['apt'], ' ' ) . ";";
+				}
+
+				if ( in_array( 'gd', $config['extensions'], true ) ) {
+					$install_extensions .= " \\\n\t\\\n\t";
+					$install_extensions .= "docker-php-ext-configure gd --with-png-dir=/usr --with-jpeg-dir=/usr;";
+				}
+
+				if ( $config['extensions'] ) {
+					$install_extensions .= " \\\n\t\\\n\t";
+					$install_extensions .= "docker-php-ext-install " . implode( $config['extensions'], ' ' ) . ";";
+				}
+
+				if ( $config['pecl_extensions'] ) {
+					$install_extensions .= " \\\n\t\\\n";
+					$install_extensions .= array_reduce( $config['pecl_extensions'], function ( $command, $extension ) {
+						if ( $command ) {
+							$command .= " \\\n";
+						}
+
+						return "$command\tpecl install $extension;";
+					}, '' );
+				}
+
 				$dockerfile = str_replace( '%%INSTALL_EXTENSIONS%%', $install_extensions, $dockerfile );
 			}
 
-			if ( $config['gd'] ) {
-				$dockerfile = str_replace( '%%INSTALL_GD%%', $install_gd, $dockerfile );
-			}
-
-			if ( $config['extensions'] ) {
-				$extensions = " \\\n\tdocker-php-ext-install " . implode( $config['extensions'], ' ' ) . ";";
-				$dockerfile = str_replace( '%%EXTENSIONS%%', $extensions, $dockerfile );
-			}
-
-			if ( $config['pecl_extensions'] ) {
-				$pecl_extensions = array_reduce( $config['pecl_extensions'], function ( $command, $extension ) {
-					if ( $command ) {
-						$command .= "\\\n";
-					}
-
-					return "$command\tpecl install $extension;";
-				}, '' );
-
-				$dockerfile = str_replace( '%%PECL_EXTENSIONS%%', " \\\n\t\\\n$pecl_extensions", $dockerfile );
-			}
 		} elseif ( $image === 'phpunit' ) {
 			// Replace tags inside the PHPUnit Dockerfile template.
 			$dockerfile = str_replace( '%%PHPUNIT_VERSION%%', $config, $dockerfile );
