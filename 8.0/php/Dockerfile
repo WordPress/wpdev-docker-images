@@ -6,20 +6,6 @@ FROM devilbox/php-fpm-8.0:latest
 #
 #
 
-# install the PHP extensions we need
-RUN set -ex; \
-	\
-	apt-get update; \
-	\
-	apt-get install -y --no-install-recommends \
-		libjpeg-dev \
-		libpng-dev \
-		libzip-dev \
-	; \
-	\
-	docker-php-ext-configure gd --with-png-dir=/usr --with-jpeg-dir=/usr; \
-	 \
-	\
 
 
 COPY entrypoint.sh /entrypoint.sh

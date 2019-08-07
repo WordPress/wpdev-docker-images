@@ -153,7 +153,7 @@ $php_versions = array(
 	'8.0' => array(
 		'php' => array(
 			'base_name'       => 'devilbox/php-fpm-8.0:latest',
-			'gd'              => true,
+			'gd'              => false,
 			'extensions'      => array(),
 			'pecl_extensions' => array(),
 		),
