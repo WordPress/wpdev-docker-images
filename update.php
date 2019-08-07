@@ -10,7 +10,7 @@ $latest = '7.3';
  *
  * @param array $php {
  *     @type string $base_name       The name of the Docker image to base our image off of.
- *     @type bool   $gd              Whether or not GD needs to be installed on this image.
+ *     @type array  $apt             An array of apt packages that need to be installed.
  *     @type array  $extensions      An array of PHP extensions that need to be enabled.
  *     @type array  $pecl_extensions An array of PECL-sourced PHP extensions that will be installed, but not enabled.
  * }
