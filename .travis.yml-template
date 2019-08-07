@@ -15,8 +15,8 @@ env:
     - secure: usv1haWO4zKTM0Ewc/boDRTJTeje6pHYXxBMpf6ny58nvqYlcGfso/UDk6ZlAu/B3/uNrEzf7NqRibJduqmq4RNLqgI7DCFSJuyxXntuSK1/CRJso1+lGYBQKAKoRDb01i1+6qy511LpyZa/nta4FxD0LmrTVNkmurQMQsQIUq5GsSDpbbSmrCZ/oKFQu+mwLnLc1hpbsHdDAjwEiqMW7GGAD5xPmwUa2jV1ZhiKikifggZIpPCnHtKj5a3oGtYVzA9t0TfMkI42Xw089ViZ+7EEmLEG1oGGpZlixZFNE/tgrRF/JmekFYusIOVPEfPEJDMzmGCJwqSanhXxnSHc2OVTJ99CyGXqASKcppRrpxZmBq4j/3tT7aZdXehxoa3+7Ba0wgHqT6n0rJDXq+soZXZZo01hBJxsNKFx9jxkS1EUdKRDCE+sOytfgPFU4nraSjqGOsFQfNYVwW60nMI0Y637k/797SjgZeM6zjXarNpllsaaog3CL+sP+YPKDF9V9CiMUIPi5d5gBBvOts2CKEWgIxuSoukIfjejU4obKC79DOdTGdDYydXRBk4289BY4vtQtr+P7ORMJW1cZ/MFd2Nbxte1OmuE6MoAv2xzutJLJDTNxISC25zI6VdukAtC+F8/HHRzi3ysJO2fr3rH2da6Z8Jep7dSRL4iE0D5S0U=
     # GITHUB_TOKEN
     - secure: Y8TKVQ9hWYdffxRliIDDDoXCF1FyOeOJ+oq9cRVeMG5/wgofor/3vhN2anOdwrrsoQvmoDwJII97iT9mcKnmQe6UV/LnZXXw/P1peWJOaDsKbwEX+07agNVQKdefqaxi5Jr1wDMgkadn39VU7/haXrsjqJ3Wbnu5AfcGnIzxfVnLjehkuSSOOmQy3w+RwW+HymLVpFqevfhED4uJjrjvwUEvtirxG0E3nyKXGsjusPSDGVzZhmLJBXEHf0g717loN1b+JeUa6TeIYGQ5vM/oRsyzxeJJ0iltiTKk31JHtBP+TTcoyHKWqOzefVfoXCNbk1G2Ez8czUqWIfQK8YnIHOmneUeSi6lQbCdcMSWbv/bJ5+wEJgsQKGBxy7qfF8v0T/GoMSi1OM6JfkcgW3bhuBgMGdnwxJUJ/lmYYAYlmXcO/+cui7lmyXsMT44lArdCZFo9SGt5IlPL4BW5SODYrDFKzP+2uHsj56flK03/lt+/KNJjLZKvH6NbzfhESRzMChnFFaz5eWxHgMZJefO5S51zI/88gu8YZgQDahpgIQUKvZKqi1dSASfVQ7jGqKj3roNKu2s4IdQoMXELeIehrsn9bw6BiN1kaL8yyAXjWLry21VXH0VYv0FdF4W7j23Wv7GWbcg0THDSydLvLYICPBi7NyU3yCPsGGlGpT8Oe9A=
-    - PR_TAG: $(if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then echo "-$PR_TAG"; fi)
-    - PACKAGE_REGISTRY_HOST: $(if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then echo "docker.pkg.github.com"; fi)
+    - PR_TAG: $(if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then echo "-$TRAVIS_PULL_REQUEST"; else echo ""; fi)
+    - PACKAGE_REGISTRY_HOST: $(if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then echo "docker.pkg.github.com"; else echo ""; fi)
     - PACKAGE_REGISTRY: $(if [ "$PACKAGE_REGISTRY_HOST" != "" ]; then echo "${PACKAGE_REGISTRY_HOST}/wordpress/wpdev-docker-images; else echo "wordpressdevelop"; fi)
 
 before_script:
