@@ -9,7 +9,6 @@ FROM devilbox/php-fpm-8.0:latest
 # install the PHP extensions we need
 RUN set -ex; \
 	\
- \
 	docker-php-ext-install mysqli;
 
 COPY entrypoint.sh /entrypoint.sh

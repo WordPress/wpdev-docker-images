@@ -11,16 +11,14 @@ RUN set -ex; \
 	\
 	apt-get update; \
 	\
-	apt-get install -y --no-install-recommends \
-		libjpeg-dev \
-		libpng-dev \
-		libzip-dev \
-	; \
+	apt-get install -y --no-install-recommends libjpeg-dev libpng-dev libzip-dev libmemcached-dev; \
 	\
 	docker-php-ext-configure gd --with-png-dir=/usr --with-jpeg-dir=/usr; \
+	\
 	docker-php-ext-install gd opcache mysqli zip; \
 	\
-	pecl install xdebug-2.7.2;
+	pecl install xdebug-2.7.2; \
+	pecl install memcached-3.1.3;
 
 COPY entrypoint.sh /entrypoint.sh
 
