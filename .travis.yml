@@ -24,6 +24,10 @@ env:
     - PACKAGE_REGISTRY: $(if [ "$PACKAGE_REGISTRY_HOST" != "" ]; then echo "${PACKAGE_REGISTRY_HOST}/wordpress/wpdev-docker-images; else echo "wordpressdevelop"; fi)
 
 before_script:
+  - echo $TRAVIS_PULL_REQUEST
+  - echo $PR_TAG
+  - echo $PACKAGE_REGISTRY_HOST
+  - echo $PACKAGE_REGISTRY
   - |
     if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then
       echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
