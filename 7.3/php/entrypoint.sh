@@ -17,7 +17,5 @@ else
 	rm -f /usr/local/etc/php/conf.d/docker-php-ext-memcached.ini
 fi
 
-
-
 # Execute CMD
 exec "$@"
