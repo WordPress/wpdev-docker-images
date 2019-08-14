@@ -225,7 +225,7 @@ foreach ( $php_versions as $version => $images ) {
 			// Replace tags inside the PHP Dockerfile template.
 			$dockerfile = str_replace( '%%BASE_NAME%%', $config['base_name'], $dockerfile );
 
-			if ( $config['apt'] || $config['extensions'] || $config['pecl_extensions'] ) {
+			if ( $config['apt'] || $config['extensions'] || $config['pecl_extensions'] || $config['composer'] ) {
 				$install_extensions = "# install the PHP extensions we need\nRUN set -ex;";
 
 				if ( $config['apt'] ) {
@@ -256,15 +256,16 @@ foreach ( $php_versions as $version => $images ) {
 
 				if ( $config['composer'] ) {
 					$install_extensions .= " \\\n\t\\\n";
-					$install_extensions .= "\tcurl --silent --fail --location --retry 3 --output /tmp/installer.sig --url https://composer.github.io/installer.sig; \\\n";
 					$install_extensions .= "\tcurl --silent --fail --location --retry 3 --output /tmp/installer.php --url https://getcomposer.org/installer; \\\n";
+					$install_extensions .= "\tcurl --silent --fail --location --retry 3 --output /tmp/installer.sig --url https://composer.github.io/installer.sig; \\\n";
 					$install_extensions .= "\tphp -r \" \\\n";
 					$install_extensions .= "\t\t\\\$signature = file_get_contents( '/tmp/installer.sig' ); \\\n";
-					$install_extensions .= "\t\t\\\$hash = hash('sha384', file_get_contents('/tmp/installer.php')); \\\n";
-					$install_extensions .= "\t\tif (!hash_equals(\\\$signature, \\\$hash)) { \\\n";
-					$install_extensions .= "\t\t\tunlink('/tmp/installer.php'); \\\n";
+					$install_extensions .= "\t\t\\\$hash = hash( 'sha384', file_get_contents('/tmp/installer.php') ); \\\n";
+					$install_extensions .= "\t\tif ( \\\$signature !== \\\$hash ) { \\\n";
+					$install_extensions .= "\t\t\tunlink( '/tmp/installer.php' ); \\\n";
+					$install_extensions .= "\t\t\tunlink( '/tmp/installer.sig' ); \\\n";
 					$install_extensions .= "\t\t\techo 'Integrity check failed, installer is either corrupt or worse.' . PHP_EOL; \\\n";
-					$install_extensions .= "\t\t\texit(1); \\\n";
+					$install_extensions .= "\t\t\texit( 1 ); \\\n";
 					$install_extensions .= "\t\t}\"; \\\n";
 					$install_extensions .= "\tphp /tmp/installer.php --no-ansi --install-dir=/usr/bin --filename=composer; \\\n";
 					$install_extensions .= "\tcomposer --ansi --version --no-interaction; \\\n";

@@ -25,15 +25,16 @@ RUN set -ex; \
 	pecl install xdebug-2.4.1; \
 	pecl install memcached-2.2.0; \
 	\
-	curl --silent --fail --location --retry 3 --output /tmp/installer.sig --url https://composer.github.io/installer.sig; \
 	curl --silent --fail --location --retry 3 --output /tmp/installer.php --url https://getcomposer.org/installer; \
+	curl --silent --fail --location --retry 3 --output /tmp/installer.sig --url https://composer.github.io/installer.sig; \
 	php -r " \
 		\$signature = file_get_contents( '/tmp/installer.sig' ); \
-		\$hash = hash('sha384', file_get_contents('/tmp/installer.php')); \
-		if (!hash_equals(\$signature, \$hash)) { \
-			unlink('/tmp/installer.php'); \
+		\$hash = hash( 'sha384', file_get_contents('/tmp/installer.php') ); \
+		if ( \$signature !== \$hash ) { \
+			unlink( '/tmp/installer.php' ); \
+			unlink( '/tmp/installer.sig' ); \
 			echo 'Integrity check failed, installer is either corrupt or worse.' . PHP_EOL; \
-			exit(1); \
+			exit( 1 ); \
 		}"; \
 	php /tmp/installer.php --no-ansi --install-dir=/usr/bin --filename=composer; \
 	composer --ansi --version --no-interaction; \
