@@ -29,9 +29,10 @@ $php_versions = array(
 			'apt'             => array(),
 			'extensions'      => array(),
 			'pecl_extensions' => array(),
+			'composer'        => false,
 		),
 		'phpunit' => 3,
-		'cli' => false
+		'cli' => false,
 	),
 	'5.3' => array(
 		'php' => array(
@@ -39,6 +40,7 @@ $php_versions = array(
 			'apt'             => array(),
 			'extensions'      => array(),
 			'pecl_extensions' => array(),
+			'composer'        => true,
 		),
 		'phpunit' => 4,
 		'cli' => array(
@@ -52,6 +54,7 @@ $php_versions = array(
 			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libzip-dev', 'libmemcached-dev' ),
 			'extensions'      => array( 'gd', 'mysql', 'mysqli', 'zip' ),
 			'pecl_extensions' => array( 'xdebug-2.4.1', 'memcached-2.2.0' ),
+			'composer'        => true,
 		),
 		'phpunit' => 4,
 		'cli' => array(
@@ -65,6 +68,7 @@ $php_versions = array(
 			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libzip-dev', 'libmemcached-dev' ),
 			'extensions'      => array( 'gd', 'mysql', 'mysqli', 'zip' ),
 			'pecl_extensions' => array( 'xdebug-2.5.5', 'memcached-2.2.0' ),
+			'composer'        => true,
 		),
 		'phpunit' => 4,
 		'cli' => array(
@@ -78,6 +82,7 @@ $php_versions = array(
 			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libzip-dev', 'libmemcached-dev' ),
 			'extensions'      => array( 'gd', 'mysql', 'mysqli', 'zip' ),
 			'pecl_extensions' => array( 'xdebug-2.5.5', 'memcached-2.2.0' ),
+			'composer'        => true,
 		),
 		'phpunit' => 5,
 		'cli' => array(
@@ -91,6 +96,7 @@ $php_versions = array(
 			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libzip-dev', 'libmemcached-dev' ),
 			'extensions'      => array( 'gd', 'opcache', 'mysqli', 'zip' ),
 			'pecl_extensions' => array( 'xdebug-2.7.2', 'memcached-3.1.3' ),
+			'composer'        => true,
 		),
 		'phpunit' => 6,
 		'cli' => array(
@@ -104,6 +110,7 @@ $php_versions = array(
 			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libzip-dev', 'libmemcached-dev' ),
 			'extensions'      => array( 'gd', 'opcache', 'mysqli', 'zip' ),
 			'pecl_extensions' => array( 'xdebug-2.7.2', 'memcached-3.1.3' ),
+			'composer'        => true,
 		),
 		'phpunit' => 7,
 		'cli' => array(
@@ -117,6 +124,7 @@ $php_versions = array(
 			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libzip-dev', 'libmemcached-dev' ),
 			'extensions'      => array( 'gd', 'opcache', 'mysqli', 'zip' ),
 			'pecl_extensions' => array( 'xdebug-2.7.2', 'memcached-3.1.3' ),
+			'composer'        => true,
 		),
 		'phpunit' => 7,
 		'cli' => array(
@@ -130,6 +138,7 @@ $php_versions = array(
 			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libzip-dev', 'libmemcached-dev' ),
 			'extensions'      => array( 'gd', 'opcache', 'mysqli', 'zip' ),
 			'pecl_extensions' => array( 'xdebug-2.7.2', 'memcached-3.1.3' ),
+			'composer'        => true,
 		),
 		'phpunit' => 7,
 		'cli' => array(
@@ -143,6 +152,7 @@ $php_versions = array(
 			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libzip-dev', 'libmemcached-dev' ),
 			'extensions'      => array( 'gd', 'opcache', 'mysqli', 'zip' ),
 			'pecl_extensions' => array( 'xdebug-2.8.0beta1', 'memcached-3.1.3' ),
+			'composer'        => true,
 		),
 		'phpunit' => 7,
 		'cli' => array(
@@ -156,6 +166,7 @@ $php_versions = array(
 			'apt'             => array(),
 			'extensions'      => array( 'mysqli' ),
 			'pecl_extensions' => array(),
+			'composer'        => true,
 		),
 		'phpunit' => 7,
 		'cli' => array(
@@ -241,6 +252,23 @@ foreach ( $php_versions as $version => $images ) {
 
 						return "$command\tpecl install $extension;";
 					}, '' );
+				}
+
+				if ( $config['composer'] ) {
+					$install_extensions .= " \\\n\t\\\n";
+					$install_extensions .= "\tcurl --silent --fail --location --retry 3 --output /tmp/installer.sig --url https://composer.github.io/installer.sig; \\\n";
+					$install_extensions .= "\tcurl --silent --fail --location --retry 3 --output /tmp/installer.php --url https://getcomposer.org/installer; \\\n";
+					$install_extensions .= "\tphp -r \" \\\n";
+					$install_extensions .= "\t\t\\\$signature = file_get_contents( '/tmp/installer.sig' ); \\\n";
+					$install_extensions .= "\t\t\\\$hash = hash('sha384', file_get_contents('/tmp/installer.php')); \\\n";
+					$install_extensions .= "\t\tif (!hash_equals(\\\$signature, \\\$hash)) { \\\n";
+					$install_extensions .= "\t\t\tunlink('/tmp/installer.php'); \\\n";
+					$install_extensions .= "\t\t\techo 'Integrity check failed, installer is either corrupt or worse.' . PHP_EOL; \\\n";
+					$install_extensions .= "\t\t\texit(1); \\\n";
+					$install_extensions .= "\t\t}\"; \\\n";
+					$install_extensions .= "\tphp /tmp/installer.php --no-ansi --install-dir=/usr/bin --filename=composer; \\\n";
+					$install_extensions .= "\tcomposer --ansi --version --no-interaction; \\\n";
+					$install_extensions .= "\trm -f /tmp/installer.php /tmp/installer.sig;";
 				}
 
 				$dockerfile = str_replace( '%%INSTALL_EXTENSIONS%%', $install_extensions, $dockerfile );

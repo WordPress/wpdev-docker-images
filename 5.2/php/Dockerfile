@@ -8,6 +8,9 @@ WORKDIR /var/www
 #
 #
 
+ENV COMPOSER_ALLOW_SUPERUSER 1
+ENV COMPOSER_HOME /tmp
+
 
 
 COPY entrypoint.sh /entrypoint.sh
