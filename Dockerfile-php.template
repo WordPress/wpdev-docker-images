@@ -4,6 +4,9 @@ WORKDIR /var/www
 
 %%GENERATED_WARNING%%
 
+ENV COMPOSER_ALLOW_SUPERUSER 1
+ENV COMPOSER_HOME /tmp
+
 %%INSTALL_EXTENSIONS%%
 
 COPY entrypoint.sh /entrypoint.sh

@@ -8,7 +8,30 @@ WORKDIR /var/www
 #
 #
 
+ENV COMPOSER_ALLOW_SUPERUSER 1
+ENV COMPOSER_HOME /tmp
 
+# install the PHP extensions we need
+RUN set -ex; \
+	\
+	apt-get update; \
+	\
+	apt-get install -y --no-install-recommends unzip; \
+	\
+	curl --silent --fail --location --retry 3 --output /tmp/installer.php --url https://getcomposer.org/installer; \
+	curl --silent --fail --location --retry 3 --output /tmp/installer.sig --url https://composer.github.io/installer.sig; \
+	php -r " \
+		\$signature = file_get_contents( '/tmp/installer.sig' ); \
+		\$hash = hash( 'sha384', file_get_contents('/tmp/installer.php') ); \
+		if ( \$signature !== \$hash ) { \
+			unlink( '/tmp/installer.php' ); \
+			unlink( '/tmp/installer.sig' ); \
+			echo 'Integrity check failed, installer is either corrupt or worse.' . PHP_EOL; \
+			exit( 1 ); \
+		}"; \
+	php /tmp/installer.php --no-ansi --install-dir=/usr/bin --filename=composer; \
+	composer --ansi --version --no-interaction; \
+	rm -f /tmp/installer.php /tmp/installer.sig;
 
 COPY entrypoint.sh /entrypoint.sh
 
