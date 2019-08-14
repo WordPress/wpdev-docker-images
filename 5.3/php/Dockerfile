@@ -14,6 +14,10 @@ ENV COMPOSER_HOME /tmp
 # install the PHP extensions we need
 RUN set -ex; \
 	\
+	apt-get update; \
+	\
+	apt-get install -y --no-install-recommends unzip; \
+	\
 	curl --silent --fail --location --retry 3 --output /tmp/installer.php --url https://getcomposer.org/installer; \
 	curl --silent --fail --location --retry 3 --output /tmp/installer.sig --url https://composer.github.io/installer.sig; \
 	php -r " \

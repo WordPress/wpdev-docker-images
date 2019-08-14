@@ -14,6 +14,10 @@ ENV COMPOSER_HOME /tmp
 # install the PHP extensions we need
 RUN set -ex; \
 	\
+	apt-get update; \
+	\
+	apt-get install -y --no-install-recommends unzip; \
+	\
 	docker-php-ext-install mysqli; \
 	\
 	curl --silent --fail --location --retry 3 --output /tmp/installer.php --url https://getcomposer.org/installer; \
