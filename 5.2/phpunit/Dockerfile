@@ -10,6 +10,6 @@ FROM $PACKAGE_REGISTRY/php:5.2-fpm$PR_TAG
 
 RUN curl -sL https://phar.phpunit.de/phpunit-3.phar > /usr/local/bin/phpunit && chmod +x /usr/local/bin/phpunit
 
-WORKDIR /wordpress-develop
+WORKDIR /var/www
 
 CMD /usr/local/bin/phpunit
