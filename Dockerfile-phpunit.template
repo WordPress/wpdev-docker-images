@@ -6,6 +6,6 @@ FROM $PACKAGE_REGISTRY/php:%%VERSION_TAG%%$PR_TAG
 
 RUN curl -sL https://phar.phpunit.de/phpunit-%%PHPUNIT_VERSION%%.phar > /usr/local/bin/phpunit && chmod +x /usr/local/bin/phpunit
 
-WORKDIR /wordpress-develop
+WORKDIR /var/www
 
 CMD /usr/local/bin/phpunit
