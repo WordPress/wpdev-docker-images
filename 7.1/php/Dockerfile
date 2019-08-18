@@ -16,7 +16,7 @@ RUN set -ex; \
 	\
 	apt-get update; \
 	\
-	apt-get install -y --no-install-recommends libjpeg-dev libpng-dev libzip-dev libmemcached-dev unzip; \
+	apt-get install -y --no-install-recommends libjpeg-dev libpng-dev libzip-dev libmemcached-dev unzip libmagickwand-dev; \
 	\
 	docker-php-ext-configure gd --with-png-dir=/usr --with-jpeg-dir=/usr; \
 	\
@@ -24,6 +24,8 @@ RUN set -ex; \
 	\
 	pecl install xdebug-2.7.2; \
 	pecl install memcached-3.1.3; \
+	pecl install imagick; \
+	docker-php-ext-enable imagick; \
 	\
 	curl --silent --fail --location --retry 3 --output /tmp/installer.php --url https://getcomposer.org/installer; \
 	curl --silent --fail --location --retry 3 --output /tmp/installer.sig --url https://composer.github.io/installer.sig; \
