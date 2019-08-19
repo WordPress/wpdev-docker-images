@@ -6,6 +6,8 @@
 
 if: tag IS blank
 
+language: generic
+
 services:
   - docker
 
