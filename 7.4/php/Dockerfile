@@ -16,11 +16,11 @@ RUN set -ex; \
 	\
 	apt-get update; \
 	\
-	apt-get install -y --no-install-recommends libjpeg-dev libpng-dev libzip-dev libmemcached-dev unzip libmagickwand-dev ghostscript; \
+	apt-get install -y --no-install-recommends libjpeg-dev libpng-dev libzip-dev libmemcached-dev unzip libmagickwand-dev ghostscript libonig-dev; \
 	\
 	docker-php-ext-configure gd --with-png-dir=/usr --with-jpeg-dir=/usr; \
 	\
-	docker-php-ext-install gd opcache mysqli zip exif intl; \
+	docker-php-ext-install gd opcache mysqli zip exif intl mbstring; \
 	\
 	pecl install xdebug-2.8.0beta1; \
 	pecl install memcached-3.1.3; \

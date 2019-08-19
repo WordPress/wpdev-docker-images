@@ -51,8 +51,8 @@ $php_versions = array(
 	'5.4' => array(
 		'php' => array(
 			'base_name'       => 'php:5.4-fpm',
-			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libzip-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript' ),
-			'extensions'      => array( 'gd', 'mysql', 'mysqli', 'zip', 'exif', 'intl' ),
+			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libzip-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libonig-dev' ),
+			'extensions'      => array( 'gd', 'mysql', 'mysqli', 'zip', 'exif', 'intl', 'mbstring' ),
 			'pecl_extensions' => array( 'xdebug-2.4.1', 'memcached-2.2.0', 'imagick-3.4.4' ),
 			'composer'        => true,
 		),
@@ -65,8 +65,8 @@ $php_versions = array(
 	'5.5' => array(
 		'php' => array(
 			'base_name'       => 'php:5.5-fpm',
-			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libzip-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript' ),
-			'extensions'      => array( 'gd', 'mysql', 'mysqli', 'zip', 'exif', 'intl' ),
+			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libzip-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libonig-dev' ),
+			'extensions'      => array( 'gd', 'mysql', 'mysqli', 'zip', 'exif', 'intl', 'mbstring' ),
 			'pecl_extensions' => array( 'xdebug-2.5.5', 'memcached-2.2.0', 'imagick-3.4.4' ),
 			'composer'        => true,
 		),
@@ -79,8 +79,8 @@ $php_versions = array(
 	'5.6' => array(
 		'php' => array(
 			'base_name'       => 'php:5.6-fpm',
-			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libzip-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript' ),
-			'extensions'      => array( 'gd', 'mysql', 'mysqli', 'zip', 'exif', 'intl' ),
+			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libzip-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libonig-dev' ),
+			'extensions'      => array( 'gd', 'mysql', 'mysqli', 'zip', 'exif', 'intl', 'mbstring' ),
 			'pecl_extensions' => array( 'xdebug-2.5.5', 'memcached-2.2.0', 'imagick-3.4.4' ),
 			'composer'        => true,
 		),
@@ -93,8 +93,8 @@ $php_versions = array(
 	'7.0' => array(
 		'php' => array(
 			'base_name'       => 'php:7.0-fpm',
-			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libzip-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript' ),
-			'extensions'      => array( 'gd', 'opcache', 'mysqli', 'zip', 'exif', 'intl' ),
+			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libzip-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libonig-dev' ),
+			'extensions'      => array( 'gd', 'opcache', 'mysqli', 'zip', 'exif', 'intl', 'mbstring' ),
 			'pecl_extensions' => array( 'xdebug-2.7.2', 'memcached-3.1.3', 'imagick' ),
 			'composer'        => true,
 		),
@@ -107,8 +107,8 @@ $php_versions = array(
 	'7.1' => array(
 		'php' => array(
 			'base_name'       => 'php:7.1-fpm',
-			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libzip-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript' ),
-			'extensions'      => array( 'gd', 'opcache', 'mysqli', 'zip', 'exif', 'intl' ),
+			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libzip-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libonig-dev' ),
+			'extensions'      => array( 'gd', 'opcache', 'mysqli', 'zip', 'exif', 'intl', 'mbstring' ),
 			'pecl_extensions' => array( 'xdebug-2.7.2', 'memcached-3.1.3', 'imagick' ),
 			'composer'        => true,
 		),
@@ -121,8 +121,8 @@ $php_versions = array(
 	'7.2' => array(
 		'php' => array(
 			'base_name'       => 'php:7.2-fpm',
-			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libzip-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript' ),
-			'extensions'      => array( 'gd', 'opcache', 'mysqli', 'zip', 'exif', 'intl' ),
+			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libzip-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libonig-dev' ),
+			'extensions'      => array( 'gd', 'opcache', 'mysqli', 'zip', 'exif', 'intl', 'mbstring' ),
 			'pecl_extensions' => array( 'xdebug-2.7.2', 'memcached-3.1.3', 'imagick' ),
 			'composer'        => true,
 		),
@@ -135,8 +135,8 @@ $php_versions = array(
 	'7.3' => array(
 		'php' => array(
 			'base_name'       => 'php:7.3-fpm',
-			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libzip-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript' ),
-			'extensions'      => array( 'gd', 'opcache', 'mysqli', 'zip', 'exif', 'intl' ),
+			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libzip-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libonig-dev' ),
+			'extensions'      => array( 'gd', 'opcache', 'mysqli', 'zip', 'exif', 'intl', 'mbstring' ),
 			'pecl_extensions' => array( 'xdebug-2.7.2', 'memcached-3.1.3', 'imagick' ),
 			'composer'        => true,
 		),
@@ -149,8 +149,8 @@ $php_versions = array(
 	'7.4' => array(
 		'php' => array(
 			'base_name'       => 'php:7.4-rc-fpm',
-			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libzip-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript' ),
-			'extensions'      => array( 'gd', 'opcache', 'mysqli', 'zip', 'exif', 'intl' ),
+			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libzip-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libonig-dev' ),
+			'extensions'      => array( 'gd', 'opcache', 'mysqli', 'zip', 'exif', 'intl', 'mbstring' ),
 			'pecl_extensions' => array( 'xdebug-2.8.0beta1', 'memcached-3.1.3', 'imagick' ),
 			'composer'        => true,
 		),
