@@ -235,7 +235,7 @@ foreach ( $php_versions as $version => $images ) {
 					// We need to add some locales for testing.
 					if ( array_search( 'locales', $config['apt'], true ) ) {
 						$install_extensions .= " \\\n\tsed -i 's/^# *\(\(ru_RU\|fr_FR\|de_DE\|es_ES\|ja_JP\).UTF-8\)/\\1/' /etc/locale.gen;";
-						$install_extensions .= " \\\n\tlocale-gen";
+						$install_extensions .= " \\\n\tlocale-gen;";
 					}
 				}
 
