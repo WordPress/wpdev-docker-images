@@ -16,7 +16,7 @@ RUN set -ex; \
 	\
 	apt-get update; \
 	\
-	apt-get install -y --no-install-recommends libjpeg-dev libpng-dev libzip-dev libmemcached-dev unzip libmagickwand-dev; \
+	apt-get install -y --no-install-recommends libjpeg-dev libpng-dev libzip-dev libmemcached-dev unzip libmagickwand-dev gs; \
 	\
 	docker-php-ext-configure gd --with-png-dir=/usr --with-jpeg-dir=/usr; \
 	\
