@@ -285,6 +285,8 @@ foreach ( $php_versions as $version => $images ) {
 				}
 
 				$dockerfile = str_replace( '%%INSTALL_EXTENSIONS%%', $install_extensions, $dockerfile );
+
+				echo shell_exec( "cp -r docker-entrypoint.d $version/$image" );
 			}
 
 		} elseif ( $image === 'phpunit' ) {
@@ -313,6 +315,11 @@ foreach ( $php_versions as $version => $images ) {
 		// Copy the entrypoint script, if it exists.
 		if ( file_exists( "entrypoint-$image.sh" ) ) {
 			copy( "entrypoint-$image.sh", "$version/$image/entrypoint.sh" );
+		}
+
+		// Copy the PHP-FPM configuration, if it exists.
+		if ( file_exists( "php-fpm-$image.conf" ) ) {
+			copy( "php-fpm-$image.conf", "$version/$image/php-fpm.conf" );
 		}
 
 		// Generate the build and push commands for this image/version.

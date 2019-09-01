@@ -11,6 +11,13 @@ WORKDIR /var/www
 ENV COMPOSER_ALLOW_SUPERUSER 1
 ENV COMPOSER_HOME /tmp
 
+# Update the user/group in "php-fpm.conf" if
+# PHP_FPM_USER or PHP_FPM_GROUP is changed
+ENV PHP_FPM_USER wp_php
+ENV	PHP_FPM_GROUP wp_php
+ENV	PHP_FPM_UID 1000
+ENV	PHP_FPM_GID 1000
+
 # install the PHP extensions we need
 RUN set -ex; \
 	\
@@ -34,8 +41,11 @@ RUN set -ex; \
 	rm -f /tmp/installer.php /tmp/installer.sig;
 
 COPY entrypoint.sh /entrypoint.sh
+COPY docker-entrypoint.d /docker-entrypoint.d
+COPY php-fpm.conf /usr/local/etc/php-fpm.d/zz-wordpress.conf
 
-RUN chmod +x /entrypoint.sh
+RUN chmod +x /entrypoint.sh && \
+    chmod +x /docker-entrypoint.d/*.sh
 
 ENTRYPOINT [ "/entrypoint.sh" ]
 
