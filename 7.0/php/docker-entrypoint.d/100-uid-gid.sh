@@ -76,7 +76,7 @@ set_uid() {
                 log "warn" "User with ${uid} already exists: ${target_username}"
                 usermod -u "${spare_uid}" "${target_username}"
             fi
-        # UID not found, let's create a new user and group
+        # UID not found, let's create a new user
         else
             useradd -M -u "${uid}" -s /bin/bash -g "${groupname}" "${username}"
             return 0
@@ -107,6 +107,7 @@ set_gid() {
                 log "warn" "Group with ${gid} already exists: ${target_groupname}"
                 groupmod -g "${spare_gid}" "${target_groupname}"
             fi
+        # GID not found, let's create a new group
         else
             groupadd -g "${gid}" -r "${groupname}"
             return 0

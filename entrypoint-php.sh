@@ -21,8 +21,8 @@ fi
 
 
 ### Change UID/GID
-set_gid "${PHP_FPM_GID}" "${PHP_FPM_GROUP}"
-set_uid "${PHP_FPM_UID}" "${PHP_FPM_USER}" "${PHP_FPM_GROUP}"
+set_gid "${PHP_FPM_GID}" "wp_php"
+set_uid "${PHP_FPM_UID}" "wp_php" "wp_php"
 
 # Execute CMD
 exec "$@"

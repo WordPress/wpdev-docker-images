@@ -11,10 +11,10 @@ WORKDIR /var/www
 ENV COMPOSER_ALLOW_SUPERUSER 1
 ENV COMPOSER_HOME /tmp
 
-# Update the user/group in "php-fpm.conf" if
-# PHP_FPM_USER or PHP_FPM_GROUP is changed
-ENV PHP_FPM_USER wp_php
-ENV	PHP_FPM_GROUP wp_php
+# Update the user/group in "php-fpm.conf" and "entrypoint-php.sh"
+# if PHP_FPM_USER or PHP_FPM_GROUP is changed
+ARG PHP_FPM_USER wp_php
+ARG	PHP_FPM_GROUP wp_php
 ENV	PHP_FPM_UID 1000
 ENV	PHP_FPM_GID 1000
 
@@ -47,7 +47,9 @@ COPY docker-entrypoint.d /docker-entrypoint.d
 COPY php-fpm.conf /usr/local/etc/php-fpm.d/zz-wordpress.conf
 
 RUN chmod +x /entrypoint.sh && \
-    chmod +x /docker-entrypoint.d/*.sh
+    chmod +x /docker-entrypoint.d/*.sh && \
+    groupadd -g ${PHP_FPM_GID} -r ${PHP_FPM_GROUP} && \
+    useradd -M -u ${PHP_FPM_UID} -s /bin/bash -g ${PHP_FPM_GROUP} ${PHP_FPM_USER}
 
 ENTRYPOINT [ "/entrypoint.sh" ]
 
