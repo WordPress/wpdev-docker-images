@@ -241,7 +241,12 @@ foreach ( $php_versions as $version => $images ) {
 
 				if ( in_array( 'gd', $config['extensions'], true ) ) {
 					$install_extensions .= " \\\n\t\\\n\t";
-					$install_extensions .= "docker-php-ext-configure gd --with-png-dir=/usr --with-jpeg-dir=/usr;";
+
+					if ( version_compare( $version, 7.4 ) >= 0 ) {
+						$install_extensions .= "docker-php-ext-configure gd --enable-gd --with-jpeg=/usr;";
+					} else {
+						$install_extensions .= "docker-php-ext-configure gd --with-png-dir=/usr --with-jpeg-dir=/usr;";
+					}
 				}
 
 				if ( $config['extensions'] ) {
