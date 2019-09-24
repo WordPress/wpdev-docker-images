@@ -13,10 +13,10 @@ ENV COMPOSER_HOME /tmp
 
 # Update the user/group in "php-fpm.conf" and "entrypoint-php.sh"
 # if PHP_FPM_USER or PHP_FPM_GROUP is changed
-ARG PHP_FPM_USER wp_php
-ARG	PHP_FPM_GROUP wp_php
-ENV	PHP_FPM_UID 1000
-ENV	PHP_FPM_GID 1000
+ENV PHP_FPM_USER wp_php
+ENV PHP_FPM_GROUP wp_php
+ENV PHP_FPM_UID 1000
+ENV PHP_FPM_GID 1000
 
 # install the PHP extensions we need
 RUN set -ex; \
