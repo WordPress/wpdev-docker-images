@@ -288,8 +288,6 @@ foreach ( $php_versions as $version => $images ) {
 
 			}
 
-			echo shell_exec( "cp -R docker-entrypoint.d $version/$image" );
-
 		} elseif ( $image === 'phpunit' ) {
 			// Replace tags inside the PHPUnit Dockerfile template.
 			$dockerfile = str_replace( '%%PHPUNIT_VERSION%%', $config, $dockerfile );

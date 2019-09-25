@@ -1,8 +1,6 @@
 #!/bin/bash
 set -e
 
-source /docker-entrypoint.d/100-uid-gid.sh
-
 # If LOCAL_PHP_XDEBUG=true xdebug extension will be enabled
 if [ "$LOCAL_PHP_XDEBUG" = true ]; then
 	docker-php-ext-enable xdebug
@@ -20,8 +18,8 @@ else
 fi
 
 ### Change UID/GID
-set_gid "${PHP_FPM_GID}" "wp_php"
-set_uid "${PHP_FPM_UID}" "wp_php" "wp_php"
+usermod -o -u "${PHP_FPM_UID}" "wp_php"
+groupmod -o -g "${PHP_FPM_GID}" "wp_php"
 
 # first arg is `-f` or `--some-option`
 if [ "${1#-}" != "$1" ]; then
