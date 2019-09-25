@@ -35,4 +35,4 @@ if wp --path=/dev/null help "$1" > /dev/null 2>&1; then
 fi
 
 # Execute CMD
-exec "$@"
+exec su wp_php -c "$@"

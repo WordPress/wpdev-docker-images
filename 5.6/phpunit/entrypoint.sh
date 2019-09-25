@@ -24,4 +24,4 @@ set_gid "${PHP_FPM_GID}" "wp_php"
 set_uid "${PHP_FPM_UID}" "wp_php" "wp_php"
 
 # Execute CMD
-exec "$@"
+exec su wp_php -c "$@"

@@ -29,7 +29,9 @@ RUN set -ex; \
 
 COPY entrypoint.sh /entrypoint.sh
 
-ENTRYPOINT [ "entrypoint.sh" ]
+RUN chmod +x /entrypoint.sh
+
+ENTRYPOINT [ "/entrypoint.sh" ]
 
 
 WORKDIR /var/www
