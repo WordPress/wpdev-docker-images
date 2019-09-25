@@ -17,7 +17,6 @@ COPY entrypoint.sh /entrypoint.sh
 COPY php-fpm.conf /usr/local/etc/php-fpm.d/zz-wordpress.conf
 
 RUN chmod +x /entrypoint.sh && \
-    chmod +x /docker-entrypoint.d/*.sh && \
     groupadd -g 1000 -r wp_php && \
     useradd -M -u 1000 -s /bin/bash -g wp_php wp_php
 
