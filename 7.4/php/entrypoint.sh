@@ -19,7 +19,6 @@ else
 	rm -f /usr/local/etc/php/conf.d/docker-php-ext-memcached.ini
 fi
 
-
 ### Change UID/GID
 set_gid "${PHP_FPM_GID}" "wp_php"
 set_uid "${PHP_FPM_UID}" "wp_php" "wp_php"

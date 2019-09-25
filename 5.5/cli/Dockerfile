@@ -27,9 +27,11 @@ RUN set -ex; \
 	\
 	wp --allow-root --version;
 
-ENTRYPOINT [ "/usr/local/bin/wp", "--allow-root" ]
+COPY entrypoint.sh /entrypoint.sh
+
+ENTRYPOINT [ "entrypoint.sh" ]
 
 
 WORKDIR /var/www
 
-CMD [ "shell" ]
+CMD [ "wp", "shell" ]

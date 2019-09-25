@@ -12,4 +12,8 @@ RUN curl -sL https://phar.phpunit.de/phpunit-6.phar > /usr/local/bin/phpunit && 
 
 WORKDIR /var/www
 
+COPY entrypoint.sh /entrypoint.sh
+
+ENTRYPOINT [ "entrypoint.sh" ]
+
 CMD /usr/local/bin/phpunit

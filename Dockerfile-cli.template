@@ -23,7 +23,9 @@ RUN set -ex; \
 	\
 	wp --allow-root --version;
 
-ENTRYPOINT [ "/usr/local/bin/wp", "--allow-root" ]
+COPY entrypoint.sh /entrypoint.sh
+
+ENTRYPOINT [ "entrypoint.sh" ]
 %%/NEW_PHP%%
 
 %%OLD_PHP%%
@@ -32,4 +34,4 @@ ENTRYPOINT [ "echo", "WP-CLI is not available for PHP %%VERSION_TAG%%.\nCommand 
 
 WORKDIR /var/www
 
-CMD [ "shell" ]
+CMD [ "wp", "shell" ]

@@ -14,4 +14,4 @@ ENTRYPOINT [ "echo", "WP-CLI is not available for PHP 5.2-fpm.\nCommand was not 
 
 WORKDIR /var/www
 
-CMD [ "shell" ]
+CMD [ "wp", "shell" ]
