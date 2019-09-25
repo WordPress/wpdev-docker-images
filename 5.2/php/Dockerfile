@@ -11,7 +11,12 @@ WORKDIR /var/www
 ENV COMPOSER_ALLOW_SUPERUSER 1
 ENV COMPOSER_HOME /tmp
 
-
+# install the PHP extensions we need
+RUN set -ex; \
+	\
+	apt-get update; \
+	\
+	apt-get install -y --no-install-recommends sudo;
 
 COPY entrypoint.sh /entrypoint.sh
 COPY php-fpm.conf /usr/local/etc/php-fpm.d/zz-wordpress.conf

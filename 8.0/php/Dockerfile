@@ -16,7 +16,7 @@ RUN set -ex; \
 	\
 	apt-get update; \
 	\
-	apt-get install -y --no-install-recommends unzip; \
+	apt-get install -y --no-install-recommends unzip sudo; \
 	\
 	docker-php-ext-install mysqli; \
 	\
