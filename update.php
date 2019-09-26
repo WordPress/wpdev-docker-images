@@ -26,7 +26,7 @@ $php_versions = array(
 	'5.2' => array(
 		'php' => array(
 			'base_name'       => 'devilbox/php-fpm-5.2:latest',
-			'apt'             => array(),
+			'apt'             => array( 'sudo' ),
 			'extensions'      => array(),
 			'pecl_extensions' => array(),
 			'composer'        => false,
@@ -37,7 +37,7 @@ $php_versions = array(
 	'5.3' => array(
 		'php' => array(
 			'base_name'       => 'devilbox/php-fpm-5.3:latest',
-			'apt'             => array( 'unzip' ),
+			'apt'             => array( 'unzip', 'sudo' ),
 			'extensions'      => array(),
 			'pecl_extensions' => array(),
 			'composer'        => true,
@@ -51,7 +51,7 @@ $php_versions = array(
 	'5.4' => array(
 		'php' => array(
 			'base_name'       => 'php:5.4-fpm',
-			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libzip-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libicu-dev', 'libonig-dev', 'locales' ),
+			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libzip-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libicu-dev', 'libonig-dev', 'locales', 'sudo' ),
 			'extensions'      => array( 'gd', 'mysql', 'mysqli', 'zip', 'exif', 'intl', 'mbstring' ),
 			'pecl_extensions' => array( 'xdebug-2.4.1', 'memcached-2.2.0', 'imagick-3.4.4' ),
 			'composer'        => true,
@@ -65,7 +65,7 @@ $php_versions = array(
 	'5.5' => array(
 		'php' => array(
 			'base_name'       => 'php:5.5-fpm',
-			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libzip-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libicu-dev', 'libonig-dev', 'locales' ),
+			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libzip-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libicu-dev', 'libonig-dev', 'locales', 'sudo' ),
 			'extensions'      => array( 'gd', 'mysql', 'mysqli', 'zip', 'exif', 'intl', 'mbstring' ),
 			'pecl_extensions' => array( 'xdebug-2.5.5', 'memcached-2.2.0', 'imagick-3.4.4' ),
 			'composer'        => true,
@@ -79,7 +79,7 @@ $php_versions = array(
 	'5.6' => array(
 		'php' => array(
 			'base_name'       => 'php:5.6-fpm',
-			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libzip-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libonig-dev', 'locales' ),
+			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libzip-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libonig-dev', 'locales', 'sudo' ),
 			'extensions'      => array( 'gd', 'mysql', 'mysqli', 'zip', 'exif', 'intl', 'mbstring' ),
 			'pecl_extensions' => array( 'xdebug-2.5.5', 'memcached-2.2.0', 'imagick-3.4.4' ),
 			'composer'        => true,
@@ -93,7 +93,7 @@ $php_versions = array(
 	'7.0' => array(
 		'php' => array(
 			'base_name'       => 'php:7.0-fpm',
-			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libzip-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libonig-dev', 'locales' ),
+			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libzip-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libonig-dev', 'locales', 'sudo' ),
 			'extensions'      => array( 'gd', 'opcache', 'mysqli', 'zip', 'exif', 'intl', 'mbstring' ),
 			'pecl_extensions' => array( 'xdebug-2.7.2', 'memcached-3.1.3', 'imagick' ),
 			'composer'        => true,
@@ -107,7 +107,7 @@ $php_versions = array(
 	'7.1' => array(
 		'php' => array(
 			'base_name'       => 'php:7.1-fpm',
-			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libzip-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libonig-dev', 'locales' ),
+			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libzip-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libonig-dev', 'locales', 'sudo' ),
 			'extensions'      => array( 'gd', 'opcache', 'mysqli', 'zip', 'exif', 'intl', 'mbstring' ),
 			'pecl_extensions' => array( 'xdebug-2.7.2', 'memcached-3.1.3', 'imagick' ),
 			'composer'        => true,
@@ -121,7 +121,7 @@ $php_versions = array(
 	'7.2' => array(
 		'php' => array(
 			'base_name'       => 'php:7.2-fpm',
-			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libzip-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libonig-dev', 'locales' ),
+			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libzip-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libonig-dev', 'locales', 'sudo' ),
 			'extensions'      => array( 'gd', 'opcache', 'mysqli', 'zip', 'exif', 'intl', 'mbstring' ),
 			'pecl_extensions' => array( 'xdebug-2.7.2', 'memcached-3.1.3', 'imagick' ),
 			'composer'        => true,
@@ -135,7 +135,7 @@ $php_versions = array(
 	'7.3' => array(
 		'php' => array(
 			'base_name'       => 'php:7.3-fpm',
-			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libzip-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libonig-dev', 'locales' ),
+			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libzip-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libonig-dev', 'locales', 'sudo' ),
 			'extensions'      => array( 'gd', 'opcache', 'mysqli', 'zip', 'exif', 'intl', 'mbstring' ),
 			'pecl_extensions' => array( 'xdebug-2.7.2', 'memcached-3.1.3', 'imagick' ),
 			'composer'        => true,
@@ -149,7 +149,7 @@ $php_versions = array(
 	'7.4' => array(
 		'php' => array(
 			'base_name'       => 'php:7.4-rc-fpm',
-			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libzip-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libonig-dev', 'locales' ),
+			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libzip-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libonig-dev', 'locales', 'sudo' ),
 			'extensions'      => array( 'gd', 'opcache', 'mysqli', 'zip', 'exif', 'intl', 'mbstring' ),
 			'pecl_extensions' => array( 'xdebug-2.8.0beta1', 'memcached-3.1.3', 'imagick' ),
 			'composer'        => true,
@@ -163,7 +163,7 @@ $php_versions = array(
 	'8.0' => array(
 		'php' => array(
 			'base_name'       => 'devilbox/php-fpm-8.0:latest',
-			'apt'             => array( 'unzip' ),
+			'apt'             => array( 'unzip', 'sudo' ),
 			'extensions'      => array( 'mysqli' ),
 			'pecl_extensions' => array(),
 			'composer'        => true,
@@ -180,16 +180,17 @@ $php_versions = array(
 $generated_warning = <<<EOT
 ##########################################################################
 #
-# WARNING: This file was generated by update.php. Do not edit it directly.
+# WARNING: This file was generated by update.php.
 #
+# You can find the relevant template in the `/templates` folder.
 #
 EOT;
 
 // Load the templates.
 $templates = array(
-	'php'     => file_get_contents( 'Dockerfile-php.template' ),
-	'phpunit' => file_get_contents( 'Dockerfile-phpunit.template' ),
-	'cli'     => file_get_contents( 'Dockerfile-cli.template' ),
+	'php'     => file_get_contents( 'templates/Dockerfile-php.template' ),
+	'phpunit' => file_get_contents( 'templates/Dockerfile-phpunit.template' ),
+	'cli'     => file_get_contents( 'templates/Dockerfile-cli.template' ),
 );
 
 $build_cmds = array(
@@ -207,7 +208,7 @@ foreach ( $php_versions as $version => $images ) {
 
 	foreach ( $images as $image => $config ) {
 		echo str_pad( $image, 10, '.' );
-		echo shell_exec( "mkdir -p $version/$image" );
+		echo shell_exec( "mkdir -p images/$version/$image" );
 
 		$dockerfile = $templates[ $image ];
 
@@ -287,6 +288,8 @@ foreach ( $php_versions as $version => $images ) {
 				$dockerfile = str_replace( '%%INSTALL_EXTENSIONS%%', $install_extensions, $dockerfile );
 			}
 
+			copy( "entrypoint/common.sh", "images/$version/$image/common.sh" );
+
 		} elseif ( $image === 'phpunit' ) {
 			// Replace tags inside the PHPUnit Dockerfile template.
 			$dockerfile = str_replace( '%%PHPUNIT_VERSION%%', $config, $dockerfile );
@@ -306,13 +309,18 @@ foreach ( $php_versions as $version => $images ) {
 		$dockerfile = preg_replace( '/%%[^%]+%%/', '', $dockerfile );
 
 		// Write the real Dockerfile.
-		$fh = fopen( "$version/$image/Dockerfile", 'w' );
+		$fh = fopen( "images/$version/$image/Dockerfile", 'w' );
 		fwrite( $fh, $dockerfile );
 		fclose( $fh );
 
 		// Copy the entrypoint script, if it exists.
-		if ( file_exists( "entrypoint-$image.sh" ) ) {
-			copy( "entrypoint-$image.sh", "$version/$image/entrypoint.sh" );
+		if ( file_exists( "entrypoint/entrypoint-$image.sh" ) ) {
+			copy( "entrypoint/entrypoint-$image.sh", "images/$version/$image/entrypoint.sh" );
+		}
+
+		// Copy the PHP-FPM configuration, if it exists.
+		if ( file_exists( "config/php-fpm-$image.conf" ) ) {
+			copy( "config/php-fpm-$image.conf", "images/$version/$image/php-fpm.conf" );
 		}
 
 		// Generate the build and push commands for this image/version.
@@ -323,7 +331,7 @@ foreach ( $php_versions as $version => $images ) {
 		}
 		$build_cmd_list = array(
 			"$image $version",
-			"$build_cmd $version/$image",
+			"$build_cmd images/$version/$image",
 			'docker images',
 			"docker push \$PACKAGE_REGISTRY/$image:$version-fpm\$PR_TAG",
 		);
@@ -337,7 +345,7 @@ foreach ( $php_versions as $version => $images ) {
 	}
 
 	// Load the .travis.yml template.
-	$travis_template = file_get_contents( '.travis.yml-template' );
+	$travis_template = file_get_contents( 'templates/.travis.yml-template' );
 	$travis_template = str_replace( '%%GENERATED_WARNING%%', $generated_warning, $travis_template );
 
 	// Generate the YML-formatted list of build commands for each of the images.

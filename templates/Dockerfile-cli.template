@@ -1,0 +1,39 @@
+ARG PACKAGE_REGISTRY
+ARG PR_TAG
+FROM $PACKAGE_REGISTRY/php:%%VERSION_TAG%%$PR_TAG
+
+%%GENERATED_WARNING%%
+
+%%NEW_PHP%%
+# install wp-cli dependences
+RUN set -ex; \
+	\
+	apt-get update; \
+	\
+	apt-get install -y --no-install-recommends \
+		less \
+		%%MYSQL_CLIENT%% \
+	;
+
+RUN set -ex; \
+	\
+	curl -L -o /usr/local/bin/wp %%DOWNLOAD_URL%%; \
+	\
+	chmod +x /usr/local/bin/wp; \
+	\
+	wp --allow-root --version;
+
+COPY entrypoint.sh /entrypoint.sh
+
+RUN chmod +x /entrypoint.sh
+
+ENTRYPOINT [ "/entrypoint.sh" ]
+%%/NEW_PHP%%
+
+%%OLD_PHP%%
+ENTRYPOINT [ "echo", "WP-CLI is not available for PHP %%VERSION_TAG%%.\nCommand was not executed:" ]
+%%/OLD_PHP%%
+
+WORKDIR /var/www
+
+CMD [ "wp", "shell" ]
