@@ -188,7 +188,7 @@ EOT;
 
 // Load the templates.
 $templates = array(
-	'php'     => file_get_contents( 'templates/ockerfile-php.template' ),
+	'php'     => file_get_contents( 'templates/Dockerfile-php.template' ),
 	'phpunit' => file_get_contents( 'templates/Dockerfile-phpunit.template' ),
 	'cli'     => file_get_contents( 'templates/Dockerfile-cli.template' ),
 );
@@ -286,8 +286,9 @@ foreach ( $php_versions as $version => $images ) {
 				}
 
 				$dockerfile = str_replace( '%%INSTALL_EXTENSIONS%%', $install_extensions, $dockerfile );
-
 			}
+
+			copy( "entrypoint/common.sh", "images/$version/$image/common.sh" );
 
 		} elseif ( $image === 'phpunit' ) {
 			// Replace tags inside the PHPUnit Dockerfile template.
