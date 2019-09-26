@@ -18,5 +18,13 @@ else
 fi
 
 ### Change UID/GID
-usermod -o -u "${PHP_FPM_UID-1000}" "wp_php"
-groupmod -o -g "${PHP_FPM_GID-1000}" "wp_php"
+WP_PHP_UID="${PHP_FPM_UID-1000}"
+WP_PHP_GID="${PHP_FPM_GID-1000}"
+
+if [ "$WP_PHP_UID" != "`id -u wp_php`" ]; then
+	usermod -o -u "${WP_PHP_UID}" "wp_php"
+fi
+
+if [ "$WP_PHP_GID" != "`id -g wp_php`" ]; then
+	groupmod -o -g "${WP_PHP_GID}" "wp_php"
+fi
