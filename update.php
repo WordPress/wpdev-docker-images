@@ -86,7 +86,7 @@ $php_versions = array(
 		),
 		'phpunit' => 5,
 		'cli' => array(
-			'mysql_client' => 'virtual-mysql-client',
+			'mysql_client' => 'mysql-client',
 			'download_url' => 'https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar',
 		),
 	),
