@@ -14,4 +14,4 @@ if sudo -u wp_php wp --path=/dev/null help "$1" > /dev/null 2>&1; then
 fi
 
 # Execute CMD
-sudo -u wp_php "$@"
+sudo -E -u wp_php "$@"
