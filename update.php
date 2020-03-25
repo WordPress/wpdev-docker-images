@@ -243,6 +243,10 @@ foreach ( $php_versions as $version => $images ) {
 			if ( $config['apt'] || $config['extensions'] || $config['pecl_extensions'] || $config['composer'] ) {
 				$install_extensions = "# install the PHP extensions we need\nRUN set -ex;";
 
+				if ( $config['composer'] ) {
+					$config['apt'][] = 'git';
+				}
+
 				if ( $config['apt'] ) {
 					$install_extensions .= " \\\n\t\\\n\t";
 					$install_extensions .= "apt-get update; \\\n\t\\\n\tapt-get install -y --no-install-recommends " . implode( $config['apt'], ' ' ) . ";";
