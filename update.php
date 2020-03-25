@@ -243,6 +243,7 @@ foreach ( $php_versions as $version => $images ) {
 			if ( $config['apt'] || $config['extensions'] || $config['pecl_extensions'] || $config['composer'] ) {
 				$install_extensions = "# install the PHP extensions we need\nRUN set -ex;";
 
+				// Composer requires git to be installed in some circumstances (e.g. `composer install --prefer-source`).
 				if ( $config['composer'] ) {
 					$config['apt'][] = 'git';
 				}
