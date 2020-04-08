@@ -17,7 +17,7 @@ RUN set -ex; \
 	\
 	apt-get update; \
 	\
-	apt-get install -y --no-install-recommends sudo;
+	apt-get install -y --no-install-recommends sudo rsync;
 
 COPY entrypoint.sh /entrypoint.sh
 COPY common.sh /common.sh
