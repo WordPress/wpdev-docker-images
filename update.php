@@ -190,6 +190,33 @@ $php_versions = array(
 	),
 );
 
+$phpunit_versions = array(
+	'8' => array(
+		'7.4',
+		'7.3',
+		'7.2',
+	),
+	'7' => array(
+		'7.4',
+		'7.3',
+		'7.2',
+		'7.1',
+	),
+	'6' => array(
+		'7.2',
+		'7.1',
+		'7.0',
+	),
+	'5' => array(
+		'7.1',
+		'7.0',
+		'5.6',
+	),
+	'4' => array(
+		'5.6',
+	)
+);
+
 // A warning that will be added to each Dockerfile, to ensure folks don't edit them directly.
 $generated_warning = <<<EOT
 ##########################################################################
@@ -366,6 +393,56 @@ foreach ( $php_versions as $version => $images ) {
 		$build_cmds[ $image ][] = $build_cmd_list;
 
 		echo "✅\n";
+	}
+
+	foreach ( $phpunit_versions as $phpunit_version => $php_versions ) {
+		foreach ( $php_versions as $php_version ) {
+			echo shell_exec( "mkdir -p images/$php_version/phpunit-$phpunit_version" );
+
+			$dockerfile = $templates['phpunit'];
+
+			$dockerfile = str_replace( '%%GENERATED_WARNING%%', $generated_warning, $dockerfile );
+
+			if ( 'latest' === $php_version ) {
+				$version_tag = 'latest';
+			} else {
+				$version_tag = "$php_version-fpm";
+			}
+			$dockerfile = str_replace( '%%VERSION_TAG%%', $version_tag, $dockerfile );
+
+			$dockerfile = str_replace( '%%PHPUNIT_VERSION%%', $phpunit_version, $dockerfile );
+
+			// Cleanup any leftover tags.
+			$dockerfile = preg_replace( '/%%[^%]+%%/', '', $dockerfile );
+
+			// Write the real Dockerfile.
+			$fh = fopen( "images/$php_version/phpunit-$phpunit_version/Dockerfile", 'w' );
+			fwrite( $fh, $dockerfile );
+			fclose( $fh );
+
+			// Copy the entrypoint script, if it exists.
+			if ( file_exists( "entrypoint/entrypoint-phpunit.sh" ) ) {
+				copy( "entrypoint/entrypoint-phpunit.sh", "images/$php_version/phpunit-$phpunit_version/entrypoint.sh" );
+			}
+
+			// Generate the build and push commands for this image/version.
+			$build_cmd  = "docker build --build-arg PACKAGE_REGISTRY=\$PACKAGE_REGISTRY --build-arg PR_TAG=\$PR_TAG";
+			$build_cmd .= " -t \$PACKAGE_REGISTRY/phpunit-$phpunit_version:$php_version-fpm\$PR_TAG";
+			if ( $version === $latest ) {
+				$build_cmd .= " -t \$PACKAGE_REGISTRY/phpunit-$phpunit_version:latest\$PR_TAG";
+			}
+			$build_cmd_list = array(
+				"phpunit-$phpunit_version $version",
+				"$build_cmd images/$php_version/phpunit-$phpunit_version",
+				'docker images',
+				"docker push \$PACKAGE_REGISTRY/phpunit-$phpunit_version:$php_version-fpm\$PR_TAG",
+			);
+			if ( $version === $latest ) {
+				$build_cmd_list[] = "docker push \$PACKAGE_REGISTRY/phpunit-$phpunit_version:latest\$PR_TAG";
+			}
+
+			$build_cmds[ "phpunit-$phpunit_version" ][] = $build_cmd_list;
+		}
 	}
 
 	// Load the .travis.yml template.
