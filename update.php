@@ -162,7 +162,7 @@ $php_versions = array(
 	),
 	'7.4' => array(
 		'php' => array(
-			'base_name'       => 'php:7.4-rc-fpm',
+			'base_name'       => 'php:7.4-fpm',
 			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libzip-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libonig-dev', 'locales', 'sudo', 'rsync' ),
 			'extensions'      => array( 'gd', 'opcache', 'mysqli', 'zip', 'exif', 'intl', 'mbstring' ),
 			'pecl_extensions' => array( 'xdebug-2.8.0beta1', 'memcached-3.1.3', 'imagick' ),
