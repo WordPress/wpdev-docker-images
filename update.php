@@ -8,23 +8,25 @@ $latest = '7.3';
  *
  * Each PHP version has settings for the PHP base image, the PHPUnit image, and the WP_CLI image.
  *
- * @param array $php {
- *     @type string $base_name       The name of the Docker image to base our image off of.
- *     @type array  $apt             An array of apt packages that need to be installed.
- *     @type array  $extensions      An array of PHP extensions that need to be enabled.
- *     @type array  $pecl_extensions An array of PECL-sourced PHP extensions that will be installed, but not enabled.
+ * @param array       $php             {
+ *
+ * @type string       $base_name       The name of the Docker image to base our image off of.
+ * @type array        $apt             An array of apt packages that need to be installed.
+ * @type array        $extensions      An array of PHP extensions that need to be enabled.
+ * @type array        $pecl_extensions An array of PECL-sourced PHP extensions that will be installed, but not enabled.
  * }
  *
- * @param int $phpunit The major version branch of PHPUnit to install on this image.
+ * @param int         $phpunit         The major version branch of PHPUnit to install on this image.
  *
- * @param array|false $cli {
- *     @type string $mysql_client The name of the MySQL client Ubuntu package on this image.
- *     @type string $download_url The download URL for the version of WP-CLI to install on this image.
+ * @param array|false $cli             {
+ *
+ * @type string       $mysql_client    The name of the MySQL client Ubuntu package on this image.
+ * @type string       $download_url    The download URL for the version of WP-CLI to install on this image.
  * }
  */
 $php_versions = array(
-	'5.2' => array(
-		'php' => array(
+	'5.2'    => array(
+		'php'     => array(
 			'base_name'       => 'devilbox/php-fpm-5.2:latest',
 			'apt'             => array( 'sudo', 'rsync' ),
 			'extensions'      => array(),
@@ -32,10 +34,10 @@ $php_versions = array(
 			'composer'        => false,
 		),
 		'phpunit' => 3,
-		'cli' => false,
+		'cli'     => false,
 	),
-	'5.3' => array(
-		'php' => array(
+	'5.3'    => array(
+		'php'     => array(
 			'base_name'       => 'devilbox/php-fpm-5.3:latest',
 			'apt'             => array( 'unzip', 'sudo', 'rsync' ),
 			'extensions'      => array(),
@@ -43,139 +45,250 @@ $php_versions = array(
 			'composer'        => true,
 		),
 		'phpunit' => 4,
-		'cli' => array(
+		'cli'     => array(
 			'mysql_client' => 'mysql-client',
 			'download_url' => 'https://github.com/wp-cli/wp-cli/releases/download/v1.5.1/wp-cli-1.5.1.phar',
 		),
 	),
-	'5.4' => array(
-		'php' => array(
+	'5.4'    => array(
+		'php'     => array(
 			'base_name'       => 'php:5.4-fpm',
-			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libzip-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libicu-dev', 'libonig-dev', 'locales', 'sudo', 'rsync' ),
+			'apt'             => array(
+				'libjpeg-dev',
+				'libpng-dev',
+				'libzip-dev',
+				'libmemcached-dev',
+				'unzip',
+				'libmagickwand-dev',
+				'ghostscript',
+				'libicu-dev',
+				'libonig-dev',
+				'locales',
+				'sudo',
+				'rsync'
+			),
 			'extensions'      => array( 'gd', 'mysql', 'mysqli', 'zip', 'exif', 'intl', 'mbstring' ),
 			'pecl_extensions' => array( 'xdebug-2.4.1', 'memcached-2.2.0', 'imagick-3.4.4' ),
 			'composer'        => true,
 		),
 		'phpunit' => 4,
-		'cli' => array(
+		'cli'     => array(
 			'mysql_client' => 'mysql-client',
 			'download_url' => 'https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar',
 		),
 	),
-	'5.5' => array(
-		'php' => array(
+	'5.5'    => array(
+		'php'     => array(
 			'base_name'       => 'php:5.5-fpm',
-			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libzip-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libicu-dev', 'libonig-dev', 'locales', 'sudo', 'rsync' ),
+			'apt'             => array(
+				'libjpeg-dev',
+				'libpng-dev',
+				'libzip-dev',
+				'libmemcached-dev',
+				'unzip',
+				'libmagickwand-dev',
+				'ghostscript',
+				'libicu-dev',
+				'libonig-dev',
+				'locales',
+				'sudo',
+				'rsync'
+			),
 			'extensions'      => array( 'gd', 'mysql', 'mysqli', 'zip', 'exif', 'intl', 'mbstring' ),
 			'pecl_extensions' => array( 'xdebug-2.5.5', 'memcached-2.2.0', 'imagick-3.4.4' ),
 			'composer'        => true,
 		),
 		'phpunit' => 4,
-		'cli' => array(
+		'cli'     => array(
 			'mysql_client' => 'mysql-client',
 			'download_url' => 'https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar',
 		),
 	),
 	'5.6.20' => array( // WordPress' minumum PHP requirement as of WordPress 5.3.
-		'php' => array(
+		'php'     => array(
 			'base_name'       => 'php:5.6.20-fpm',
-			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libzip-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libicu-dev', 'libonig-dev', 'locales', 'sudo', 'rsync' ),
+			'apt'             => array(
+				'libjpeg-dev',
+				'libpng-dev',
+				'libzip-dev',
+				'libmemcached-dev',
+				'unzip',
+				'libmagickwand-dev',
+				'ghostscript',
+				'libicu-dev',
+				'libonig-dev',
+				'locales',
+				'sudo',
+				'rsync'
+			),
 			'extensions'      => array( 'gd', 'mysql', 'mysqli', 'zip', 'exif', 'intl', 'mbstring' ),
 			'pecl_extensions' => array( 'xdebug-2.5.5', 'memcached-2.2.0', 'imagick-3.4.4' ),
 			'composer'        => true,
 		),
 		'phpunit' => 5,
-		'cli' => array(
+		'cli'     => array(
 			'mysql_client' => 'mysql-client',
 			'download_url' => 'https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar',
 		),
 	),
-	'5.6' => array(
-		'php' => array(
+	'5.6'    => array(
+		'php'     => array(
 			'base_name'       => 'php:5.6-fpm',
-			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libzip-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libonig-dev', 'locales', 'sudo', 'rsync' ),
+			'apt'             => array(
+				'libjpeg-dev',
+				'libpng-dev',
+				'libzip-dev',
+				'libmemcached-dev',
+				'unzip',
+				'libmagickwand-dev',
+				'ghostscript',
+				'libonig-dev',
+				'locales',
+				'sudo',
+				'rsync'
+			),
 			'extensions'      => array( 'gd', 'mysql', 'mysqli', 'zip', 'exif', 'intl', 'mbstring' ),
 			'pecl_extensions' => array( 'xdebug-2.5.5', 'memcached-2.2.0', 'imagick-3.4.4' ),
 			'composer'        => true,
 		),
 		'phpunit' => 5,
-		'cli' => array(
+		'cli'     => array(
 			'mysql_client' => 'virtual-mysql-client',
 			'download_url' => 'https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar',
 		),
 	),
-	'7.0' => array(
-		'php' => array(
+	'7.0'    => array(
+		'php'     => array(
 			'base_name'       => 'php:7.0-fpm',
-			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libzip-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libonig-dev', 'locales', 'sudo', 'rsync' ),
+			'apt'             => array(
+				'libjpeg-dev',
+				'libpng-dev',
+				'libzip-dev',
+				'libmemcached-dev',
+				'unzip',
+				'libmagickwand-dev',
+				'ghostscript',
+				'libonig-dev',
+				'locales',
+				'sudo',
+				'rsync'
+			),
 			'extensions'      => array( 'gd', 'opcache', 'mysqli', 'zip', 'exif', 'intl', 'mbstring' ),
 			'pecl_extensions' => array( 'xdebug-2.7.2', 'memcached-3.1.3', 'imagick' ),
 			'composer'        => true,
 		),
 		'phpunit' => 6,
-		'cli' => array(
+		'cli'     => array(
 			'mysql_client' => 'virtual-mysql-client',
 			'download_url' => 'https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar',
 		),
 	),
-	'7.1' => array(
-		'php' => array(
+	'7.1'    => array(
+		'php'     => array(
 			'base_name'       => 'php:7.1-fpm',
-			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libzip-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libonig-dev', 'locales', 'sudo', 'rsync' ),
+			'apt'             => array(
+				'libjpeg-dev',
+				'libpng-dev',
+				'libzip-dev',
+				'libmemcached-dev',
+				'unzip',
+				'libmagickwand-dev',
+				'ghostscript',
+				'libonig-dev',
+				'locales',
+				'sudo',
+				'rsync'
+			),
 			'extensions'      => array( 'gd', 'opcache', 'mysqli', 'zip', 'exif', 'intl', 'mbstring' ),
 			'pecl_extensions' => array( 'xdebug-2.7.2', 'memcached-3.1.3', 'imagick' ),
 			'composer'        => true,
 		),
 		'phpunit' => 7,
-		'cli' => array(
+		'cli'     => array(
 			'mysql_client' => 'virtual-mysql-client',
 			'download_url' => 'https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar',
 		),
 	),
-	'7.2' => array(
-		'php' => array(
+	'7.2'    => array(
+		'php'     => array(
 			'base_name'       => 'php:7.2-fpm',
-			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libzip-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libonig-dev', 'locales', 'sudo', 'rsync' ),
+			'apt'             => array(
+				'libjpeg-dev',
+				'libpng-dev',
+				'libzip-dev',
+				'libmemcached-dev',
+				'unzip',
+				'libmagickwand-dev',
+				'ghostscript',
+				'libonig-dev',
+				'locales',
+				'sudo',
+				'rsync'
+			),
 			'extensions'      => array( 'gd', 'opcache', 'mysqli', 'zip', 'exif', 'intl', 'mbstring' ),
 			'pecl_extensions' => array( 'xdebug-2.7.2', 'memcached-3.1.3', 'imagick' ),
 			'composer'        => true,
 		),
 		'phpunit' => 7,
-		'cli' => array(
+		'cli'     => array(
 			'mysql_client' => 'virtual-mysql-client',
 			'download_url' => 'https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar',
 		),
 	),
-	'7.3' => array(
-		'php' => array(
+	'7.3'    => array(
+		'php'     => array(
 			'base_name'       => 'php:7.3-fpm',
-			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libzip-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libonig-dev', 'locales', 'sudo', 'rsync' ),
+			'apt'             => array(
+				'libjpeg-dev',
+				'libpng-dev',
+				'libzip-dev',
+				'libmemcached-dev',
+				'unzip',
+				'libmagickwand-dev',
+				'ghostscript',
+				'libonig-dev',
+				'locales',
+				'sudo',
+				'rsync'
+			),
 			'extensions'      => array( 'gd', 'opcache', 'mysqli', 'zip', 'exif', 'intl', 'mbstring' ),
 			'pecl_extensions' => array( 'xdebug-2.7.2', 'memcached-3.1.3', 'imagick' ),
 			'composer'        => true,
 		),
 		'phpunit' => 7,
-		'cli' => array(
+		'cli'     => array(
 			'mysql_client' => 'virtual-mysql-client',
 			'download_url' => 'https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar',
 		),
 	),
-	'7.4' => array(
-		'php' => array(
+	'7.4'    => array(
+		'php'     => array(
 			'base_name'       => 'php:7.4-fpm',
-			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libzip-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libonig-dev', 'locales', 'sudo', 'rsync' ),
+			'apt'             => array(
+				'libjpeg-dev',
+				'libpng-dev',
+				'libzip-dev',
+				'libmemcached-dev',
+				'unzip',
+				'libmagickwand-dev',
+				'ghostscript',
+				'libonig-dev',
+				'locales',
+				'sudo',
+				'rsync'
+			),
 			'extensions'      => array( 'gd', 'opcache', 'mysqli', 'zip', 'exif', 'intl', 'mbstring' ),
 			'pecl_extensions' => array( 'xdebug-2.8.0beta1', 'memcached-3.1.3', 'imagick' ),
 			'composer'        => true,
 		),
 		'phpunit' => 7,
-		'cli' => array(
+		'cli'     => array(
 			'mysql_client' => 'virtual-mysql-client',
 			'download_url' => 'https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar',
 		),
 	),
-	'8.0' => array(
-		'php' => array(
+	'8.0'    => array(
+		'php'     => array(
 			'base_name'       => 'devilbox/php-fpm-8.0:latest',
 			'apt'             => array( 'unzip', 'sudo', 'rsync' ),
 			'extensions'      => array( 'mysqli' ),
@@ -183,7 +296,7 @@ $php_versions = array(
 			'composer'        => true,
 		),
 		'phpunit' => 7,
-		'cli' => array(
+		'cli'     => array(
 			'mysql_client' => 'virtual-mysql-client',
 			'download_url' => 'https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar',
 		),
@@ -249,7 +362,7 @@ foreach ( $php_versions as $version => $images ) {
 
 	foreach ( $images as $image => $config ) {
 		echo str_pad( $image, 10, '.' );
-		echo shell_exec( "mkdir -p images/$version/$image" );
+		echo shell_exec( "mkdir -p images/{$image}/{$version}-fpm" );
 
 		$dockerfile = $templates[ $image ];
 
@@ -339,7 +452,7 @@ foreach ( $php_versions as $version => $images ) {
 				$dockerfile = str_replace( '%%INSTALL_EXTENSIONS%%', $install_extensions, $dockerfile );
 			}
 
-			copy( "entrypoint/common.sh", "images/$version/$image/common.sh" );
+			copy( "entrypoint/common.sh", "images/{$image}/{$version}-fpm/common.sh" );
 
 		} elseif ( $image === 'phpunit' ) {
 			// Replace tags inside the PHPUnit Dockerfile template.
@@ -360,44 +473,35 @@ foreach ( $php_versions as $version => $images ) {
 		$dockerfile = preg_replace( '/%%[^%]+%%/', '', $dockerfile );
 
 		// Write the real Dockerfile.
-		$fh = fopen( "images/$version/$image/Dockerfile", 'w' );
-		fwrite( $fh, $dockerfile );
-		fclose( $fh );
+		write_file( "images/{$image}/{$version}-fpm/Dockerfile", $dockerfile );
 
 		// Copy the entrypoint script, if it exists.
 		if ( file_exists( "entrypoint/entrypoint-$image.sh" ) ) {
-			copy( "entrypoint/entrypoint-$image.sh", "images/$version/$image/entrypoint.sh" );
+			copy( "entrypoint/entrypoint-$image.sh", "images/{$image}/{$version}-fpm/entrypoint.sh" );
 		}
 
 		// Copy the PHP-FPM configuration, if it exists.
 		if ( file_exists( "config/php-fpm-$image.conf" ) ) {
-			copy( "config/php-fpm-$image.conf", "images/$version/$image/php-fpm.conf" );
+			copy( "config/php-fpm-$image.conf", "images/{$image}/{$version}-fpm/php-fpm.conf" );
 		}
 
 		// Generate the build and push commands for this image/version.
-		$build_cmd  = "docker build --build-arg PACKAGE_REGISTRY=\$PACKAGE_REGISTRY --build-arg PR_TAG=\$PR_TAG";
-		$build_cmd .= " -t \$PACKAGE_REGISTRY/$image:$version-fpm\$PR_TAG";
-		if ( $version === $latest ) {
-			$build_cmd .= " -t \$PACKAGE_REGISTRY/$image:latest\$PR_TAG";
-		}
-		$build_cmd_list = array(
-			"$image $version",
-			"$build_cmd images/$version/$image",
-			'docker images',
-			"docker push \$PACKAGE_REGISTRY/$image:$version-fpm\$PR_TAG",
+		$build_cmds[ $image ][] = build_commands(
+			"{$image} {$version}",
+			$image,
+			"{$version}-fpm",
+			$version === $latest
 		);
-		if ( $version === $latest ) {
-			$build_cmd_list[] = "docker push \$PACKAGE_REGISTRY/$image:latest\$PR_TAG";
-		}
-
-		$build_cmds[ $image ][] = $build_cmd_list;
 
 		echo "✅\n";
 	}
 
 	foreach ( $phpunit_versions as $phpunit_version => $php_versions ) {
-		foreach ( $php_versions as $php_version ) {
-			echo shell_exec( "mkdir -p images/$php_version/phpunit-$phpunit_version" );
+
+		if ( in_array( $version, $php_versions, true ) ) {
+			$php_version = $version;
+
+			echo shell_exec( "mkdir -p images/phpunit/{$phpunit_version}-php-{$php_version}-fpm" );
 
 			$dockerfile = $templates['phpunit'];
 
@@ -416,32 +520,20 @@ foreach ( $php_versions as $version => $images ) {
 			$dockerfile = preg_replace( '/%%[^%]+%%/', '', $dockerfile );
 
 			// Write the real Dockerfile.
-			$fh = fopen( "images/$php_version/phpunit-$phpunit_version/Dockerfile", 'w' );
-			fwrite( $fh, $dockerfile );
-			fclose( $fh );
+			write_file( "images/phpunit/{$phpunit_version}-php-{$php_version}-fpm/Dockerfile", $dockerfile );
 
 			// Copy the entrypoint script, if it exists.
 			if ( file_exists( "entrypoint/entrypoint-phpunit.sh" ) ) {
-				copy( "entrypoint/entrypoint-phpunit.sh", "images/$php_version/phpunit-$phpunit_version/entrypoint.sh" );
+				copy( "entrypoint/entrypoint-phpunit.sh", "images/phpunit/{$phpunit_version}-php-{$php_version}-fpm/entrypoint.sh" );
 			}
 
 			// Generate the build and push commands for this image/version.
-			$build_cmd  = "docker build --build-arg PACKAGE_REGISTRY=\$PACKAGE_REGISTRY --build-arg PR_TAG=\$PR_TAG";
-			$build_cmd .= " -t \$PACKAGE_REGISTRY/phpunit-$phpunit_version:$php_version-fpm\$PR_TAG";
-			if ( $version === $latest ) {
-				$build_cmd .= " -t \$PACKAGE_REGISTRY/phpunit-$phpunit_version:latest\$PR_TAG";
-			}
-			$build_cmd_list = array(
-				"phpunit-$phpunit_version $version",
-				"$build_cmd images/$php_version/phpunit-$phpunit_version",
-				'docker images',
-				"docker push \$PACKAGE_REGISTRY/phpunit-$phpunit_version:$php_version-fpm\$PR_TAG",
+			$build_cmds['phpunit'][] = build_commands(
+				"phpunit {$phpunit_version} on php {$php_version}",
+				'phpunit',
+				"{$phpunit_version}-php-{$php_version}-fpm",
+				$version === $latest
 			);
-			if ( $version === $latest ) {
-				$build_cmd_list[] = "docker push \$PACKAGE_REGISTRY/phpunit-$phpunit_version:latest\$PR_TAG";
-			}
-
-			$build_cmds[ "phpunit-$phpunit_version" ][] = $build_cmd_list;
 		}
 	}
 
@@ -450,27 +542,82 @@ foreach ( $php_versions as $version => $images ) {
 	$travis_template = str_replace( '%%GENERATED_WARNING%%', $generated_warning, $travis_template );
 
 	// Generate the YML-formatted list of build commands for each of the images.
-	foreach ( array( 'php', 'phpunit', 'cli' ) as $image ) {
-		$build_strings[ $image ] = array_reduce( $build_cmds[ $image ], function( $string, $cmds ) use ( $image ) {
+	$travis_template = str_replace( '%%BUILD_PHP_IMAGES%%', generate_image_yaml( $build_cmds['php'] ), $travis_template );
+	$travis_template = str_replace( '%%BUILD_PHPUNIT_IMAGES%%', generate_image_yaml( $build_cmds['phpunit'] ), $travis_template );
+	$travis_template = str_replace( '%%BUILD_CLI_IMAGES%%', generate_image_yaml( $build_cmds['cli'] ), $travis_template );
+
+	write_file( '.travis.yml', $travis_template );
+}
+
+/**
+ * Generate Docker build commands.
+ *
+ * @param string $label       The name of the Travis script
+ * @param string $image_type  The image type (e.g. php, phpunit, cli)
+ * @param string $image_label The image label (e.g. 5.2-fpm, etc.)
+ * @param bool   $is_latest   Whether the version is the latest.
+ *
+ * @return array
+ */
+function build_commands( $label, $image_type = 'php', $image_label = '7.3-fpm', $is_latest = false ) {
+
+	$path = "images/{$image_type}/{$image_label}";
+
+	$build = 'docker build --build-arg PACKAGE_REGISTRY=$PACKAGE_REGISTRY --build-arg PR_TAG=$PR_TAG';
+	$build .= " -t \$PACKAGE_REGISTRY/{$image_type}:{$image_label}\$PR_TAG";
+	if ( $is_latest ) {
+		$build .= " -t \$PACKAGE_REGISTRY/{$image_type}:latest\$PR_TAG";
+	}
+
+	$commands = array(
+		$label,
+		"$build $path",
+		'docker images',
+		"docker push \$PACKAGE_REGISTRY/{$image_type}:{$image_label}\$PR_TAG",
+	);
+	if ( $is_latest ) {
+		$commands[] = "docker push \$PACKAGE_REGISTRY/{$image_type}:{$image_label}\$PR_TAG";
+	}
+
+	return $commands;
+}
+
+/**
+ * Convert array of build commands into YAML.
+ *
+ * @param array $build_commands Array of build commands.
+ *
+ * @return string
+ */
+function generate_image_yaml( array $build_commands ) {
+	return array_reduce(
+		$build_commands,
+		function ( $string, $cmds ) {
 			$name = array_shift( $cmds );
-			if ( $string === '' && $image !== 'cli' ) {
+			if ( empty( $string ) ) {
 				$string .= "      name: \"$name\"\n";
 			} else {
 				$string .= "    - name: \"$name\"\n";
 			}
 			$string .= "      script:\n";
-			foreach( $cmds as $cmd ) {
+			foreach ( $cmds as $cmd ) {
 				$string .= "        - $cmd\n";
 			}
 
 			return $string;
-		}, '' );
-	}
-	$travis_template = str_replace( '%%BUILD_PHP_IMAGES%%', $build_strings['php'], $travis_template );
-	$travis_template = str_replace( '%%BUILD_PHPUNIT_IMAGES%%', $build_strings['phpunit'], $travis_template );
-	$travis_template = str_replace( '%%BUILD_CLI_IMAGES%%', $build_strings['cli'], $travis_template );
+		},
+		''
+	);
+}
 
-	$fh = fopen( ".travis.yml", 'w' );
-	fwrite( $fh, $travis_template );
+/**
+ * Write file.
+ *
+ * @param string $file     File path.
+ * @param string $contents File contents.
+ */
+function write_file( $file, $contents ) {
+	$fh = fopen( $file, 'w' );
+	fwrite( $fh, $contents );
 	fclose( $fh );
 }
