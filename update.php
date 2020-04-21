@@ -8,25 +8,23 @@ $latest = '7.3';
  *
  * Each PHP version has settings for the PHP base image, the PHPUnit image, and the WP_CLI image.
  *
- * @param array       $php             {
- *
- * @type string       $base_name       The name of the Docker image to base our image off of.
- * @type array        $apt             An array of apt packages that need to be installed.
- * @type array        $extensions      An array of PHP extensions that need to be enabled.
- * @type array        $pecl_extensions An array of PECL-sourced PHP extensions that will be installed, but not enabled.
+ * @param array $php {
+ *     @type string $base_name       The name of the Docker image to base our image off of.
+ *     @type array  $apt             An array of apt packages that need to be installed.
+ *     @type array  $extensions      An array of PHP extensions that need to be enabled.
+ *     @type array  $pecl_extensions An array of PECL-sourced PHP extensions that will be installed, but not enabled.
  * }
  *
- * @param int         $phpunit         The major version branch of PHPUnit to install on this image.
+ * @param int $phpunit The major version branch of PHPUnit to install on this image.
  *
- * @param array|false $cli             {
- *
- * @type string       $mysql_client    The name of the MySQL client Ubuntu package on this image.
- * @type string       $download_url    The download URL for the version of WP-CLI to install on this image.
+ * @param array|false $cli {
+ *     @type string $mysql_client The name of the MySQL client Ubuntu package on this image.
+ *     @type string $download_url The download URL for the version of WP-CLI to install on this image.
  * }
  */
 $php_versions = array(
-	'5.2'    => array(
-		'php'     => array(
+	'5.2' => array(
+		'php' => array(
 			'base_name'       => 'devilbox/php-fpm-5.2:latest',
 			'apt'             => array( 'sudo', 'rsync' ),
 			'extensions'      => array(),
@@ -34,10 +32,10 @@ $php_versions = array(
 			'composer'        => false,
 		),
 		'phpunit' => 3,
-		'cli'     => false,
+		'cli' => false,
 	),
-	'5.3'    => array(
-		'php'     => array(
+	'5.3' => array(
+		'php' => array(
 			'base_name'       => 'devilbox/php-fpm-5.3:latest',
 			'apt'             => array( 'unzip', 'sudo', 'rsync' ),
 			'extensions'      => array(),
@@ -45,250 +43,139 @@ $php_versions = array(
 			'composer'        => true,
 		),
 		'phpunit' => 4,
-		'cli'     => array(
+		'cli' => array(
 			'mysql_client' => 'mysql-client',
 			'download_url' => 'https://github.com/wp-cli/wp-cli/releases/download/v1.5.1/wp-cli-1.5.1.phar',
 		),
 	),
-	'5.4'    => array(
-		'php'     => array(
+	'5.4' => array(
+		'php' => array(
 			'base_name'       => 'php:5.4-fpm',
-			'apt'             => array(
-				'libjpeg-dev',
-				'libpng-dev',
-				'libzip-dev',
-				'libmemcached-dev',
-				'unzip',
-				'libmagickwand-dev',
-				'ghostscript',
-				'libicu-dev',
-				'libonig-dev',
-				'locales',
-				'sudo',
-				'rsync'
-			),
+			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libzip-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libicu-dev', 'libonig-dev', 'locales', 'sudo', 'rsync' ),
 			'extensions'      => array( 'gd', 'mysql', 'mysqli', 'zip', 'exif', 'intl', 'mbstring' ),
 			'pecl_extensions' => array( 'xdebug-2.4.1', 'memcached-2.2.0', 'imagick-3.4.4' ),
 			'composer'        => true,
 		),
 		'phpunit' => 4,
-		'cli'     => array(
+		'cli' => array(
 			'mysql_client' => 'mysql-client',
 			'download_url' => 'https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar',
 		),
 	),
-	'5.5'    => array(
-		'php'     => array(
+	'5.5' => array(
+		'php' => array(
 			'base_name'       => 'php:5.5-fpm',
-			'apt'             => array(
-				'libjpeg-dev',
-				'libpng-dev',
-				'libzip-dev',
-				'libmemcached-dev',
-				'unzip',
-				'libmagickwand-dev',
-				'ghostscript',
-				'libicu-dev',
-				'libonig-dev',
-				'locales',
-				'sudo',
-				'rsync'
-			),
+			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libzip-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libicu-dev', 'libonig-dev', 'locales', 'sudo', 'rsync' ),
 			'extensions'      => array( 'gd', 'mysql', 'mysqli', 'zip', 'exif', 'intl', 'mbstring' ),
 			'pecl_extensions' => array( 'xdebug-2.5.5', 'memcached-2.2.0', 'imagick-3.4.4' ),
 			'composer'        => true,
 		),
 		'phpunit' => 4,
-		'cli'     => array(
+		'cli' => array(
 			'mysql_client' => 'mysql-client',
 			'download_url' => 'https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar',
 		),
 	),
 	'5.6.20' => array( // WordPress' minumum PHP requirement as of WordPress 5.3.
-		'php'     => array(
+		'php' => array(
 			'base_name'       => 'php:5.6.20-fpm',
-			'apt'             => array(
-				'libjpeg-dev',
-				'libpng-dev',
-				'libzip-dev',
-				'libmemcached-dev',
-				'unzip',
-				'libmagickwand-dev',
-				'ghostscript',
-				'libicu-dev',
-				'libonig-dev',
-				'locales',
-				'sudo',
-				'rsync'
-			),
+			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libzip-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libicu-dev', 'libonig-dev', 'locales', 'sudo', 'rsync' ),
 			'extensions'      => array( 'gd', 'mysql', 'mysqli', 'zip', 'exif', 'intl', 'mbstring' ),
 			'pecl_extensions' => array( 'xdebug-2.5.5', 'memcached-2.2.0', 'imagick-3.4.4' ),
 			'composer'        => true,
 		),
 		'phpunit' => 5,
-		'cli'     => array(
+		'cli' => array(
 			'mysql_client' => 'mysql-client',
 			'download_url' => 'https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar',
 		),
 	),
-	'5.6'    => array(
-		'php'     => array(
+	'5.6' => array(
+		'php' => array(
 			'base_name'       => 'php:5.6-fpm',
-			'apt'             => array(
-				'libjpeg-dev',
-				'libpng-dev',
-				'libzip-dev',
-				'libmemcached-dev',
-				'unzip',
-				'libmagickwand-dev',
-				'ghostscript',
-				'libonig-dev',
-				'locales',
-				'sudo',
-				'rsync'
-			),
+			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libzip-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libonig-dev', 'locales', 'sudo', 'rsync' ),
 			'extensions'      => array( 'gd', 'mysql', 'mysqli', 'zip', 'exif', 'intl', 'mbstring' ),
 			'pecl_extensions' => array( 'xdebug-2.5.5', 'memcached-2.2.0', 'imagick-3.4.4' ),
 			'composer'        => true,
 		),
 		'phpunit' => 5,
-		'cli'     => array(
+		'cli' => array(
 			'mysql_client' => 'virtual-mysql-client',
 			'download_url' => 'https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar',
 		),
 	),
-	'7.0'    => array(
-		'php'     => array(
+	'7.0' => array(
+		'php' => array(
 			'base_name'       => 'php:7.0-fpm',
-			'apt'             => array(
-				'libjpeg-dev',
-				'libpng-dev',
-				'libzip-dev',
-				'libmemcached-dev',
-				'unzip',
-				'libmagickwand-dev',
-				'ghostscript',
-				'libonig-dev',
-				'locales',
-				'sudo',
-				'rsync'
-			),
+			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libzip-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libonig-dev', 'locales', 'sudo', 'rsync' ),
 			'extensions'      => array( 'gd', 'opcache', 'mysqli', 'zip', 'exif', 'intl', 'mbstring' ),
 			'pecl_extensions' => array( 'xdebug-2.7.2', 'memcached-3.1.3', 'imagick' ),
 			'composer'        => true,
 		),
 		'phpunit' => 6,
-		'cli'     => array(
+		'cli' => array(
 			'mysql_client' => 'virtual-mysql-client',
 			'download_url' => 'https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar',
 		),
 	),
-	'7.1'    => array(
-		'php'     => array(
+	'7.1' => array(
+		'php' => array(
 			'base_name'       => 'php:7.1-fpm',
-			'apt'             => array(
-				'libjpeg-dev',
-				'libpng-dev',
-				'libzip-dev',
-				'libmemcached-dev',
-				'unzip',
-				'libmagickwand-dev',
-				'ghostscript',
-				'libonig-dev',
-				'locales',
-				'sudo',
-				'rsync'
-			),
+			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libzip-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libonig-dev', 'locales', 'sudo', 'rsync' ),
 			'extensions'      => array( 'gd', 'opcache', 'mysqli', 'zip', 'exif', 'intl', 'mbstring' ),
 			'pecl_extensions' => array( 'xdebug-2.7.2', 'memcached-3.1.3', 'imagick' ),
 			'composer'        => true,
 		),
 		'phpunit' => 7,
-		'cli'     => array(
+		'cli' => array(
 			'mysql_client' => 'virtual-mysql-client',
 			'download_url' => 'https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar',
 		),
 	),
-	'7.2'    => array(
-		'php'     => array(
+	'7.2' => array(
+		'php' => array(
 			'base_name'       => 'php:7.2-fpm',
-			'apt'             => array(
-				'libjpeg-dev',
-				'libpng-dev',
-				'libzip-dev',
-				'libmemcached-dev',
-				'unzip',
-				'libmagickwand-dev',
-				'ghostscript',
-				'libonig-dev',
-				'locales',
-				'sudo',
-				'rsync'
-			),
+			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libzip-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libonig-dev', 'locales', 'sudo', 'rsync' ),
 			'extensions'      => array( 'gd', 'opcache', 'mysqli', 'zip', 'exif', 'intl', 'mbstring' ),
 			'pecl_extensions' => array( 'xdebug-2.7.2', 'memcached-3.1.3', 'imagick' ),
 			'composer'        => true,
 		),
 		'phpunit' => 7,
-		'cli'     => array(
+		'cli' => array(
 			'mysql_client' => 'virtual-mysql-client',
 			'download_url' => 'https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar',
 		),
 	),
-	'7.3'    => array(
-		'php'     => array(
+	'7.3' => array(
+		'php' => array(
 			'base_name'       => 'php:7.3-fpm',
-			'apt'             => array(
-				'libjpeg-dev',
-				'libpng-dev',
-				'libzip-dev',
-				'libmemcached-dev',
-				'unzip',
-				'libmagickwand-dev',
-				'ghostscript',
-				'libonig-dev',
-				'locales',
-				'sudo',
-				'rsync'
-			),
+			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libzip-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libonig-dev', 'locales', 'sudo', 'rsync' ),
 			'extensions'      => array( 'gd', 'opcache', 'mysqli', 'zip', 'exif', 'intl', 'mbstring' ),
 			'pecl_extensions' => array( 'xdebug-2.7.2', 'memcached-3.1.3', 'imagick' ),
 			'composer'        => true,
 		),
 		'phpunit' => 7,
-		'cli'     => array(
+		'cli' => array(
 			'mysql_client' => 'virtual-mysql-client',
 			'download_url' => 'https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar',
 		),
 	),
-	'7.4'    => array(
-		'php'     => array(
+	'7.4' => array(
+		'php' => array(
 			'base_name'       => 'php:7.4-fpm',
-			'apt'             => array(
-				'libjpeg-dev',
-				'libpng-dev',
-				'libzip-dev',
-				'libmemcached-dev',
-				'unzip',
-				'libmagickwand-dev',
-				'ghostscript',
-				'libonig-dev',
-				'locales',
-				'sudo',
-				'rsync'
-			),
+			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libzip-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libonig-dev', 'locales', 'sudo', 'rsync' ),
 			'extensions'      => array( 'gd', 'opcache', 'mysqli', 'zip', 'exif', 'intl', 'mbstring' ),
 			'pecl_extensions' => array( 'xdebug-2.8.0beta1', 'memcached-3.1.3', 'imagick' ),
 			'composer'        => true,
 		),
 		'phpunit' => 7,
-		'cli'     => array(
+		'cli' => array(
 			'mysql_client' => 'virtual-mysql-client',
 			'download_url' => 'https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar',
 		),
 	),
-	'8.0'    => array(
-		'php'     => array(
+	'8.0' => array(
+		'php' => array(
 			'base_name'       => 'devilbox/php-fpm-8.0:latest',
 			'apt'             => array( 'unzip', 'sudo', 'rsync' ),
 			'extensions'      => array( 'mysqli' ),
@@ -296,7 +183,7 @@ $php_versions = array(
 			'composer'        => true,
 		),
 		'phpunit' => 7,
-		'cli'     => array(
+		'cli' => array(
 			'mysql_client' => 'virtual-mysql-client',
 			'download_url' => 'https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar',
 		),
