@@ -190,6 +190,14 @@ $php_versions = array(
 	),
 );
 
+/**
+ * An array of all PHPUnit and PHP version combinations that we need to generate images for.
+ *
+ * Different WordPress versions support different versions of PHP and different versions of PHPUnit.
+ * This creates a need to run multiple versions of PHPUnit on each version of PHP.
+ *
+ * @param array $phpunit_version A list of PHP versions for each PHPUnit version.
+ */
 $phpunit_versions = array(
 	'8' => array(
 		'7.4',
@@ -248,7 +256,7 @@ foreach ( $php_versions as $version => $images ) {
 	echo str_repeat( '-', strlen( $title ) ) . "\n";
 
 	foreach ( $images as $image => $config ) {
-		echo str_pad( $image, 10, '.' );
+		echo str_pad( $image, 15, '.' );
 		echo shell_exec( "mkdir -p images/{$image}/{$version}-fpm" );
 
 		$dockerfile = $templates[ $image ];
@@ -384,8 +392,9 @@ foreach ( $php_versions as $version => $images ) {
 	}
 
 	foreach ( $phpunit_versions as $phpunit_version => $php_versions ) {
-
 		if ( in_array( $version, $php_versions, true ) ) {
+			echo str_pad( "phpunit $phpunit_version", 15, '.' );
+
 			$php_version = $version;
 
 			echo shell_exec( "mkdir -p images/phpunit/{$phpunit_version}-php-{$php_version}-fpm" );
@@ -421,6 +430,8 @@ foreach ( $php_versions as $version => $images ) {
 				"{$phpunit_version}-php-{$php_version}-fpm",
 				$version === $latest
 			);
+
+			echo "✅\n";
 		}
 	}
 
