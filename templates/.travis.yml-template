@@ -33,8 +33,9 @@ before_script:
 
 jobs:
   include:
-    - stage: "Build base PHP images"
+    - stage: "Build PHP images"
 %%BUILD_PHP_IMAGES%%
-    - stage: "Build child images"
+    - stage: "Build PHPUnit images"
 %%BUILD_PHPUNIT_IMAGES%%
+    - stage: "Build CLI images"
 %%BUILD_CLI_IMAGES%%
