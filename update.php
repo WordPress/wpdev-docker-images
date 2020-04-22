@@ -1,7 +1,7 @@
 <?php
 
 // The latest stable version of PHP that is supported in WordPress trunk.
-$latest = '7.3';
+$latest = '7.4';
 
 /**
  * An array of all PHP versions that we need to generate images for, and their config settings.
@@ -209,18 +209,21 @@ $phpunit_versions = array(
 		'7.3',
 		'7.2',
 		'7.1',
+		'7.0',
 	),
 	'6' => array(
+		'7.3',
 		'7.2',
 		'7.1',
 		'7.0',
 	),
 	'5' => array(
-		'7.1',
 		'7.0',
+		'5.6.20',
 		'5.6',
 	),
 	'4' => array(
+		'5.6.20',
 		'5.6',
 	)
 );
@@ -257,7 +260,7 @@ foreach ( $php_versions as $version => $images ) {
 
 	foreach ( $images as $image => $config ) {
 		echo str_pad( $image, 15, '.' );
-		echo shell_exec( "mkdir -p images/{$image}/{$version}-fpm" );
+		echo shell_exec( "mkdir -p images/{$version}/{$image}" );
 
 		$dockerfile = $templates[ $image ];
 
@@ -347,7 +350,7 @@ foreach ( $php_versions as $version => $images ) {
 				$dockerfile = str_replace( '%%INSTALL_EXTENSIONS%%', $install_extensions, $dockerfile );
 			}
 
-			copy( "entrypoint/common.sh", "images/{$image}/{$version}-fpm/common.sh" );
+			copy( "entrypoint/common.sh", "images/{$version}/{$image}/common.sh" );
 
 		} elseif ( $image === 'phpunit' ) {
 			// Replace tags inside the PHPUnit Dockerfile template.
@@ -368,23 +371,23 @@ foreach ( $php_versions as $version => $images ) {
 		$dockerfile = preg_replace( '/%%[^%]+%%/', '', $dockerfile );
 
 		// Write the real Dockerfile.
-		write_file( "images/{$image}/{$version}-fpm/Dockerfile", $dockerfile );
+		write_file( "images/{$version}/{$image}/Dockerfile", $dockerfile );
 
 		// Copy the entrypoint script, if it exists.
 		if ( file_exists( "entrypoint/entrypoint-$image.sh" ) ) {
-			copy( "entrypoint/entrypoint-$image.sh", "images/{$image}/{$version}-fpm/entrypoint.sh" );
+			copy( "entrypoint/entrypoint-$image.sh", "images/{$version}/{$image}/entrypoint.sh" );
 		}
 
 		// Copy the PHP-FPM configuration, if it exists.
 		if ( file_exists( "config/php-fpm-$image.conf" ) ) {
-			copy( "config/php-fpm-$image.conf", "images/{$image}/{$version}-fpm/php-fpm.conf" );
+			copy( "config/php-fpm-$image.conf", "images/{$version}/{$image}/php-fpm.conf" );
 		}
 
 		// Generate the build and push commands for this image/version.
 		$build_cmds[ $image ][] = build_commands(
 			"{$image} {$version}",
 			$image,
-			"{$version}-fpm",
+			"{$version}",
 			$version === $latest
 		);
 
@@ -397,7 +400,7 @@ foreach ( $php_versions as $version => $images ) {
 
 			$php_version = $version;
 
-			echo shell_exec( "mkdir -p images/phpunit/{$phpunit_version}-php-{$php_version}-fpm" );
+			echo shell_exec( "mkdir -p images/phpunit/{$phpunit_version}-php-{$php_version}" );
 
 			$dockerfile = $templates['phpunit'];
 
@@ -416,18 +419,18 @@ foreach ( $php_versions as $version => $images ) {
 			$dockerfile = preg_replace( '/%%[^%]+%%/', '', $dockerfile );
 
 			// Write the real Dockerfile.
-			write_file( "images/phpunit/{$phpunit_version}-php-{$php_version}-fpm/Dockerfile", $dockerfile );
+			write_file( "images/phpunit/{$phpunit_version}-php-{$php_version}/Dockerfile", $dockerfile );
 
 			// Copy the entrypoint script, if it exists.
 			if ( file_exists( "entrypoint/entrypoint-phpunit.sh" ) ) {
-				copy( "entrypoint/entrypoint-phpunit.sh", "images/phpunit/{$phpunit_version}-php-{$php_version}-fpm/entrypoint.sh" );
+				copy( "entrypoint/entrypoint-phpunit.sh", "images/phpunit/{$phpunit_version}-php-{$php_version}/entrypoint.sh" );
 			}
 
 			// Generate the build and push commands for this image/version.
 			$build_cmds['phpunit'][] = build_commands(
 				"phpunit {$phpunit_version} on php {$php_version}",
 				'phpunit',
-				"{$phpunit_version}-php-{$php_version}-fpm",
+				"{$phpunit_version}-php-{$php_version}",
 				$version === $latest
 			);
 
@@ -452,17 +455,20 @@ foreach ( $php_versions as $version => $images ) {
  *
  * @param string $label       The name of the Travis script
  * @param string $image_type  The image type (e.g. php, phpunit, cli)
- * @param string $image_label The image label (e.g. 5.2-fpm, etc.)
+ * @param string $image_label The image label (e.g. 5.2, etc.). '-fpm' will be added to the end.
  * @param bool   $is_latest   Whether the version is the latest.
  *
  * @return array
  */
-function build_commands( $label, $image_type = 'php', $image_label = '7.3-fpm', $is_latest = false ) {
-
-	$path = "images/{$image_type}/{$image_label}";
+function build_commands( $label, $image_type = 'php', $image_label = '7.3', $is_latest = false ) {
+	if ( 'phpunit' === $image_type && false !== strpos( $image_label, '-php-' ) ) {
+		$path = "images/phpunit/{$image_label}";
+	} else {
+		$path = "images/{$image_label}/{$image_type}";
+	}
 
 	$build = 'docker build --build-arg PACKAGE_REGISTRY=$PACKAGE_REGISTRY --build-arg PR_TAG=$PR_TAG';
-	$build .= " -t \$PACKAGE_REGISTRY/{$image_type}:{$image_label}\$PR_TAG";
+	$build .= " -t \$PACKAGE_REGISTRY/{$image_type}:{$image_label}-fpm\$PR_TAG";
 	if ( $is_latest ) {
 		$build .= " -t \$PACKAGE_REGISTRY/{$image_type}:latest\$PR_TAG";
 	}
@@ -471,10 +477,10 @@ function build_commands( $label, $image_type = 'php', $image_label = '7.3-fpm', 
 		$label,
 		"$build $path",
 		'docker images',
-		"docker push \$PACKAGE_REGISTRY/{$image_type}:{$image_label}\$PR_TAG",
+		"docker push \$PACKAGE_REGISTRY/{$image_type}:{$image_label}-fpm\$PR_TAG",
 	);
 	if ( $is_latest ) {
-		$commands[] = "docker push \$PACKAGE_REGISTRY/{$image_type}:{$image_label}\$PR_TAG";
+		$commands[] = "docker push \$PACKAGE_REGISTRY/{$image_type}:{$image_label}-fpm\$PR_TAG";
 	}
 
 	return $commands;

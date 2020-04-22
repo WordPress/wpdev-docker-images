@@ -1,6 +1,6 @@
 ARG PACKAGE_REGISTRY
 ARG PR_TAG
-FROM $PACKAGE_REGISTRY/php:7.1-fpm$PR_TAG
+FROM $PACKAGE_REGISTRY/php:5.6.20-fpm$PR_TAG
 
 ##########################################################################
 #
@@ -9,7 +9,7 @@ FROM $PACKAGE_REGISTRY/php:7.1-fpm$PR_TAG
 # You can find the relevant template in the `/templates` folder.
 #
 
-RUN curl -sL https://phar.phpunit.de/phpunit-5.phar > /usr/local/bin/phpunit && chmod +x /usr/local/bin/phpunit
+RUN curl -sL https://phar.phpunit.de/phpunit-4.phar > /usr/local/bin/phpunit && chmod +x /usr/local/bin/phpunit
 
 WORKDIR /var/www
 
