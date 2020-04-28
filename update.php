@@ -1,7 +1,7 @@
 <?php
 
 // The latest stable version of PHP that is supported in WordPress trunk.
-$latest = '7.3';
+$latest = '7.4';
 
 /**
  * An array of all PHP versions that we need to generate images for, and their config settings.
@@ -190,6 +190,44 @@ $php_versions = array(
 	),
 );
 
+/**
+ * An array of all PHPUnit and PHP version combinations that we need to generate images for.
+ *
+ * Different WordPress versions support different versions of PHP and different versions of PHPUnit.
+ * This creates a need to run multiple versions of PHPUnit on each version of PHP.
+ *
+ * @param array $phpunit_version A list of PHP versions for each PHPUnit version.
+ */
+$phpunit_versions = array(
+	'8' => array(
+		'7.4',
+		'7.3',
+		'7.2',
+	),
+	'7' => array(
+		'7.4',
+		'7.3',
+		'7.2',
+		'7.1',
+		'7.0',
+	),
+	'6' => array(
+		'7.3',
+		'7.2',
+		'7.1',
+		'7.0',
+	),
+	'5' => array(
+		'7.0',
+		'5.6.20',
+		'5.6',
+	),
+	'4' => array(
+		'5.6.20',
+		'5.6',
+	)
+);
+
 // A warning that will be added to each Dockerfile, to ensure folks don't edit them directly.
 $generated_warning = <<<EOT
 ##########################################################################
@@ -221,8 +259,8 @@ foreach ( $php_versions as $version => $images ) {
 	echo str_repeat( '-', strlen( $title ) ) . "\n";
 
 	foreach ( $images as $image => $config ) {
-		echo str_pad( $image, 10, '.' );
-		echo shell_exec( "mkdir -p images/$version/$image" );
+		echo str_pad( $image, 15, '.' );
+		echo shell_exec( "mkdir -p images/{$version}/{$image}" );
 
 		$dockerfile = $templates[ $image ];
 
@@ -312,7 +350,7 @@ foreach ( $php_versions as $version => $images ) {
 				$dockerfile = str_replace( '%%INSTALL_EXTENSIONS%%', $install_extensions, $dockerfile );
 			}
 
-			copy( "entrypoint/common.sh", "images/$version/$image/common.sh" );
+			copy( "entrypoint/common.sh", "images/{$version}/{$image}/common.sh" );
 
 		} elseif ( $image === 'phpunit' ) {
 			// Replace tags inside the PHPUnit Dockerfile template.
@@ -333,39 +371,71 @@ foreach ( $php_versions as $version => $images ) {
 		$dockerfile = preg_replace( '/%%[^%]+%%/', '', $dockerfile );
 
 		// Write the real Dockerfile.
-		$fh = fopen( "images/$version/$image/Dockerfile", 'w' );
-		fwrite( $fh, $dockerfile );
-		fclose( $fh );
+		write_file( "images/{$version}/{$image}/Dockerfile", $dockerfile );
 
 		// Copy the entrypoint script, if it exists.
 		if ( file_exists( "entrypoint/entrypoint-$image.sh" ) ) {
-			copy( "entrypoint/entrypoint-$image.sh", "images/$version/$image/entrypoint.sh" );
+			copy( "entrypoint/entrypoint-$image.sh", "images/{$version}/{$image}/entrypoint.sh" );
 		}
 
 		// Copy the PHP-FPM configuration, if it exists.
 		if ( file_exists( "config/php-fpm-$image.conf" ) ) {
-			copy( "config/php-fpm-$image.conf", "images/$version/$image/php-fpm.conf" );
+			copy( "config/php-fpm-$image.conf", "images/{$version}/{$image}/php-fpm.conf" );
 		}
 
 		// Generate the build and push commands for this image/version.
-		$build_cmd  = "docker build --build-arg PACKAGE_REGISTRY=\$PACKAGE_REGISTRY --build-arg PR_TAG=\$PR_TAG";
-		$build_cmd .= " -t \$PACKAGE_REGISTRY/$image:$version-fpm\$PR_TAG";
-		if ( $version === $latest ) {
-			$build_cmd .= " -t \$PACKAGE_REGISTRY/$image:latest\$PR_TAG";
-		}
-		$build_cmd_list = array(
-			"$image $version",
-			"$build_cmd images/$version/$image",
-			'docker images',
-			"docker push \$PACKAGE_REGISTRY/$image:$version-fpm\$PR_TAG",
+		$build_cmds[ $image ][] = build_commands(
+			"{$image} {$version}",
+			$image,
+			"{$version}",
+			$version === $latest
 		);
-		if ( $version === $latest ) {
-			$build_cmd_list[] = "docker push \$PACKAGE_REGISTRY/$image:latest\$PR_TAG";
-		}
-
-		$build_cmds[ $image ][] = $build_cmd_list;
 
 		echo "✅\n";
+	}
+
+	foreach ( $phpunit_versions as $phpunit_version => $php_versions ) {
+		if ( in_array( $version, $php_versions, true ) ) {
+			echo str_pad( "phpunit $phpunit_version", 15, '.' );
+
+			$php_version = $version;
+
+			echo shell_exec( "mkdir -p images/phpunit/{$phpunit_version}-php-{$php_version}" );
+
+			$dockerfile = $templates['phpunit'];
+
+			$dockerfile = str_replace( '%%GENERATED_WARNING%%', $generated_warning, $dockerfile );
+
+			if ( 'latest' === $php_version ) {
+				$version_tag = 'latest';
+			} else {
+				$version_tag = "$php_version-fpm";
+			}
+			$dockerfile = str_replace( '%%VERSION_TAG%%', $version_tag, $dockerfile );
+
+			$dockerfile = str_replace( '%%PHPUNIT_VERSION%%', $phpunit_version, $dockerfile );
+
+			// Cleanup any leftover tags.
+			$dockerfile = preg_replace( '/%%[^%]+%%/', '', $dockerfile );
+
+			// Write the real Dockerfile.
+			write_file( "images/phpunit/{$phpunit_version}-php-{$php_version}/Dockerfile", $dockerfile );
+
+			// Copy the entrypoint script, if it exists.
+			if ( file_exists( "entrypoint/entrypoint-phpunit.sh" ) ) {
+				copy( "entrypoint/entrypoint-phpunit.sh", "images/phpunit/{$phpunit_version}-php-{$php_version}/entrypoint.sh" );
+			}
+
+			// Generate the build and push commands for this image/version.
+			$build_cmds['phpunit'][] = build_commands(
+				"phpunit {$phpunit_version} on php {$php_version}",
+				'phpunit',
+				"{$phpunit_version}-php-{$php_version}",
+				$version === $latest
+			);
+
+			echo "✅\n";
+		}
 	}
 
 	// Load the .travis.yml template.
@@ -373,27 +443,85 @@ foreach ( $php_versions as $version => $images ) {
 	$travis_template = str_replace( '%%GENERATED_WARNING%%', $generated_warning, $travis_template );
 
 	// Generate the YML-formatted list of build commands for each of the images.
-	foreach ( array( 'php', 'phpunit', 'cli' ) as $image ) {
-		$build_strings[ $image ] = array_reduce( $build_cmds[ $image ], function( $string, $cmds ) use ( $image ) {
+	$travis_template = str_replace( '%%BUILD_PHP_IMAGES%%', generate_image_yaml( $build_cmds['php'] ), $travis_template );
+	$travis_template = str_replace( '%%BUILD_PHPUNIT_IMAGES%%', generate_image_yaml( $build_cmds['phpunit'] ), $travis_template );
+	$travis_template = str_replace( '%%BUILD_CLI_IMAGES%%', generate_image_yaml( $build_cmds['cli'] ), $travis_template );
+
+	write_file( '.travis.yml', $travis_template );
+}
+
+/**
+ * Generate Docker build commands.
+ *
+ * @param string $label       The name of the Travis script
+ * @param string $image_type  The image type (e.g. php, phpunit, cli)
+ * @param string $image_label The image label (e.g. 5.2, etc.). '-fpm' will be added to the end.
+ * @param bool   $is_latest   Whether the version is the latest.
+ *
+ * @return array
+ */
+function build_commands( $label, $image_type = 'php', $image_label = '7.3', $is_latest = false ) {
+	if ( 'phpunit' === $image_type && false !== strpos( $image_label, '-php-' ) ) {
+		$path = "images/phpunit/{$image_label}";
+	} else {
+		$path = "images/{$image_label}/{$image_type}";
+	}
+
+	$build = 'docker build --build-arg PACKAGE_REGISTRY=$PACKAGE_REGISTRY --build-arg PR_TAG=$PR_TAG';
+	$build .= " -t \$PACKAGE_REGISTRY/{$image_type}:{$image_label}-fpm\$PR_TAG";
+	if ( $is_latest ) {
+		$build .= " -t \$PACKAGE_REGISTRY/{$image_type}:latest\$PR_TAG";
+	}
+
+	$commands = array(
+		$label,
+		"$build $path",
+		'docker images',
+		"docker push \$PACKAGE_REGISTRY/{$image_type}:{$image_label}-fpm\$PR_TAG",
+	);
+	if ( $is_latest ) {
+		$commands[] = "docker push \$PACKAGE_REGISTRY/{$image_type}:{$image_label}-fpm\$PR_TAG";
+	}
+
+	return $commands;
+}
+
+/**
+ * Convert array of build commands into YAML.
+ *
+ * @param array $build_commands Array of build commands.
+ *
+ * @return string
+ */
+function generate_image_yaml( array $build_commands ) {
+	return array_reduce(
+		$build_commands,
+		function ( $string, $cmds ) {
 			$name = array_shift( $cmds );
-			if ( $string === '' && $image !== 'cli' ) {
+			if ( empty( $string ) ) {
 				$string .= "      name: \"$name\"\n";
 			} else {
 				$string .= "    - name: \"$name\"\n";
 			}
 			$string .= "      script:\n";
-			foreach( $cmds as $cmd ) {
+			foreach ( $cmds as $cmd ) {
 				$string .= "        - $cmd\n";
 			}
 
 			return $string;
-		}, '' );
-	}
-	$travis_template = str_replace( '%%BUILD_PHP_IMAGES%%', $build_strings['php'], $travis_template );
-	$travis_template = str_replace( '%%BUILD_PHPUNIT_IMAGES%%', $build_strings['phpunit'], $travis_template );
-	$travis_template = str_replace( '%%BUILD_CLI_IMAGES%%', $build_strings['cli'], $travis_template );
+		},
+		''
+	);
+}
 
-	$fh = fopen( ".travis.yml", 'w' );
-	fwrite( $fh, $travis_template );
+/**
+ * Write file.
+ *
+ * @param string $file     File path.
+ * @param string $contents File contents.
+ */
+function write_file( $file, $contents ) {
+	$fh = fopen( $file, 'w' );
+	fwrite( $fh, $contents );
 	fclose( $fh );
 }
