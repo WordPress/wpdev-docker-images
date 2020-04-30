@@ -394,8 +394,8 @@ foreach ( $php_versions as $version => $images ) {
 		echo "✅\n";
 	}
 
-	foreach ( $phpunit_versions as $phpunit_version => $php_versions ) {
-		if ( in_array( $version, $php_versions, true ) ) {
+	foreach ( $phpunit_versions as $phpunit_version => $supported_php_versions ) {
+		if ( in_array( $version, $supported_php_versions, true ) ) {
 			echo str_pad( "phpunit $phpunit_version", 15, '.' );
 
 			$php_version = $version;
