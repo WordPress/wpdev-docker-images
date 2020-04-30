@@ -235,15 +235,13 @@ jobs:
         - docker push $PACKAGE_REGISTRY/phpunit:7.4-fpm$PR_TAG
     - name: "phpunit 8 on php 7.4"
       script:
-        - docker build --build-arg PACKAGE_REGISTRY=$PACKAGE_REGISTRY --build-arg PR_TAG=$PR_TAG -t $PACKAGE_REGISTRY/phpunit:8-php-7.4-fpm$PR_TAG -t $PACKAGE_REGISTRY/phpunit:latest$PR_TAG images/phpunit/8-php-7.4
+        - docker build --build-arg PACKAGE_REGISTRY=$PACKAGE_REGISTRY --build-arg PR_TAG=$PR_TAG -t $PACKAGE_REGISTRY/phpunit:8-php-7.4-fpm$PR_TAG images/phpunit/8-php-7.4
         - docker images
-        - docker push $PACKAGE_REGISTRY/phpunit:8-php-7.4-fpm$PR_TAG
         - docker push $PACKAGE_REGISTRY/phpunit:8-php-7.4-fpm$PR_TAG
     - name: "phpunit 7 on php 7.4"
       script:
-        - docker build --build-arg PACKAGE_REGISTRY=$PACKAGE_REGISTRY --build-arg PR_TAG=$PR_TAG -t $PACKAGE_REGISTRY/phpunit:7-php-7.4-fpm$PR_TAG -t $PACKAGE_REGISTRY/phpunit:latest$PR_TAG images/phpunit/7-php-7.4
+        - docker build --build-arg PACKAGE_REGISTRY=$PACKAGE_REGISTRY --build-arg PR_TAG=$PR_TAG -t $PACKAGE_REGISTRY/phpunit:7-php-7.4-fpm$PR_TAG images/phpunit/7-php-7.4
         - docker images
-        - docker push $PACKAGE_REGISTRY/phpunit:7-php-7.4-fpm$PR_TAG
         - docker push $PACKAGE_REGISTRY/phpunit:7-php-7.4-fpm$PR_TAG
     - name: "phpunit 8.0"
       script:

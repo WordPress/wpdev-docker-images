@@ -431,7 +431,7 @@ foreach ( $php_versions as $version => $images ) {
 				"phpunit {$phpunit_version} on php {$php_version}",
 				'phpunit',
 				"{$phpunit_version}-php-{$php_version}",
-				$version === $latest
+				false
 			);
 
 			echo "✅\n";
