@@ -94,7 +94,7 @@ jobs:
         - docker build --build-arg PACKAGE_REGISTRY=$PACKAGE_REGISTRY --build-arg PR_TAG=$PR_TAG -t $PACKAGE_REGISTRY/php:7.4-fpm$PR_TAG -t $PACKAGE_REGISTRY/php:latest$PR_TAG images/7.4/php
         - docker images
         - docker push $PACKAGE_REGISTRY/php:7.4-fpm$PR_TAG
-        - docker push $PACKAGE_REGISTRY/php:7.4-fpm$PR_TAG
+        - docker push $PACKAGE_REGISTRY/php:latest$PR_TAG
     - name: "php 8.0"
       script:
         - docker build --build-arg PACKAGE_REGISTRY=$PACKAGE_REGISTRY --build-arg PR_TAG=$PR_TAG -t $PACKAGE_REGISTRY/php:8.0-fpm$PR_TAG images/8.0/php
@@ -232,7 +232,7 @@ jobs:
         - docker build --build-arg PACKAGE_REGISTRY=$PACKAGE_REGISTRY --build-arg PR_TAG=$PR_TAG -t $PACKAGE_REGISTRY/phpunit:7.4-fpm$PR_TAG -t $PACKAGE_REGISTRY/phpunit:latest$PR_TAG images/7.4/phpunit
         - docker images
         - docker push $PACKAGE_REGISTRY/phpunit:7.4-fpm$PR_TAG
-        - docker push $PACKAGE_REGISTRY/phpunit:7.4-fpm$PR_TAG
+        - docker push $PACKAGE_REGISTRY/phpunit:latest$PR_TAG
     - name: "phpunit 8 on php 7.4"
       script:
         - docker build --build-arg PACKAGE_REGISTRY=$PACKAGE_REGISTRY --build-arg PR_TAG=$PR_TAG -t $PACKAGE_REGISTRY/phpunit:8-php-7.4-fpm$PR_TAG images/phpunit/8-php-7.4
@@ -305,7 +305,7 @@ jobs:
         - docker build --build-arg PACKAGE_REGISTRY=$PACKAGE_REGISTRY --build-arg PR_TAG=$PR_TAG -t $PACKAGE_REGISTRY/cli:7.4-fpm$PR_TAG -t $PACKAGE_REGISTRY/cli:latest$PR_TAG images/7.4/cli
         - docker images
         - docker push $PACKAGE_REGISTRY/cli:7.4-fpm$PR_TAG
-        - docker push $PACKAGE_REGISTRY/cli:7.4-fpm$PR_TAG
+        - docker push $PACKAGE_REGISTRY/cli:latest$PR_TAG
     - name: "cli 8.0"
       script:
         - docker build --build-arg PACKAGE_REGISTRY=$PACKAGE_REGISTRY --build-arg PR_TAG=$PR_TAG -t $PACKAGE_REGISTRY/cli:8.0-fpm$PR_TAG images/8.0/cli

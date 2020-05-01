@@ -480,7 +480,7 @@ function build_commands( $label, $image_type = 'php', $image_label = '7.3', $is_
 		"docker push \$PACKAGE_REGISTRY/{$image_type}:{$image_label}-fpm\$PR_TAG",
 	);
 	if ( $is_latest ) {
-		$commands[] = "docker push \$PACKAGE_REGISTRY/{$image_type}:{$image_label}-fpm\$PR_TAG";
+		$commands[] = "docker push \$PACKAGE_REGISTRY/{$image_type}:latest\$PR_TAG";
 	}
 
 	return $commands;
