@@ -394,8 +394,8 @@ foreach ( $php_versions as $version => $images ) {
 		echo "✅\n";
 	}
 
-	foreach ( $phpunit_versions as $phpunit_version => $php_versions ) {
-		if ( in_array( $version, $php_versions, true ) ) {
+	foreach ( $phpunit_versions as $phpunit_version => $supported_php_versions ) {
+		if ( in_array( $version, $supported_php_versions, true ) ) {
 			echo str_pad( "phpunit $phpunit_version", 15, '.' );
 
 			$php_version = $version;
@@ -431,7 +431,7 @@ foreach ( $php_versions as $version => $images ) {
 				"phpunit {$phpunit_version} on php {$php_version}",
 				'phpunit',
 				"{$phpunit_version}-php-{$php_version}",
-				$version === $latest
+				false
 			);
 
 			echo "✅\n";
@@ -480,7 +480,7 @@ function build_commands( $label, $image_type = 'php', $image_label = '7.3', $is_
 		"docker push \$PACKAGE_REGISTRY/{$image_type}:{$image_label}-fpm\$PR_TAG",
 	);
 	if ( $is_latest ) {
-		$commands[] = "docker push \$PACKAGE_REGISTRY/{$image_type}:{$image_label}-fpm\$PR_TAG";
+		$commands[] = "docker push \$PACKAGE_REGISTRY/{$image_type}:latest\$PR_TAG";
 	}
 
 	return $commands;
