@@ -288,7 +288,7 @@ foreach ( $php_versions as $version => $images ) {
 
 				if ( $config['apt'] ) {
 					$install_extensions .= " \\\n\t\\\n\t";
-					$install_extensions .= "apt-get update; \\\n\t\\\n\tapt-get install -y --no-install-recommends " . implode( $config['apt'], ' ' ) . ";";
+					$install_extensions .= "apt-get update; \\\n\t\\\n\tapt-get install -y --no-install-recommends " . implode( ' ', $config['apt'] ) . ";";
 
 					// We need to add some locales for testing.
 					if ( array_search( 'locales', $config['apt'], true ) ) {
@@ -309,7 +309,7 @@ foreach ( $php_versions as $version => $images ) {
 
 				if ( $config['extensions'] ) {
 					$install_extensions .= " \\\n\t\\\n\t";
-					$install_extensions .= "docker-php-ext-install " . implode( $config['extensions'], ' ' ) . ";";
+					$install_extensions .= "docker-php-ext-install " . implode( ' ', $config['extensions'] ) . ";";
 				}
 
 				if ( $config['pecl_extensions'] ) {
