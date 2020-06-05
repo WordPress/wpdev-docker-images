@@ -17,13 +17,13 @@ RUN set -ex; \
 	\
 	apt-get update; \
 	\
-	apt-get install -y --no-install-recommends libjpeg-dev libpng-dev libzip-dev libmemcached-dev unzip libmagickwand-dev ghostscript libicu-dev libonig-dev locales sudo rsync git; \
+	apt-get install -y --no-install-recommends libjpeg-dev libpng-dev libzip-dev libmemcached-dev unzip libmagickwand-dev ghostscript libicu-dev libonig-dev locales sudo rsync libxslt-dev git; \
 	sed -i 's/^# *\(\(ru_RU\|fr_FR\|de_DE\|es_ES\|ja_JP\).UTF-8\)/\1/' /etc/locale.gen; \
 	locale-gen; \
 	\
 	docker-php-ext-configure gd --with-png-dir=/usr --with-jpeg-dir=/usr; \
 	\
-	docker-php-ext-install gd mysql mysqli zip exif intl mbstring; \
+	docker-php-ext-install gd mysql mysqli zip exif intl mbstring xml xsl; \
 	\
 	pecl install xdebug-2.4.1; \
 	pecl install memcached-2.2.0; \
