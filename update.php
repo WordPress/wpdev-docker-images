@@ -182,7 +182,7 @@ $php_versions = array(
 			'pecl_extensions' => array(),
 			'composer'        => true,
 		),
-		'phpunit' => 7,
+		'phpunit' => 9,
 		'cli' => array(
 			'mysql_client' => 'virtual-mysql-client',
 			'download_url' => 'https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar',
@@ -199,6 +199,11 @@ $php_versions = array(
  * @param array $phpunit_version A list of PHP versions for each PHPUnit version.
  */
 $phpunit_versions = array(
+	'9' => array(
+		'8.0',
+		'7.4',
+		'7.3',
+	),
 	'8' => array(
 		'7.4',
 		'7.3',
