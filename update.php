@@ -177,9 +177,9 @@ $php_versions = array(
 	'8.0' => array(
 		'php' => array(
 			'base_name'       => 'devilbox/php-fpm-8.0:latest',
-			'apt'             => array( 'unzip', 'sudo', 'rsync' ),
-			'extensions'      => array( 'mysqli' ),
-			'pecl_extensions' => array(),
+			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libzip-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libonig-dev', 'locales', 'sudo', 'rsync', 'libxslt-dev' ),
+			'extensions'      => array( 'gd', 'opcache', 'mysqli', 'zip', 'exif', 'intl', 'mbstring', 'xml', 'xsl' ),
+			'pecl_extensions' => array( 'xdebug-2.8.0beta1', 'memcached-3.1.3', 'imagick' ),
 			'composer'        => true,
 		),
 		'phpunit' => 9,
