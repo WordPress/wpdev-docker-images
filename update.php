@@ -179,7 +179,7 @@ $php_versions = array(
 			'base_name'       => 'php:8.0.0beta4-fpm',
 			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libzip-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libonig-dev', 'locales', 'sudo', 'rsync', 'libxslt-dev' ),
 			'extensions'      => array( 'gd', 'opcache', 'mysqli', 'zip', 'exif', 'intl', 'mbstring', 'xml', 'xsl' ),
-			'pecl_extensions' => array(),
+			'pecl_extensions' => array( 'memcached-3.1.5', 'imagick' ),
 			'composer'        => true,
 		),
 		'phpunit' => 9,
@@ -319,12 +319,22 @@ foreach ( $php_versions as $version => $images ) {
 
 				if ( $config['pecl_extensions'] ) {
 					$install_extensions .= " \\\n\t\\\n";
-					$install_extensions .= array_reduce( $config['pecl_extensions'], function ( $command, $extension ) {
+
+					if ( version_compare( $version, '8.0beta1' ) >= 0 ) {
+						$install_extensions .= "\tcurl --location --output /usr/local/bin/pickle https://github.com/FriendsOfPHP/pickle/releases/download/v0.6.0/pickle.phar \\\n";
+						$install_extensions .= "\tchmod +x /usr/local/bin/pickle \\\n\t\\\n";
+					}
+
+					$install_extensions .= array_reduce( $config['pecl_extensions'], function ( $command, $extension ) use ( $version ) {
 						if ( $command ) {
 							$command .= " \\\n";
 						}
 
-						$command .= "\tpecl install $extension;";
+						if ( version_compare( $version, '8.0beta1' ) >= 0 ) {
+							$command .= "\tpickle install $extension --no-interaction;";
+						} else {
+							$command .= "\tpecl install $extension;";
+						}
 
 						if ( 0 === strpos( $extension, 'imagick' ) ) {
 							$command .= " \\\n\tdocker-php-ext-enable imagick;";
