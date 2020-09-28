@@ -283,8 +283,10 @@ foreach ( $php_versions as $version => $images ) {
 			// Replace tags inside the PHP Dockerfile template.
 			$dockerfile = str_replace( '%%BASE_NAME%%', $config['base_name'], $dockerfile );
 
+			$install_extensions = '';
+
 			if ( $config['apt'] || $config['extensions'] || $config['pecl_extensions'] || $config['composer'] ) {
-				$install_extensions = "# install the PHP extensions we need\nRUN set -ex;";
+				$install_extensions .= "# install the PHP extensions we need\nRUN set -ex;";
 
 				// Composer requires git to be installed in some circumstances (e.g. `composer install --prefer-source`).
 				if ( $config['composer'] ) {
@@ -351,9 +353,9 @@ foreach ( $php_versions as $version => $images ) {
 					$install_extensions .= "\tcomposer --ansi --version --no-interaction; \\\n";
 					$install_extensions .= "\trm -f /tmp/installer.php /tmp/installer.sig;";
 				}
-
-				$dockerfile = str_replace( '%%INSTALL_EXTENSIONS%%', $install_extensions, $dockerfile );
 			}
+
+			$dockerfile = str_replace( '%%INSTALL_EXTENSIONS%%', $install_extensions, $dockerfile );
 
 			copy( "entrypoint/common.sh", "images/{$version}/{$image}/common.sh" );
 
