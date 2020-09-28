@@ -1,4 +1,4 @@
-FROM devilbox/php-fpm-8.0:latest
+FROM php-fpm-8.0:latest
 
 WORKDIR /var/www
 
