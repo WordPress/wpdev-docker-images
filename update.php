@@ -176,7 +176,7 @@ $php_versions = array(
 	),
 	'8.0' => array(
 		'php' => array(
-			'base_name'       => 'php-fpm-8.0:latest',
+			'base_name'       => 'php:8.0.0beta4-fpm',
 			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libzip-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libonig-dev', 'locales', 'sudo', 'rsync', 'libxslt-dev' ),
 			'extensions'      => array( 'gd', 'opcache', 'mysqli', 'zip', 'exif', 'intl', 'mbstring', 'xml', 'xsl' ),
 			'pecl_extensions' => array(),
