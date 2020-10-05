@@ -320,7 +320,7 @@ foreach ( $php_versions as $version => $images ) {
 				if ( $config['pecl_extensions'] ) {
 					$install_extensions .= " \\\n\t\\\n";
 
-					if ( version_compare( $version, '8.0beta1' ) >= 0 ) {
+					if ( version_compare( $version, '7.4', '>' ) === true ) {
 						$install_extensions .= "\tcurl --location --output /usr/local/bin/pickle https://github.com/FriendsOfPHP/pickle/releases/download/v0.6.0/pickle.phar; \\\n";
 						$install_extensions .= "\tchmod +x /usr/local/bin/pickle; \\\n\t\\\n";
 					}
@@ -330,7 +330,7 @@ foreach ( $php_versions as $version => $images ) {
 							$command .= " \\\n";
 						}
 
-						if ( version_compare( $version, '8.0beta1' ) >= 0 ) {
+						if ( version_compare( $version, '7.4', '>' ) === true ) {
 							$command .= "\tpickle install $extension;";
 						} else {
 							$command .= "\tpecl install $extension;";
