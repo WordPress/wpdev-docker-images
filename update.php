@@ -179,7 +179,7 @@ $php_versions = array(
 			'base_name'       => 'php:8.0.0rc1-fpm',
 			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libzip-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libonig-dev', 'locales', 'sudo', 'rsync', 'libxslt-dev' ),
 			'extensions'      => array( 'gd', 'opcache', 'mysqli', 'zip', 'exif', 'intl', 'mbstring', 'xml', 'xsl' ),
-			'pecl_extensions' => array( 'imagick-06116aa24b76edaf6b1693198f79e6c295eda8a9', 'memcached-3.1.5' ),
+			'pecl_extensions' => array( 'memcached-3.1.5' ),
 			'composer'        => true,
 		),
 		'phpunit' => 9,
@@ -331,13 +331,7 @@ foreach ( $php_versions as $version => $images ) {
 						}
 
 						if ( version_compare( $version, '7.4', '>' ) === true ) {
-							// Imagick `master` branch currently has PHP 8.0 support.
-							if ( 0 === strpos( $extension, 'imagick' ) ) {
-								$imagick_version = substr( $extension, strpos( $extension, '-' )+ 1 );
-								$command .= "\tpickle install https://github.com/Imagick/imagick/archive/$imagick_version.tar.gz;";
-							} else {
-								$command .= "\tpickle install $extension;";
-							}
+							$command .= "\tpickle install $extension;";
 						} else {
 							$command .= "\tpecl install $extension;";
 						}
