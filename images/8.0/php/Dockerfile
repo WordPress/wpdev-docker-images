@@ -1,4 +1,4 @@
-FROM devilbox/php-fpm-8.0:latest
+FROM php:8.0.0rc1-fpm
 
 WORKDIR /var/www
 
@@ -17,9 +17,18 @@ RUN set -ex; \
 	\
 	apt-get update; \
 	\
-	apt-get install -y --no-install-recommends unzip sudo rsync git; \
+	apt-get install -y --no-install-recommends libjpeg-dev libpng-dev libzip-dev libmemcached-dev unzip libmagickwand-dev ghostscript libonig-dev locales sudo rsync libxslt-dev git; \
+	sed -i 's/^# *\(\(ru_RU\|fr_FR\|de_DE\|es_ES\|ja_JP\).UTF-8\)/\1/' /etc/locale.gen; \
+	locale-gen; \
 	\
-	docker-php-ext-install mysqli; \
+	docker-php-ext-configure gd --enable-gd --with-jpeg=/usr; \
+	\
+	docker-php-ext-install gd opcache mysqli zip exif intl mbstring xml xsl; \
+	\
+	curl --location --output /usr/local/bin/pickle https://github.com/FriendsOfPHP/pickle/releases/download/v0.6.0/pickle.phar; \
+	chmod +x /usr/local/bin/pickle; \
+	\
+	pickle install memcached-3.1.5; \
 	\
 	curl --silent --fail --location --retry 3 --output /tmp/installer.php --url https://getcomposer.org/installer; \
 	curl --silent --fail --location --retry 3 --output /tmp/installer.sig --url https://composer.github.io/installer.sig; \
