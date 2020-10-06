@@ -28,6 +28,8 @@ RUN set -ex; \
 	curl --location --output /usr/local/bin/pickle https://github.com/FriendsOfPHP/pickle/releases/download/v0.6.0/pickle.phar; \
 	chmod +x /usr/local/bin/pickle; \
 	\
+	pickle install https://github.com/Imagick/imagick/archive/06116aa24b76edaf6b1693198f79e6c295eda8a9.tar.gz; \
+	docker-php-ext-enable imagick; \
 	pickle install memcached-3.1.5; \
 	\
 	curl --silent --fail --location --retry 3 --output /tmp/installer.php --url https://getcomposer.org/installer; \
