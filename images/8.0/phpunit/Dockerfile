@@ -9,7 +9,7 @@ FROM $PACKAGE_REGISTRY/php:8.0-fpm$PR_TAG
 # You can find the relevant template in the `/templates` folder.
 #
 
-RUN curl -sL https://phar.phpunit.de/phpunit-9.phar > /usr/local/bin/phpunit && chmod +x /usr/local/bin/phpunit
+RUN curl -sL https://phar.phpunit.de/phpunit-7.phar > /usr/local/bin/phpunit && chmod +x /usr/local/bin/phpunit
 
 WORKDIR /var/www
 
