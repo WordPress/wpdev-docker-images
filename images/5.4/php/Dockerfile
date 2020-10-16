@@ -25,6 +25,7 @@ RUN set -ex; \
 	\
 	docker-php-ext-install gd mysql mysqli zip exif intl mbstring xml xsl; \
 	\
+	pecl install zendopcache-7.0.5; \
 	pecl install xdebug-2.4.1; \
 	pecl install memcached-2.2.0; \
 	pecl install imagick-3.4.4; \
