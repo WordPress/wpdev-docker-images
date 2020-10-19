@@ -25,7 +25,7 @@ RUN set -ex; \
 	\
 	docker-php-ext-install gd opcache mysqli zip exif intl mbstring xml xsl; \
 	\
-	curl --location --output pickle https://github.com/FriendsOfPHP/pickle.git; \
+	git clone https://github.com/FriendsOfPHP/pickle.git pickle; \
 	cd pickle; \
 	composer install --no-dev --optimize-autoloader; \
 	php -d phar.readonly=0 box.phar build; \
