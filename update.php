@@ -319,8 +319,8 @@ foreach ( $php_versions as $version => $images ) {
 					if ( version_compare( $version, '7.4', '>' ) === true ) {
 						$install_extensions .= "\tcurl --location --output /usr/local/bin/pickle https://github.com/FriendsOfPHP/pickle/releases/download/v0.7.0/pickle.phar; \\\n";
 						$install_extensions .= "\tchmod +x /usr/local/bin/pickle; \\\n\t\\\n";
-						$install_extensions .= 'cd /usr/local/bin/pickle';
-						$install_extensions .= 'composer install';
+						$install_extensions .= 'cd pickle../';
+						$install_extensions .= 'rm -rf pickle';
 					}
 
 					$install_extensions .= array_reduce( $config['pecl_extensions'], function ( $command, $extension ) use ( $version ) {
