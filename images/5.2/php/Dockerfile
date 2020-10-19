@@ -17,7 +17,10 @@ RUN set -ex; \
 	\
 	apt-get update; \
 	\
-	apt-get install -y --no-install-recommends sudo rsync;
+	apt-get install -y --no-install-recommends sudo rsync; \
+	\
+	pecl install zendopcache-7.0.5; \
+	pecl install xdebug-2.2.7;
 
 COPY entrypoint.sh /entrypoint.sh
 COPY common.sh /common.sh
