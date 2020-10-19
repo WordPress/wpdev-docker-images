@@ -1,6 +1,6 @@
 ARG PACKAGE_REGISTRY
 ARG PR_TAG
-FROM $PACKAGE_REGISTRY/php:5.2-fpm$PR_TAG
+FROM $PACKAGE_REGISTRY/php:5.4-fpm$PR_TAG
 
 ##########################################################################
 #
@@ -10,7 +10,35 @@ FROM $PACKAGE_REGISTRY/php:5.2-fpm$PR_TAG
 #
 
 
-ENTRYPOINT [ "echo", "WP-CLI is not available for PHP 5.2-fpm.\nCommand was not executed:" ]
+# install wp-cli dependences
+RUN set -ex; \
+	\
+	apt-get update; \
+	\
+	apt-get install -y --no-install-recommends \
+		less \
+		mysql-client \
+	;
+
+RUN set -ex; \
+	\
+	curl -L -o /usr/local/bin/wp https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar; \
+	\
+	chmod +x /usr/local/bin/wp; \
+	\
+	wp --allow-root --version;
+
+COPY entrypoint.sh /entrypoint.sh
+
+RUN chmod +x /entrypoint.sh
+
+ENTRYPOINT [ "/entrypoint.sh" ]
+
+
+
+ENTRYPOINT [ "echo", "WP-CLI does not support PHP 5.4-fpm." ]
+ENTRYPOINT [ "echo", "To allow use of the WP-CLI, the PHP 5.4-fpm CLI container is being used instead." ]
+ENTRYPOINT [ "echo", "Be aware that this PHP version mismatch may result in odd or surprising behavior." ]
 
 
 WORKDIR /var/www
