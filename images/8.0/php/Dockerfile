@@ -25,10 +25,10 @@ RUN set -ex; \
 	\
 	docker-php-ext-install gd opcache mysqli zip exif intl mbstring xml xsl; \
 	\
-	curl --location --output /usr/local/bin/pickle https://github.com/FriendsOfPHP/pickle.git; \
-	chmod +x /usr/local/bin/pickle; \
+	curl --location --output pickle https://github.com/FriendsOfPHP/pickle.git; \
+cd picklecomposer install --no-dev --optimize-autoloaderphp -d phar.readonly=0 box.phar buildmv pickle.phar /usr/local/bin/pickle	chmod +x /usr/local/bin/pickle; \
 	\
-cd /usr/local/bin/picklecomposer install	pickle install memcached-3.1.5; \
+cd pickle../rm -rf pickle	pickle install memcached-3.1.5; \
 	pickle install xdebug-3.0.0beta1; \
 	\
 	curl --silent --fail --location --retry 3 --output /tmp/installer.php --url https://getcomposer.org/installer; \
