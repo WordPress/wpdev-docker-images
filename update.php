@@ -321,14 +321,10 @@ foreach ( $php_versions as $version => $images ) {
 					$install_extensions .= " \\\n\t\\\n";
 
 					if ( version_compare( $version, '7.4', '>' ) === true ) {
-						$install_extensions .= "\tcurl --location --output pickle https://github.com/FriendsOfPHP/pickle.git; \\\n";
-						$install_extensions .= 'cd pickle';
-						$install_extensions .= 'composer install --no-dev --optimize-autoloader';
-						$install_extensions .= 'php -d phar.readonly=0 box.phar build';
-						$install_extensions .= 'mv pickle.phar /usr/local/bin/pickle';
+						$install_extensions .= "\tcurl --location --output /usr/local/bin/pickle https://github.com/FriendsOfPHP/pickle.git; \\\n";
 						$install_extensions .= "\tchmod +x /usr/local/bin/pickle; \\\n\t\\\n";
-						$install_extensions .= 'cd pickle../';
-						$install_extensions .= 'rm -rf pickle';
+						$install_extensions .= 'cd /usr/local/bin/pickle';
+						$install_extensions .= 'composer install';
 					}
 
 					$install_extensions .= array_reduce( $config['pecl_extensions'], function ( $command, $extension ) use ( $version ) {
