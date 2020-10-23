@@ -9,7 +9,6 @@ FROM $PACKAGE_REGISTRY/php:7.1-fpm$PR_TAG
 # You can find the relevant template in the `/templates` folder.
 #
 
-
 # install wp-cli dependences
 RUN set -ex; \
 	\
@@ -33,7 +32,6 @@ COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
 ENTRYPOINT [ "/entrypoint.sh" ]
-
 
 WORKDIR /var/www
 

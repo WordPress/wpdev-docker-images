@@ -9,7 +9,6 @@ FROM $PACKAGE_REGISTRY/php:5.4-fpm$PR_TAG
 # You can find the relevant template in the `/templates` folder.
 #
 
-
 # install wp-cli dependences
 RUN set -ex; \
 	\
@@ -35,10 +34,7 @@ RUN chmod +x /entrypoint.sh
 ENTRYPOINT [ "/entrypoint.sh" ]
 
 
-
-ENTRYPOINT [ "echo", "WP-CLI does not support PHP 5.4-fpm." ]
-ENTRYPOINT [ "echo", "To allow use of the WP-CLI, the PHP 5.4-fpm CLI container is being used instead." ]
-ENTRYPOINT [ "echo", "Be aware that this PHP version mismatch may result in odd or surprising behavior." ]
+ENTRYPOINT [ "echo", "WP-CLI does not support PHP 5.4-fpm.\nThe PHP 5.4-fpm CLI container is being used instead. Be aware that this PHP version mismatch may result in odd or surprising behavior." ]
 
 
 WORKDIR /var/www

@@ -4,7 +4,6 @@ FROM $PACKAGE_REGISTRY/php:%%VERSION_TAG%%$PR_TAG
 
 %%GENERATED_WARNING%%
 
-%%NEW_PHP%%
 # install wp-cli dependences
 RUN set -ex; \
 	\
@@ -28,12 +27,9 @@ COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
 ENTRYPOINT [ "/entrypoint.sh" ]
-%%/NEW_PHP%%
 
 %%OLD_PHP%%
-ENTRYPOINT [ "echo", "WP-CLI does not support PHP %%VERSION_TAG%%." ]
-ENTRYPOINT [ "echo", "To allow use of the WP-CLI, the PHP 5.4-fpm CLI container is being used instead." ]
-ENTRYPOINT [ "echo", "Be aware that this PHP version mismatch may result in odd or surprising behavior." ]
+ENTRYPOINT [ "echo", "WP-CLI does not support PHP %%VERSION_TAG%%.\nThe PHP 5.4-fpm CLI container is being used instead. Be aware that this PHP version mismatch may result in odd or surprising behavior." ]
 %%/OLD_PHP%%
 
 WORKDIR /var/www
