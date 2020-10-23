@@ -1,6 +1,6 @@
 ARG PACKAGE_REGISTRY
 ARG PR_TAG
-FROM $PACKAGE_REGISTRY/php:5.4-fpm$PR_TAG
+FROM $PACKAGE_REGISTRY/php:5.3-fpm$PR_TAG
 
 ##########################################################################
 #
@@ -21,7 +21,7 @@ RUN set -ex; \
 
 RUN set -ex; \
 	\
-	curl -L -o /usr/local/bin/wp https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar; \
+	curl -L -o /usr/local/bin/wp https://github.com/wp-cli/wp-cli/releases/download/v1.5.1/wp-cli-1.5.1.phar; \
 	\
 	chmod +x /usr/local/bin/wp; \
 	\
@@ -34,7 +34,7 @@ RUN chmod +x /entrypoint.sh
 ENTRYPOINT [ "/entrypoint.sh" ]
 
 
-ENTRYPOINT [ "echo", "WP-CLI does not support PHP 5.4-fpm.\nThe PHP 5.4-fpm CLI container is being used instead. Be aware that this PHP version mismatch may result in odd or surprising behavior." ]
+ENTRYPOINT [ "echo", "WP-CLI does not support PHP 5.3-fpm.\nThe PHP 5.3-fpm CLI container is being used instead. Be aware that this PHP version mismatch may result in odd or surprising behavior." ]
 
 
 WORKDIR /var/www

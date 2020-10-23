@@ -36,12 +36,12 @@ $php_versions = array(
 			/*
 			 * WP CLI is not supported on PHP 5.2.
 			 *
-			 * In order to allow the local environment to work on this version of PHP, the PHP 5.4-fpm image should be
+			 * In order to allow the local environment to work on this version of PHP, the PHP 5.3-fpm image should be
 			 * used as a base within cli:5.2-fpm instead. A warning is output when the CLI container is used to alert
 			 * the user of the PHP version mismatch, which may cause some odd or surprising behavior.
 			 */
 			'mysql_client' => 'mysql-client',
-			'download_url' => 'https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar',
+			'download_url' => 'https://github.com/wp-cli/wp-cli/releases/download/v1.5.1/wp-cli-1.5.1.phar',
 		),
 	),
 	'5.3' => array(
@@ -285,8 +285,8 @@ foreach ( $php_versions as $version => $images ) {
 		if ( 'latest' === $version ) {
 			$version_tag = 'latest';
 		} elseif ( 'cli' === $image && '5.2' === $version ) {
-			// Use PHP 5.4 for the PHP 5.2 CLI image.
-			$version_tag = '5.4-fpm';
+			// Use PHP 5.3 for the PHP 5.2 CLI image.
+			$version_tag = '5.3-fpm';
 		} else {
 			$version_tag = "$version-fpm";
 		}
