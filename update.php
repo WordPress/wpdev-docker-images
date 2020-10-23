@@ -385,17 +385,12 @@ foreach ( $php_versions as $version => $images ) {
 			$dockerfile = str_replace( '%%PHPUNIT_VERSION%%', $config, $dockerfile );
 		} elseif ( $image === 'cli' ) {
 			// Replace tags inside the WP-CLI Dockerfile template.
-			if ( $config ) {
-				if ( '5.2' !== $version ) {
-					$dockerfile = preg_replace( '|\n%%OLD_PHP%%.*%%/OLD_PHP%%\n|s', '', $dockerfile );
-				}
-
-				$dockerfile = str_replace( '%%MYSQL_CLIENT%%', $config['mysql_client'], $dockerfile );
-				$dockerfile = str_replace( '%%DOWNLOAD_URL%%', $config['download_url'], $dockerfile );
-			} else {
-				// WP-CLI isn't available for this version of PHP.
-				$dockerfile = preg_replace( '|\n%%NEW_PHP%%.*%%/NEW_PHP%%\n|s', '', $dockerfile );
+			if ( '5.2' !== $version ) {
+				$dockerfile = preg_replace( '|\n%%OLD_PHP%%.*%%/OLD_PHP%%\n|s', '', $dockerfile );
 			}
+
+			$dockerfile = str_replace( '%%MYSQL_CLIENT%%', $config['mysql_client'], $dockerfile );
+			$dockerfile = str_replace( '%%DOWNLOAD_URL%%', $config['download_url'], $dockerfile );
 		}
 
 		// Cleanup any leftover tags.
