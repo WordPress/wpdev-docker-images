@@ -321,7 +321,7 @@ foreach ( $php_versions as $version => $images ) {
 					$install_extensions .= " \\\n\t\\\n";
 
 					if ( version_compare( $version, '7.4', '>' ) === true ) {
-						$install_extensions .= "\tgit clone https://github.com/FriendsOfPHP/pickle.git pickle; \\\n";
+						$install_extensions .= "\tcurl --location --output pickle https://github.com/FriendsOfPHP/pickle.git; \\\n";
 						$install_extensions .= "\tcd pickle; \\\n";
 						$install_extensions .= "\tcomposer install --no-dev --optimize-autoloader; \\\n";
 						$install_extensions .= "\tphp -d phar.readonly=0 box.phar build; \\\n";
