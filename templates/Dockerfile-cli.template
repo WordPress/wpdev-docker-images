@@ -28,10 +28,6 @@ RUN chmod +x /entrypoint.sh
 
 ENTRYPOINT [ "/entrypoint.sh" ]
 
-%%OLD_PHP%%
-ENTRYPOINT [ "echo", "WP-CLI does not support PHP 5.2-fpm.\nThe PHP 5.3-fpm CLI container is being used instead. Be aware that this PHP version mismatch may result in odd or surprising behavior.\n" ]
-%%/OLD_PHP%%
-
 WORKDIR /var/www
 
 CMD [ "wp", "shell" ]
