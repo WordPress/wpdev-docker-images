@@ -284,8 +284,8 @@ foreach ( $php_versions as $version => $images ) {
 		// PHPUnit and WP-CLI image parent tags vary depending on whether it's a PHP version, or "latest".
 		if ( 'latest' === $version ) {
 			$version_tag = 'latest';
-		} elseif ( 'cli' === $image && '5.2' === $version ) {
-			// Use PHP 5.3 for the PHP 5.2 CLI image.
+		} elseif ( in_array( $image, array( 'cli', 'phpunit' ) ) && '5.2' === $version ) {
+			// Use PHP 5.3 for the PHP 5.2 CLI and PHPUnit images.
 			$version_tag = '5.3-fpm';
 		} else {
 			$version_tag = "$version-fpm";
