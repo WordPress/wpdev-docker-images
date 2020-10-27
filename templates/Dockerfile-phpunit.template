@@ -3,9 +3,13 @@ ARG PR_TAG
 FROM $PACKAGE_REGISTRY/php:%%VERSION_TAG%%$PR_TAG
 
 %%GENERATED_WARNING%%
-
+%%NEW_PHP%%
 RUN curl -sL https://phar.phpunit.de/phpunit-%%PHPUNIT_VERSION%%.phar > /usr/local/bin/phpunit && chmod +x /usr/local/bin/phpunit
+%%/NEW_PHP%%
 
+%%OLD_PHP%%
+RUN curl -sL https://github.com/treffynnon/php5.2-phpunit3.6.12-phar/releases/download/1.0.2/php52-phpunit.phar > /usr/local/bin/phpunit && chmod +x /usr/local/bin/phpunit
+%%/OLD_PHP%%
 WORKDIR /var/www
 
 COPY entrypoint.sh /entrypoint.sh

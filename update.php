@@ -383,12 +383,18 @@ foreach ( $php_versions as $version => $images ) {
 		} elseif ( $image === 'phpunit' ) {
 			// Replace tags inside the PHPUnit Dockerfile template.
 			$dockerfile = str_replace( '%%PHPUNIT_VERSION%%', $config, $dockerfile );
+
+			if ( '5.2' === $version ) {
+				$dockerfile = preg_replace( '|\n%%NEW_PHP%%.*%%/NEW_PHP%%\n|s', '', $dockerfile );
+			} else {
+				$dockerfile = preg_replace( '|\n%%OLD_PHP%%.*%%/OLD_PHP%%\n|s', '', $dockerfile );
+			}
 		} elseif ( $image === 'cli' ) {
-			// Replace tags inside the WP-CLI Dockerfile template.
 			if ( '5.2' !== $version ) {
 				$dockerfile = preg_replace( '|\n%%OLD_PHP%%.*%%/OLD_PHP%%\n|s', '', $dockerfile );
 			}
 
+			// Replace tags inside the WP-CLI Dockerfile template.
 			$dockerfile = str_replace( '%%MYSQL_CLIENT%%', $config['mysql_client'], $dockerfile );
 			$dockerfile = str_replace( '%%DOWNLOAD_URL%%', $config['download_url'], $dockerfile );
 		}
@@ -437,6 +443,9 @@ foreach ( $php_versions as $version => $images ) {
 			} else {
 				$version_tag = "$php_version-fpm";
 			}
+
+			$dockerfile = preg_replace( '|\n%%OLD_PHP%%.*%%/OLD_PHP%%\n|s', '', $dockerfile );
+
 			$dockerfile = str_replace( '%%VERSION_TAG%%', $version_tag, $dockerfile );
 
 			$dockerfile = str_replace( '%%PHPUNIT_VERSION%%', $phpunit_version, $dockerfile );
