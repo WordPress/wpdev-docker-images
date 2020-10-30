@@ -1,6 +1,6 @@
 <?php
 
-// The latest stable version of PHP that is supported in WordPress trunk.
+// The latest stable version of PHP that is supported in WordPress trunk
 $latest = '7.4';
 
 /**
