@@ -21,9 +21,7 @@ RUN set -ex; \
 	sed -i 's/^# *\(\(ru_RU\|fr_FR\|de_DE\|es_ES\|ja_JP\).UTF-8\)/\1/' /etc/locale.gen; \
 	locale-gen; \
 	\
-	docker-php-ext-configure gd --with-png-dir=/usr --with-jpeg-dir=/usr; \
-	\
-	docker-php-ext-install gd mysql mysqli zip exif intl mbstring xml xsl; \
+	docker-php-ext-install mysql mysqli zip exif intl mbstring xml xsl; \
 	\
 	pecl install zendopcache-7.0.5; \
 	pecl install xdebug-2.2.7;
