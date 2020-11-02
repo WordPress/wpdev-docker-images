@@ -17,11 +17,7 @@ RUN set -ex; \
 	\
 	apt-get update; \
 	\
-	apt-get install -y --no-install-recommends libjpeg-dev libpng-dev libzip-dev libmemcached-dev unzip libmagickwand-dev ghostscript libicu-dev libonig-dev locales sudo rsync libxslt-dev; \
-	sed -i 's/^# *\(\(ru_RU\|fr_FR\|de_DE\|es_ES\|ja_JP\).UTF-8\)/\1/' /etc/locale.gen; \
-	locale-gen; \
-	\
-	docker-php-ext-install mysql mysqli zip exif intl mbstring xml xsl; \
+	apt-get install -y --no-install-recommends sudo rsync; \
 	\
 	pecl install zendopcache-7.0.5; \
 	pecl install xdebug-2.2.7;
