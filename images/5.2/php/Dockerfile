@@ -26,9 +26,7 @@ RUN set -ex; \
 	docker-php-ext-install gd mysql mysqli zip exif intl mbstring xml xsl; \
 	\
 	pecl install zendopcache-7.0.5; \
-	pecl install xdebug-2.2.7; \
-	pecl install imagick-2.3.3; \
-	docker-php-ext-enable imagick;
+	pecl install xdebug-2.2.7;
 
 COPY entrypoint.sh /entrypoint.sh
 COPY common.sh /common.sh
