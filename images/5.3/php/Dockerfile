@@ -27,7 +27,7 @@ RUN set -ex; \
 	\
 	pecl install zendopcache-7.0.5; \
 	pecl install xdebug-2.2.7; \
-	pecl install imagick-3.4.4; \
+	pecl install imagick-2.3.3; \
 	docker-php-ext-enable imagick; \
 	\
 	curl --silent --fail --location --retry 3 --output /tmp/installer.php --url https://getcomposer.org/installer; \
