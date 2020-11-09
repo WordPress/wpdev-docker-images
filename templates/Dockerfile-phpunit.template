@@ -31,9 +31,7 @@ RUN mkdir ~/phpunit \
     && cd ~/phpunit/phpunit-mock-objects && git checkout 1.1.1 \
     && cd ~/phpunit/phpunit-selenium && git checkout 1.2.8 \
     && chmod +x ~/phpunit/phpunit/phpunit.php \
-    && ln -s ~/phpunit/phpunit/phpunit.php /usr/local/bin/phpunit \
-    && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false -o APT::AutoRemove::SuggestsImportant=false git \
-    && apt-get autoremove
+    && ln -s ~/phpunit/phpunit/phpunit.php /usr/local/bin/phpunit
 %%/OLD_PHP%%
 WORKDIR /var/www
 
