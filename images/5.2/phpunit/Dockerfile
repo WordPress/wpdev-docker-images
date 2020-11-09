@@ -9,9 +9,9 @@ FROM $PACKAGE_REGISTRY/php:5.2-fpm$PR_TAG
 # You can find the relevant template in the `/templates` folder.
 #
 
-RUN apt-get update && apt-get install -y git --no-install-recommends && rm -rf /var/lib/apt/lists/*
-    && mkdir ~/phpunit
-    && cd ~/phpunit
+RUN apt-get update && apt-get install -y git --no-install-recommends && rm -rf /var/lib/apt/lists/* \
+    && mkdir ~/phpunit \
+    && cd ~/phpunit \
     && git clone git://github.com/sebastianbergmann/phpunit.git \
     && git clone git://github.com/sebastianbergmann/dbunit.git \
     && git clone git://github.com/sebastianbergmann/php-file-iterator.git \
