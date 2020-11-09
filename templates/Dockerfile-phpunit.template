@@ -8,7 +8,33 @@ RUN curl -sL https://phar.phpunit.de/phpunit-%%PHPUNIT_VERSION%%.phar > /usr/loc
 %%/NEW_PHP%%
 
 %%OLD_PHP%%
-RUN curl -sL https://github.com/treffynnon/php5.2-phpunit3.6.12-phar/releases/download/1.0.2/php52-phpunit.phar > /usr/local/bin/phpunit && chmod +x /usr/local/bin/phpunit
+RUN apt-get update && apt-get install -y git --no-install-recommends && rm -rf /var/lib/apt/lists/* \
+    && mkdir ~/phpunit \
+    && cd ~/phpunit \
+    && git clone git://github.com/sebastianbergmann/phpunit.git \
+    && git clone git://github.com/sebastianbergmann/dbunit.git \
+    && git clone git://github.com/sebastianbergmann/php-file-iterator.git \
+    && git clone git://github.com/sebastianbergmann/php-text-template.git \
+    && git clone git://github.com/sebastianbergmann/php-code-coverage.git \
+    && git clone git://github.com/sebastianbergmann/php-token-stream.git \
+    && git clone git://github.com/sebastianbergmann/php-timer.git \
+    && git clone git://github.com/sebastianbergmann/phpunit-mock-objects.git \
+    && git clone git://github.com/sebastianbergmann/phpunit-selenium.git \
+    && git clone git://github.com/sebastianbergmann/phpunit-story.git \
+    && git clone git://github.com/sebastianbergmann/php-invoker.git \
+    && cd ~/phpunit/phpunit && git checkout 3.5 \
+    && cd ~/phpunit/dbunit && git checkout 1.1 \
+    && cd ~/phpunit/php-file-iterator && git checkout 1.2 \
+    && cd ~/phpunit/php-timer && git checkout 1.0.1 \
+    && cd ~/phpunit/php-text-template && git checkout 1.1.2 \
+    && cd ~/phpunit/php-token-stream && git checkout 1.1.1 \
+    && cd ~/phpunit/php-code-coverage && git checkout 1.0 \
+    && cd ~/phpunit/phpunit-mock-objects && git checkout 1.1 \
+    && cd ~/phpunit/phpunit-selenium && git checkout 1.1 \
+    && chmod +x ~/phpunit/phpunit/phpunit.php \
+    && ln -s ~/phpunit/phpunit/phpunit.php /usr/bin/phpunit \
+    && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false -o APT::AutoRemove::SuggestsImportant=false git \
+    && apt-get autoremove
 %%/OLD_PHP%%
 WORKDIR /var/www
 
