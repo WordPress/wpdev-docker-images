@@ -179,7 +179,7 @@ $php_versions = array(
 			'base_name'       => 'php:8.0-fpm',
 			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libzip-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libonig-dev', 'locales', 'sudo', 'rsync', 'libxslt-dev' ),
 			'extensions'      => array( 'gd', 'opcache', 'mysqli', 'zip', 'exif', 'intl', 'mbstring', 'xml', 'xsl' ),
-			'pecl_extensions' => array( 'memcached-3.1.5', 'xdebug-beta' ),
+			'pecl_extensions' => array( 'memcached-3.1.5', 'xdebug-3.0.0RC1' ),
 			'composer'        => true,
 		),
 		'phpunit' => 9,
