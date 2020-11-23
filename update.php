@@ -468,8 +468,8 @@ foreach ( $php_versions as $version => $images ) {
 /**
  * Generate Docker build commands.
  *
- * @param string $label       The name of the Travis script
- * @param string $image_type  The image type (e.g. php, phpunit, cli)
+ * @param string $label       The name of the Travis script.
+ * @param string $image_type  The image type (e.g. php, phpunit, cli).
  * @param string $image_label The image label (e.g. 5.2, etc.). '-fpm' will be added to the end.
  * @param bool   $is_latest   Whether the version is the latest.
  *
