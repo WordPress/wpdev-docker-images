@@ -25,7 +25,7 @@ env:
     # GITHUB_TOKEN
     - secure: Y8TKVQ9hWYdffxRliIDDDoXCF1FyOeOJ+oq9cRVeMG5/wgofor/3vhN2anOdwrrsoQvmoDwJII97iT9mcKnmQe6UV/LnZXXw/P1peWJOaDsKbwEX+07agNVQKdefqaxi5Jr1wDMgkadn39VU7/haXrsjqJ3Wbnu5AfcGnIzxfVnLjehkuSSOOmQy3w+RwW+HymLVpFqevfhED4uJjrjvwUEvtirxG0E3nyKXGsjusPSDGVzZhmLJBXEHf0g717loN1b+JeUa6TeIYGQ5vM/oRsyzxeJJ0iltiTKk31JHtBP+TTcoyHKWqOzefVfoXCNbk1G2Ez8czUqWIfQK8YnIHOmneUeSi6lQbCdcMSWbv/bJ5+wEJgsQKGBxy7qfF8v0T/GoMSi1OM6JfkcgW3bhuBgMGdnwxJUJ/lmYYAYlmXcO/+cui7lmyXsMT44lArdCZFo9SGt5IlPL4BW5SODYrDFKzP+2uHsj56flK03/lt+/KNJjLZKvH6NbzfhESRzMChnFFaz5eWxHgMZJefO5S51zI/88gu8YZgQDahpgIQUKvZKqi1dSASfVQ7jGqKj3roNKu2s4IdQoMXELeIehrsn9bw6BiN1kaL8yyAXjWLry21VXH0VYv0FdF4W7j23Wv7GWbcg0THDSydLvLYICPBi7NyU3yCPsGGlGpT8Oe9A=
     - PR_TAG: $(if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then echo "-$TRAVIS_PULL_REQUEST"; else echo ""; fi)
-    - PACKAGE_REGISTRY_HOST: $(if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then echo "docker.pkg.github.com"; else echo ""; fi)
+    - PACKAGE_REGISTRY_HOST: $(if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then echo "ghcr.io"; else echo ""; fi)
     - PACKAGE_REGISTRY: $(if [ "$PACKAGE_REGISTRY_HOST" != "" ]; then echo "${PACKAGE_REGISTRY_HOST}/wordpress/wpdev-docker-images"; else echo "wordpressdevelop"; fi)
 
 before_script:
@@ -33,7 +33,7 @@ before_script:
     if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then
       echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
     else
-      echo "$GITHUB_TOKEN" | docker login docker.pkg.github.com -u "$GITHUB_USERNAME" --password-stdin
+      echo "$GITHUB_TOKEN" | docker login ghcr.io -u "$GITHUB_USERNAME" --password-stdin
     fi
 
 jobs:
