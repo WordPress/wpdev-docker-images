@@ -14,6 +14,6 @@ After modifying any of the Dockerfile template files, you'll need to regenerate 
 
 ## Testing Images
 
-When submitting a Pull Request, images will be automatically built for you, and hosted on the GitHub Container Registry. Be aware, this service is still in public beta. You can read more about this in the [GitHub Container Registry documentation](https://docs.github.com/en/free-pro-team@latest/packages/getting-started-with-github-container-registry/about-github-container-registry).
+When submitting a Pull Request, images will be automatically built for you, and hosted on the GitHub Container Registry. As this service is currently in beta, you will need to login to the package registry, even for pulling images. You can read more about this in the [GitHub Container Registry documentation](https://docs.github.com/en/free-pro-team@latest/packages/getting-started-with-github-container-registry/about-github-container-registry).
 
 Once Travis finishes building all of these packages, you can modify [`docker-compose.yml`](https://github.com/WordPress/wordpress-develop/blob/master/tools/local-env/docker-compose.yml) and [`docker-compose.scripts.yml`](https://github.com/WordPress/wordpress-develop/blob/master/tools/local-env/docker-compose.scripts.yml) to pull from GitHub. For example, the `image` in the PHP container would change from `wordpressdevelop/php:${LOCAL_PHP-latest}` to `ghcr.io/wordpress/wpdev-docker-images/php:${LOCAL_PHP-latest}-PR_NUMBER`, where `PR_NUMBER` is the number of the Pull Request you submitted.
