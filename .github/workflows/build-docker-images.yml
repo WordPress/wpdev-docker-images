@@ -6,14 +6,13 @@ on:
   pull_request:
 
 env:
-  global:
-    DOCKER_USERNAME: garypendergast
-    GITHUB_USERNAME: pento
-    DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    PR_TAG: ${{ github.repository_owner }}
-    PACKAGE_REGISTRY_HOST: ghcr.io
-    PACKAGE_REGISTRY: ghcr.io/wordpress/wpdev-docker-images
+  DOCKER_USERNAME: garypendergast
+  GITHUB_USERNAME: pento
+  DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  PR_TAG: ${{ github.repository_owner }}
+  PACKAGE_REGISTRY_HOST: ghcr.io
+  PACKAGE_REGISTRY: ghcr.io/wordpress/wpdev-docker-images
 
 jobs:
 
