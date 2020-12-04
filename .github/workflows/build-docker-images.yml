@@ -31,11 +31,16 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name:
+      - name: Login to Docker package registry
         if: ${{ github.event == 'push' }}
         run: |
           echo "PACKAGE_REGISTRY_HOST=" >> $GITHUB_ENV
           echo "PACKAGR_REGISTRY=wordpressdevelop" >> $GITHUB_ENV
+          echo "${{ env.DOCKER_PASSWORD }}" | docker login -u "${{ env.DOCKER_USERNAME }}" --password-stdin
+
+      - name: Login to GitHub Container Registry
+        if: ${{ github.event == 'pull_request' }}
+        run: echo "${{ env.GITHUB_TOKEN }}" | docker login ghcr.io -u "${{ env.GITHUB_USERNAME }}" --password-stdin
 
       - name: Build Docker images
         run: docker build --build-arg PACKAGE_REGISTRY=${{ env.PACKAGE_REGISTRY }} --build-arg PR_TAG=${{ env.PR_TAG }} -t $PACKAGE_REGISTRY/php:${{ env.PHP_VERSION }}-fpm$PR_TAG images/${{ env.PHP_VERSION }}/php
@@ -57,11 +62,16 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name:
+      - name: Login to Docker package registry
         if: ${{ github.event == 'push' }}
         run: |
           echo "PACKAGE_REGISTRY_HOST=" >> $GITHUB_ENV
           echo "PACKAGR_REGISTRY=wordpressdevelop" >> $GITHUB_ENV
+          echo "${{ env.DOCKER_PASSWORD }}" | docker login -u "${{ env.DOCKER_USERNAME }}" --password-stdin
+
+      - name: Login to GitHub Container Registry
+        if: ${{ github.event == 'pull_request' }}
+        run: echo "${{ env.GITHUB_TOKEN }}" | docker login ghcr.io -u "${{ env.GITHUB_USERNAME }}" --password-stdin
 
       - name: Build Docker images
         run: docker build --build-arg PACKAGE_REGISTRY=${{ env.PACKAGE_REGISTRY }} --build-arg PR_TAG=${{ env.PR_TAG }} -t $PACKAGE_REGISTRY/php:${{ env.PHPUNIT_VERSION }}-fpm$PR_TAG images/${{ env.PHPUNIT_VERSION }}/phpunit
@@ -83,11 +93,16 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name:
+      - name: Login to Docker package registry
         if: ${{ github.event == 'push' }}
         run: |
           echo "PACKAGE_REGISTRY_HOST=" >> $GITHUB_ENV
           echo "PACKAGR_REGISTRY=wordpressdevelop" >> $GITHUB_ENV
+          echo "${{ env.DOCKER_PASSWORD }}" | docker login -u "${{ env.DOCKER_USERNAME }}" --password-stdin
+
+      - name: Login to GitHub Container Registry
+        if: ${{ github.event == 'pull_request' }}
+        run: echo "${{ env.GITHUB_TOKEN }}" | docker login ghcr.io -u "${{ env.GITHUB_USERNAME }}" --password-stdin
 
       - name: Build Docker images
         run: docker build --build-arg PACKAGE_REGISTRY=${{ env.PACKAGE_REGISTRY }} --build-arg PR_TAG=${{ env.PR_TAG }} -t $PACKAGE_REGISTRY/php:${{ env.PHP_VERSION }}-fpm$PR_TAG images/${{ env.PHP_VERSION }}/cli
