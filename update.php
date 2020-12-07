@@ -451,7 +451,7 @@ foreach ( $php_versions as $version => $images ) {
 	$workflow_template = str_replace( '%%PHP_LATEST%%', $latest, $workflow_template );
 
 	foreach ( $workflow_templates as $name => $remove_pattern ) {
-		// Save two GitHub Action workflwos.
+		// Save two GitHub Action workflows.
 		$workflow_contents = preg_replace( "|\n%%$remove_pattern%%.*%%/$remove_pattern%%\n|s", '', $workflow_template );
 		$workflow_contents = preg_replace( '/%%[^%]+%%/', '', $workflow_contents );
 
