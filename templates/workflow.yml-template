@@ -79,9 +79,9 @@ jobs:
       - name: Push image as latest
         if: ${{ env.PHP_LATEST == env.PHP_VERSION }}
         run: |
-          docker image tag $PACKAGE_REGISTRY/php:$PHP_VERSION-fpm$PR_TAG $PACKAGE_REGISTRY/php:latest
+          docker image tag $PACKAGE_REGISTRY/php:$PHP_VERSION-fpm$PR_TAG $PACKAGE_REGISTRY/php:latest$PR_TAG
           docker images
-          docker push $PACKAGE_REGISTRY/php:latest
+          docker push $PACKAGE_REGISTRY/php:latest$PR_TAG
 
   build-phpunit-images:
     name: PHPUnit on PHP ${{ matrix.php }}
@@ -115,8 +115,8 @@ jobs:
       - name: Tag and push image as latest
         if: ${{ env.PHP_LATEST == env.PHP_VERSION }}
         run: |
-          docker image tag $PACKAGE_REGISTRY/phpunit:$PHP_VERSION-fpm$PR_TAG $PACKAGE_REGISTRY/phpunit:latest
-          docker push $PACKAGE_REGISTRY/phpunit:latest
+          docker image tag $PACKAGE_REGISTRY/phpunit:$PHP_VERSION-fpm$PR_TAG $PACKAGE_REGISTRY/phpunit:latest$PR_TAG
+          docker push $PACKAGE_REGISTRY/phpunit:latest$PR_TAG
 
   build-specific-phpunit-images:
     name: PHPUnit ${{ matrix.phpunit }}
@@ -178,5 +178,5 @@ jobs:
       - name: Push image as latest
         if: ${{ env.PHP_LATEST == env.PHP_VERSION }}
         run: |
-          docker image tag $PACKAGE_REGISTRY/cli:$PHP_VERSION-fpm$PR_TAG $PACKAGE_REGISTRY/cli:latest
-          docker push $PACKAGE_REGISTRY/cli:latest
+          docker image tag $PACKAGE_REGISTRY/cli:$PHP_VERSION-fpm$PR_TAG $PACKAGE_REGISTRY/cli:latest$PR_TAG
+          docker push $PACKAGE_REGISTRY/cli:latest$PR_TAG
