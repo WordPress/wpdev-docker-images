@@ -1,6 +1,6 @@
 %%GENERATED_WARNING%%
 %%DOCKER_HUB%%
-name: Build Docker Hub Images
+name: Build and publish images to Docker Hub
 
 on:
   push:
@@ -17,7 +17,7 @@ env:
   PR_TAG:
 %%/DOCKER_HUB%%
 %%GITHUB%%
-name: Build GitHub Container Registry Images
+name: Build test images
 
 on:
   pull_request:

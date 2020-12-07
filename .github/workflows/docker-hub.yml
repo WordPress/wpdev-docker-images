@@ -5,7 +5,7 @@
 # You can find the relevant template in the `/templates` folder.
 #
 
-name: Build Docker Hub Images
+name: Build and publish images to Docker Hub
 
 on:
   push:

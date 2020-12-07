@@ -4,7 +4,7 @@
 #
 # You can find the relevant template in the `/templates` folder.
 #
-name: Build GitHub Container Registry Images
+name: Build test images
 
 on:
   pull_request:
