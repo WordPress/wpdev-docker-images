@@ -39,7 +39,7 @@ jobs:
           echo "$REGISTRY_PASSWORD" | docker login $PACKAGE_REGISTRY_HOST -u "$REGISTRY_USERNAME" --password-stdin
 
       - name: Build Docker image
-        run: docker build --build-arg PACKAGE_REGISTRY=$PACKAGE_REGISTRY --build-arg PR_TAG=$PR_TAG --build-arg -t $PACKAGE_REGISTRY/php:$PHP_VERSION-fpm$PR_TAG images/$PHP_VERSION/php
+        run: docker build --build-arg PACKAGE_REGISTRY=$PACKAGE_REGISTRY --build-arg PR_TAG=$PR_TAG -t $PACKAGE_REGISTRY/php:$PHP_VERSION-fpm$PR_TAG images/$PHP_VERSION/php
 
       - name: Log Docker images
         run: docker images
@@ -75,7 +75,7 @@ jobs:
           echo "$REGISTRY_PASSWORD" | docker login $PACKAGE_REGISTRY_HOST -u "$REGISTRY_USERNAME" --password-stdin
 
       - name: Build Docker image
-        run: docker build --build-arg PACKAGE_REGISTRY=$PACKAGE_REGISTRY --build-arg PR_TAG=$PR_TAG --build-arg -t $PACKAGE_REGISTRY/phpunit:$PHP_VERSION-fpm images/$PHP_VERSION/phpunit
+        run: docker build --build-arg PACKAGE_REGISTRY=$PACKAGE_REGISTRY --build-arg PR_TAG=$PR_TAG -t $PACKAGE_REGISTRY/phpunit:$PHP_VERSION-fpm images/$PHP_VERSION/phpunit
 
       - name: Log Docker images
         run: docker images
@@ -109,7 +109,7 @@ jobs:
           echo "$REGISTRY_PASSWORD" | docker login $PACKAGE_REGISTRY_HOST -u "$REGISTRY_USERNAME" --password-stdin
 
       - name: Build Docker image
-        run: docker build --build-arg PACKAGE_REGISTRY=$PACKAGE_REGISTRY --build-arg PR_TAG=$PR_TAG --build-arg -t $PACKAGE_REGISTRY/phpunit:$PHPUNIT_VERSION-fpm$PR_TAG images/phpunit/$PHPUNIT_VERSION
+        run: docker build --build-arg PACKAGE_REGISTRY=$PACKAGE_REGISTRY --build-arg PR_TAG=$PR_TAG -t $PACKAGE_REGISTRY/phpunit:$PHPUNIT_VERSION-fpm$PR_TAG images/phpunit/$PHPUNIT_VERSION
 
       - name: Log Docker images
         run: docker images
@@ -138,7 +138,7 @@ jobs:
           echo "$REGISTRY_PASSWORD" | docker login $PACKAGE_REGISTRY_HOST -u "$REGISTRY_USERNAME" --password-stdin
 
       - name: Build Docker image
-        run: docker build --build-arg PACKAGE_REGISTRY=$PACKAGE_REGISTRY --build-arg PR_TAG=$PR_TAG --build-arg -t $PACKAGE_REGISTRY/cli:$PHP_VERSION-fpm$PR_TAG images/$PHP_VERSION/cli
+        run: docker build --build-arg PACKAGE_REGISTRY=$PACKAGE_REGISTRY --build-arg PR_TAG=$PR_TAG -t $PACKAGE_REGISTRY/cli:$PHP_VERSION-fpm$PR_TAG images/$PHP_VERSION/cli
 
       - name: Log Docker images
         run: docker images
