@@ -13,7 +13,7 @@ env:
   GHA_USERNAME: desrosj
   GHCR_TOKEN: ${{ secrets.GHCR_TOKEN }}
   PACKAGE_REGISTRY_HOST: ghcr.io
-  PACKAGE_REGISTRY: ${{ env.PACKAGE_REGISTRY_HOST }}/wordpress/wpdev-docker-images
+  PACKAGE_REGISTRY: ghcr.io/wordpress/wpdev-docker-images
   PR_TAG: -${{ github.event.number }}
 
 
