@@ -10,8 +10,8 @@ on:
     - cron: '0 0 * * 0'
 
 env:
-  DOCKER_USERNAME: garypendergast
-  DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+  REGISTRY_USERNAME: garypendergast
+  REGISTRY_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
   PACKAGE_REGISTRY_HOST:
   PACKAGE_REGISTRY: wordpressdevelop
   PR_TAG:
@@ -23,8 +23,8 @@ on:
   pull_request:
 
 env:
-  GHA_USERNAME: desrosj
-  GHCR_TOKEN: ${{ secrets.GHCR_TOKEN }}
+  REGISTRY_USERNAME: desrosj
+  REGISTRY_PASSWORD: ${{ secrets.GHCR_TOKEN }}
   PACKAGE_REGISTRY_HOST: ghcr.io
   PACKAGE_REGISTRY: ghcr.io/wordpress/wpdev-docker-images
   PR_TAG: -${{ github.event.number }}
@@ -47,9 +47,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Login to Docker Hub
+      - name: Login to the package registry
         run: |
-          echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+          echo "$REGISTRY_PASSWORD" | docker login -u "$REGISTRY_USERNAME" --password-stdin
 
       - name: Build Docker image
         run: docker build --build-arg PACKAGE_REGISTRY=$PACKAGE_REGISTRY --build-arg PR_TAG=$PR_TAG--build-arg -t $PACKAGE_REGISTRY/php:$PHP_VERSION-fpm images/$PHP_VERSION/php
@@ -83,9 +83,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Login to Docker Hub
+      - name: Login to the package registry
         run: |
-          echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+          echo "$REGISTRY_PASSWORD" | docker login -u "$REGISTRY_USERNAME" --password-stdin
 
       - name: Build Docker image
         run: docker build --build-arg PACKAGE_REGISTRY=$PACKAGE_REGISTRY --build-arg PR_TAG=$PR_TAG--build-arg -t $PACKAGE_REGISTRY/phpunit:$PHP_VERSION-fpm images/$PHP_VERSION/phpunit
@@ -117,9 +117,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Login to Docker Hub
+      - name: Login to the package registry
         run: |
-          echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+          echo "$REGISTRY_PASSWORD" | docker login -u "$REGISTRY_USERNAME" --password-stdin
 
       - name: Build Docker image
         run: docker build --build-arg PACKAGE_REGISTRY=$PACKAGE_REGISTRY --build-arg PR_TAG=$PR_TAG--build-arg -t $PACKAGE_REGISTRY/phpunit:$PHPUNIT_VERSION-fpm images/phpunit/$PHPUNIT_VERSION
@@ -146,9 +146,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Login to Docker Hub
+      - name: Login to the package registry
         run: |
-          echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+          echo "$REGISTRY_PASSWORD" | docker login -u "$REGISTRY_USERNAME" --password-stdin
 
       - name: Build Docker image
         run: docker build --build-arg PACKAGE_REGISTRY=$PACKAGE_REGISTRY --build-arg PR_TAG=$PR_TAG--build-arg -t $PACKAGE_REGISTRY/cli:$PHP_VERSION-fpm images/$PHP_VERSION/cli
