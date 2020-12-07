@@ -31,11 +31,19 @@ env:
 %%/GITHUB%%
 
 jobs:
+  # Checks for any incomplete preceeding workflow runs and cancels them.
+  check-for-duplicates:
+    steps:
+      - name: Cancel previous runs of this workflow (pull requests only)
+        if: ${{ github.event_name == 'pull_request' }}
+        uses: styfle/cancel-workflow-action@0.6.0
+        with:
+          access_token: ${{ github.token }}
 
   build-php-images:
     name: PHP ${{ matrix.php }} Image
     runs-on: ubuntu-latest
-
+    needs: check-for-duplicates
     strategy:
       matrix:
         php: [ %%PHP_VERSION_LIST%% ]
