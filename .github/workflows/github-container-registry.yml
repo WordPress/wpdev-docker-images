@@ -75,7 +75,7 @@ jobs:
           echo "$REGISTRY_PASSWORD" | docker login $PACKAGE_REGISTRY_HOST -u "$REGISTRY_USERNAME" --password-stdin
 
       - name: Build Docker image
-        run: docker build --build-arg PACKAGE_REGISTRY=$PACKAGE_REGISTRY --build-arg PR_TAG=$PR_TAG -t $PACKAGE_REGISTRY/phpunit:$PHP_VERSION-fpm images/$PHP_VERSION/phpunit
+        run: docker build --build-arg PACKAGE_REGISTRY=$PACKAGE_REGISTRY --build-arg PR_TAG=$PR_TAG -t $PACKAGE_REGISTRY/phpunit:$PHP_VERSION-fpm$PR_TAG images/$PHP_VERSION/phpunit
 
       - name: Log Docker images
         run: docker images
