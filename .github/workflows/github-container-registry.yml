@@ -20,6 +20,8 @@ env:
 jobs:
   # Checks for any incomplete preceeding workflow runs and cancels them.
   check-for-duplicates:
+    name: Cancel duplicate workflow runs
+    runs-on: ubuntu-latest
     steps:
       - name: Cancel previous runs of this workflow (pull requests only)
         if: ${{ github.event_name == 'pull_request' }}
