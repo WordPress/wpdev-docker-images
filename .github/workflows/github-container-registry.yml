@@ -134,7 +134,7 @@ jobs:
         run: docker push $PACKAGE_REGISTRY/phpunit:$PHPUNIT_VERSION-fpm$PR_TAG
 
   build-cli-images:
-    name: CLI ${{ matrix.php }}
+    name: CLI on PHP ${{ matrix.php }}
     runs-on: ubuntu-latest
     needs: build-php-images
     strategy:
