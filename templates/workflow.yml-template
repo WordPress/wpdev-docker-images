@@ -31,7 +31,7 @@ env:
 %%/GITHUB%%
 
 jobs:
-  # Checks for any incomplete preceeding workflow runs and cancels them.
+  # Checks for any incomplete preceding workflow runs and cancels them.
   check-for-duplicates:
     name: Cancel duplicate workflow runs
     runs-on: ubuntu-latest
@@ -54,12 +54,6 @@ jobs:
       PHP_LATEST: '%%PHP_LATEST%%'
 
     steps:
-      - name: Cancel previous runs of this workflow (pull requests only)
-        if: ${{ github.event_name == 'pull_request' }}
-        uses: styfle/cancel-workflow-action@0.5.0
-        with:
-          access_token: ${{ github.token }}
-
       - name: Checkout repository
         uses: actions/checkout@v2
 
