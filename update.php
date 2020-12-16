@@ -250,11 +250,7 @@ $templates = array(
 	'cli'     => file_get_contents( 'templates/Dockerfile-cli.template' ),
 );
 
-$build_cmds = array(
-	'php'     => array(),
-	'phpunit' => array(),
-	'cli'     => array(),
-);
+$phpunit_combinations = array();
 
 // Loop through each PHP version, and generate the Dockerfiles.
 foreach ( $php_versions as $version => $images ) {
@@ -398,14 +394,6 @@ foreach ( $php_versions as $version => $images ) {
 			copy( "config/php-fpm-$image.conf", "images/{$version}/{$image}/php-fpm.conf" );
 		}
 
-		// Generate the build and push commands for this image/version.
-		$build_cmds[ $image ][] = build_commands(
-			"{$image} {$version}",
-			$image,
-			"{$version}",
-			$version === $latest
-		);
-
 		echo "✅\n";
 	}
 
@@ -414,7 +402,7 @@ foreach ( $php_versions as $version => $images ) {
 			echo str_pad( "phpunit $phpunit_version", 15, '.' );
 
 			$php_version = $version;
-
+			$phpunit_combinations[] = "{$phpunit_version}-php-{$php_version}";
 			echo shell_exec( "mkdir -p images/phpunit/{$phpunit_version}-php-{$php_version}" );
 
 			$dockerfile = $templates['phpunit'];
@@ -441,92 +429,34 @@ foreach ( $php_versions as $version => $images ) {
 				copy( "entrypoint/entrypoint-phpunit.sh", "images/phpunit/{$phpunit_version}-php-{$php_version}/entrypoint.sh" );
 			}
 
-			// Generate the build and push commands for this image/version.
-			$build_cmds['phpunit'][] = build_commands(
-				"phpunit {$phpunit_version} on php {$php_version}",
-				'phpunit',
-				"{$phpunit_version}-php-{$php_version}",
-				false
-			);
-
 			echo "✅\n";
 		}
 	}
 
-	// Load the .travis.yml template.
-	$travis_template = file_get_contents( 'templates/.travis.yml-template' );
-	$travis_template = str_replace( '%%GENERATED_WARNING%%', $generated_warning, $travis_template );
-
-	// Generate the YML-formatted list of build commands for each of the images.
-	$travis_template = str_replace( '%%BUILD_PHP_IMAGES%%', generate_image_yaml( $build_cmds['php'] ), $travis_template );
-	$travis_template = str_replace( '%%BUILD_PHPUNIT_IMAGES%%', generate_image_yaml( $build_cmds['phpunit'] ), $travis_template );
-	$travis_template = str_replace( '%%BUILD_CLI_IMAGES%%', generate_image_yaml( $build_cmds['cli'] ), $travis_template );
-
-	write_file( '.travis.yml', $travis_template );
-}
-
-/**
- * Generate Docker build commands.
- *
- * @param string $label       The name of the Travis script
- * @param string $image_type  The image type (e.g. php, phpunit, cli)
- * @param string $image_label The image label (e.g. 5.2, etc.). '-fpm' will be added to the end.
- * @param bool   $is_latest   Whether the version is the latest.
- *
- * @return array
- */
-function build_commands( $label, $image_type = 'php', $image_label = '7.3', $is_latest = false ) {
-	if ( 'phpunit' === $image_type && false !== strpos( $image_label, '-php-' ) ) {
-		$path = "images/phpunit/{$image_label}";
-	} else {
-		$path = "images/{$image_label}/{$image_type}";
-	}
-
-	$build = 'docker build --build-arg PACKAGE_REGISTRY=$PACKAGE_REGISTRY --build-arg PR_TAG=$PR_TAG';
-	$build .= " -t \$PACKAGE_REGISTRY/{$image_type}:{$image_label}-fpm\$PR_TAG";
-	if ( $is_latest ) {
-		$build .= " -t \$PACKAGE_REGISTRY/{$image_type}:latest\$PR_TAG";
-	}
-
-	$commands = array(
-		$label,
-		"$build $path",
-		'docker images',
-		"docker push \$PACKAGE_REGISTRY/{$image_type}:{$image_label}-fpm\$PR_TAG",
+	$workflow_templates = array(
+		'docker-hub.yml' => 'GITHUB',
+		'github-container-registry.yml' => 'DOCKER_HUB',
 	);
-	if ( $is_latest ) {
-		$commands[] = "docker push \$PACKAGE_REGISTRY/{$image_type}:latest\$PR_TAG";
+
+	// Load the GitHub Actions template.
+	$workflow_template = file_get_contents( 'templates/workflow.yml-template' );
+	$workflow_template = str_replace( '%%GENERATED_WARNING%%', $generated_warning, $workflow_template );
+
+	$php_version_list = "'" . implode( "', '", array_keys( $php_versions ) ) . "'";
+	$workflow_template = str_replace( '%%PHP_VERSION_LIST%%', $php_version_list, $workflow_template );
+
+	$phpunit_version_list = "'" . implode( "', '", array_values( $phpunit_combinations ) ) . "'";
+	$workflow_template = str_replace( '%%PHPUNIT_COMBINATIONS%%', $phpunit_version_list, $workflow_template );
+
+	$workflow_template = str_replace( '%%PHP_LATEST%%', $latest, $workflow_template );
+
+	foreach ( $workflow_templates as $name => $remove_pattern ) {
+		// Save two GitHub Action workflows.
+		$workflow_contents = preg_replace( "|\n%%$remove_pattern%%.*%%/$remove_pattern%%\n|s", '', $workflow_template );
+		$workflow_contents = preg_replace( '/%%[^%]+%%/', '', $workflow_contents );
+
+		write_file( '.github/workflows/' . $name, $workflow_contents );
 	}
-
-	return $commands;
-}
-
-/**
- * Convert array of build commands into YAML.
- *
- * @param array $build_commands Array of build commands.
- *
- * @return string
- */
-function generate_image_yaml( array $build_commands ) {
-	return array_reduce(
-		$build_commands,
-		function ( $string, $cmds ) {
-			$name = array_shift( $cmds );
-			if ( empty( $string ) ) {
-				$string .= "      name: \"$name\"\n";
-			} else {
-				$string .= "    - name: \"$name\"\n";
-			}
-			$string .= "      script:\n";
-			foreach ( $cmds as $cmd ) {
-				$string .= "        - $cmd\n";
-			}
-
-			return $string;
-		},
-		''
-	);
 }
 
 /**
