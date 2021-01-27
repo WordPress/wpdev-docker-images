@@ -34,6 +34,7 @@ RUN chmod +x /entrypoint.sh
 
 ENTRYPOINT [ "/entrypoint.sh" ]
 
+
 WORKDIR /var/www
 
 CMD [ "wp", "shell" ]
