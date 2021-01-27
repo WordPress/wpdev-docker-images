@@ -9,7 +9,8 @@ FROM $PACKAGE_REGISTRY/php:5.2-fpm$PR_TAG
 # You can find the relevant template in the `/templates` folder.
 #
 
-RUN mkdir /usr/local/bin/phpunit \
+RUN apt-get update && apt-get install -y git --no-install-recommends && rm -rf /var/lib/apt/lists/* \
+    && mkdir /usr/local/bin/phpunit \
     && cd /usr/local/bin/phpunit \
     && git clone git://github.com/sebastianbergmann/phpunit.git \
     && git clone git://github.com/sebastianbergmann/dbunit.git \
@@ -31,7 +32,9 @@ RUN mkdir /usr/local/bin/phpunit \
     && cd /usr/local/bin/phpunit/php-code-coverage && git checkout 1.1.3 \
     && cd /usr/local/bin/phpunit/phpunit-mock-objects && git checkout 1.1.1 \
     && cd /usr/local/bin/phpunit/phpunit-selenium && git checkout 1.2.8 \
-    && chmod +x /usr/local/bin/phpunit/
+    && chmod +x /usr/local/bin/phpunit/ \
+    && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false -o APT::AutoRemove::SuggestsImportant=false git \
+    && apt-get autoremove
 
 WORKDIR /var/www
 
