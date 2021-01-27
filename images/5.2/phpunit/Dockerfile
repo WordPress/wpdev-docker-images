@@ -9,9 +9,8 @@ FROM $PACKAGE_REGISTRY/php:5.2-fpm$PR_TAG
 # You can find the relevant template in the `/templates` folder.
 #
 
-RUN apt-get update && apt-get install -y git --no-install-recommends && rm -rf /var/lib/apt/lists/* \
-    && mkdir ~/phpunit \
-    && cd ~/phpunit \
+RUN mkdir /usr/local/bin/phpunit \
+    && cd /usr/local/bin/phpunit \
     && git clone git://github.com/sebastianbergmann/phpunit.git \
     && git clone git://github.com/sebastianbergmann/dbunit.git \
     && git clone git://github.com/sebastianbergmann/php-file-iterator.git \
@@ -23,19 +22,16 @@ RUN apt-get update && apt-get install -y git --no-install-recommends && rm -rf /
     && git clone git://github.com/sebastianbergmann/phpunit-selenium.git \
     && git clone git://github.com/sebastianbergmann/phpunit-story.git \
     && git clone git://github.com/sebastianbergmann/php-invoker.git \
-    && cd ~/phpunit/phpunit && git checkout 3.6.12 \
-    && cd ~/phpunit/dbunit && git checkout 1.1.2 \
-    && cd ~/phpunit/php-file-iterator && git checkout 1.3.4 \
-    && cd ~/phpunit/php-timer && git checkout 1.0.3 \
-    && cd ~/phpunit/php-text-template && git checkout 1.1.2 \
-    && cd ~/phpunit/php-token-stream && git checkout 1.1.4 \
-    && cd ~/phpunit/php-code-coverage && git checkout 1.1.3 \
-    && cd ~/phpunit/phpunit-mock-objects && git checkout 1.1.1 \
-    && cd ~/phpunit/phpunit-selenium && git checkout 1.2.8 \
-    && chmod +x ~/phpunit/phpunit/phpunit.php \
-    && ln -s ~/phpunit/phpunit/phpunit.php /usr/local/bin/phpunit \
-    && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false -o APT::AutoRemove::SuggestsImportant=false git \
-    && apt-get autoremove
+    && cd /usr/local/bin/phpunit/phpunit && git checkout 3.6.12 \
+    && cd /usr/local/bin/phpunit/dbunit && git checkout 1.1.2 \
+    && cd /usr/local/bin/phpunit/php-file-iterator && git checkout 1.3.4 \
+    && cd /usr/local/bin/phpunit/php-timer && git checkout 1.0.3 \
+    && cd /usr/local/bin/phpunit/php-text-template && git checkout 1.1.2 \
+    && cd /usr/local/bin/phpunit/php-token-stream && git checkout 1.1.4 \
+    && cd /usr/local/bin/phpunit/php-code-coverage && git checkout 1.1.3 \
+    && cd /usr/local/bin/phpunit/phpunit-mock-objects && git checkout 1.1.1 \
+    && cd /usr/local/bin/phpunit/phpunit-selenium && git checkout 1.2.8 \
+    && chmod +x /usr/local/bin/phpunit/
 
 WORKDIR /var/www
 
