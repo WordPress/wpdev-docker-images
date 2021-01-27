@@ -4,6 +4,7 @@ FROM $PACKAGE_REGISTRY/php:%%VERSION_TAG%%$PR_TAG
 
 %%GENERATED_WARNING%%
 
+
 # install wp-cli dependences
 RUN set -ex; \
 	\

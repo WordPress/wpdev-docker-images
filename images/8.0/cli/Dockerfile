@@ -9,6 +9,7 @@ FROM $PACKAGE_REGISTRY/php:8.0-fpm$PR_TAG
 # You can find the relevant template in the `/templates` folder.
 #
 
+
 # install wp-cli dependences
 RUN set -ex; \
 	\
