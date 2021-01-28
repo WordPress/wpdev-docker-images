@@ -36,7 +36,7 @@ RUN apt-get update && apt-get install -y git --no-install-recommends && rm -rf /
     && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false -o APT::AutoRemove::SuggestsImportant=false git \
     && apt-get autoremove
 
-RUN echo 'include_path = ".:/root/phpunit/phpunit:/root/phpunit/phpunit-mock-objects:/root/phpunit/php-timer:/root/phpunit/php-text-template:/root/phpunit/php-token-stream:/usr/local/lib/php:/root/phpunit/dbunit:/root/phpunit/php-file-iterator:/root/phpunit/php-code-coverage"' > /usr/local/etc/php/php.ini
+RUN echo 'include_path = ".:/root/phpunit/phpunit:/root/phpunit/phpunit-mock-objects:/root/phpunit/php-timer:/root/phpunit/php-text-template:/root/phpunit/php-token-stream:/usr/local/lib/php:/root/phpunit/dbunit:/root/phpunit/php-file-iterator:/root/phpunit/php-code-coverage:/root/phpunit/php-invoker:/root/phpunit/phpunit-story:/root/phpunit/phpunit-selenium"' > /usr/local/etc/php/php.ini
 %%/OLD_PHP%%
 WORKDIR /var/www
 
