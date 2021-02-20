@@ -38,7 +38,7 @@ jobs:
         php: [ '5.2', '5.3', '5.4', '5.5', '5.6.20', '5.6', '7.0', '7.1', '7.2', '7.3', '7.4', '8.0' ]
     env:
       PHP_VERSION: ${{ matrix.php }}
-      PHP_LATEST: '7.4'
+      PHP_LATEST: '8.0'
 
     steps:
       - name: Checkout repository
@@ -74,7 +74,7 @@ jobs:
 
     env:
       PHP_VERSION: ${{ matrix.php }}
-      PHP_LATEST: '7.4'
+      PHP_LATEST: '8.0'
 
     steps:
       - name: Checkout repository
@@ -137,7 +137,7 @@ jobs:
 
     env:
       PHP_VERSION: ${{ matrix.php }}
-      PHP_LATEST: '7.4'
+      PHP_LATEST: '8.0'
 
     steps:
       - name: Checkout repository
