@@ -302,9 +302,9 @@ foreach ( $php_versions as $version => $images ) {
 					$install_extensions .= " \\\n\t\\\n\t";
 
 					if ( version_compare( $version, '7.4' ) >= 0 ) {
-						$install_extensions .= "docker-php-ext-configure gd --enable-gd --with-jpeg=/usr;";
+						$install_extensions .= "docker-php-ext-configure gd --enable-gd --with-jpeg=/usr --with-webp=/usr;";
 					} else {
-						$install_extensions .= "docker-php-ext-configure gd --with-png-dir=/usr --with-jpeg-dir=/usr;";
+						$install_extensions .= "docker-php-ext-configure gd --with-png-dir=/usr --with-jpeg-dir=/usr --with-webp-dir=/usr;";
 					}
 				}
 
