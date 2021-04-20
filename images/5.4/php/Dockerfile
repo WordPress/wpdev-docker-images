@@ -50,6 +50,13 @@ COPY entrypoint.sh /entrypoint.sh
 COPY common.sh /common.sh
 COPY php-fpm.conf /usr/local/etc/php-fpm.d/zz-wordpress.conf
 
+ARG imagemagic_config=/etc/ImageMagick-6/policy.xml
+RUN if [ -f $imagemagic_config ] ; then \
+		sed -i 's/<policy domain="coder" rights="none" pattern="PDF" \/>/<policy domain="coder" rights="read|write" pattern="PDF" \/>/g' $imagemagic_config; \
+	else \
+		echo did not see file $imagemagic_config; \
+	fi
+
 RUN chmod +x /entrypoint.sh && \
     chmod +x /common.sh && \
     groupadd -g 1000 -r wp_php && \
