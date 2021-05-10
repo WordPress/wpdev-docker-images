@@ -3,9 +3,40 @@ ARG PR_TAG
 FROM $PACKAGE_REGISTRY/php:%%VERSION_TAG%%$PR_TAG
 
 %%GENERATED_WARNING%%
-
+%%NEW_PHP%%
 RUN curl -sL https://phar.phpunit.de/phpunit-%%PHPUNIT_VERSION%%.phar > /usr/local/bin/phpunit && chmod +x /usr/local/bin/phpunit
+%%/NEW_PHP%%
 
+%%OLD_PHP%%
+RUN apt-get update && apt-get install -y git --no-install-recommends && rm -rf /var/lib/apt/lists/* \
+    && mkdir /usr/local/bin/phpunit \
+    && cd /usr/local/bin/phpunit \
+    && git clone git://github.com/sebastianbergmann/phpunit.git \
+    && git clone git://github.com/sebastianbergmann/dbunit.git \
+    && git clone git://github.com/sebastianbergmann/php-file-iterator.git \
+    && git clone git://github.com/sebastianbergmann/php-text-template.git \
+    && git clone git://github.com/sebastianbergmann/php-code-coverage.git \
+    && git clone git://github.com/sebastianbergmann/php-token-stream.git \
+    && git clone git://github.com/sebastianbergmann/php-timer.git \
+    && git clone git://github.com/sebastianbergmann/phpunit-mock-objects.git \
+    && git clone git://github.com/sebastianbergmann/phpunit-selenium.git \
+    && git clone git://github.com/sebastianbergmann/phpunit-story.git \
+    && git clone git://github.com/sebastianbergmann/php-invoker.git \
+    && cd /usr/local/bin/phpunit/phpunit && git checkout 3.6.12 \
+    && cd /usr/local/bin/phpunit/dbunit && git checkout 1.1.2 \
+    && cd /usr/local/bin/phpunit/php-file-iterator && git checkout 1.3.4 \
+    && cd /usr/local/bin/phpunit/php-timer && git checkout 1.0.3 \
+    && cd /usr/local/bin/phpunit/php-text-template && git checkout 1.1.2 \
+    && cd /usr/local/bin/phpunit/php-token-stream && git checkout 1.1.4 \
+    && cd /usr/local/bin/phpunit/php-code-coverage && git checkout 1.1.3 \
+    && cd /usr/local/bin/phpunit/phpunit-mock-objects && git checkout 1.1.1 \
+    && cd /usr/local/bin/phpunit/phpunit-selenium && git checkout 1.2.8 \
+    && chmod +x /usr/local/bin/phpunit/phpunit/phpunit.php \
+    && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false -o APT::AutoRemove::SuggestsImportant=false git \
+    && apt-get autoremove
+
+RUN echo 'include_path = ".:/usr/local/bin/phpunit/phpunit:/usr/local/bin/phpunit/phpunit-mock-objects:/usr/local/bin/phpunit/php-timer:/usr/local/bin/phpunit/php-text-template:/usr/local/bin/phpunit/php-token-stream:/usr/local/lib/php:/usr/local/bin/phpunit/dbunit:/usr/local/bin/phpunit/php-file-iterator:/usr/local/bin/phpunit/php-code-coverage:/usr/local/bin/phpunit/php-invoker:/usr/local/bin/phpunit/phpunit-story:/usr/local/bin/phpunit/phpunit-selenium"' > /usr/local/etc/php/php.ini
+%%/OLD_PHP%%
 WORKDIR /var/www
 
 COPY entrypoint.sh /entrypoint.sh

@@ -32,7 +32,17 @@ $php_versions = array(
 			'composer'        => false,
 		),
 		'phpunit' => 3,
-		'cli' => false,
+		'cli' => array(
+			/*
+			 * WP CLI is not supported on PHP 5.2.
+			 *
+			 * In order to allow the local environment to work on this version of PHP, the PHP 5.3-fpm image should be
+			 * used as a base within cli:5.2-fpm instead. A warning is output when the CLI container is used to alert
+			 * the user of the PHP version mismatch, which may cause some odd or surprising behavior.
+			 */
+			'mysql_client' => 'mysql-client',
+			'download_url' => 'https://github.com/wp-cli/wp-cli/releases/download/v1.5.1/wp-cli-1.5.1.phar',
+		),
 	),
 	'5.3' => array(
 		'php' => array(
@@ -270,6 +280,9 @@ foreach ( $php_versions as $version => $images ) {
 		// PHPUnit and WP-CLI image parent tags vary depending on whether it's a PHP version, or "latest".
 		if ( 'latest' === $version ) {
 			$version_tag = 'latest';
+		} elseif ( 'cli' === $image && '5.2' === $version ) {
+			// Use PHP 5.3 for the PHP 5.2 CLI image.
+			$version_tag = '5.3-fpm';
 		} else {
 			$version_tag = "$version-fpm";
 		}
@@ -366,16 +379,20 @@ foreach ( $php_versions as $version => $images ) {
 		} elseif ( $image === 'phpunit' ) {
 			// Replace tags inside the PHPUnit Dockerfile template.
 			$dockerfile = str_replace( '%%PHPUNIT_VERSION%%', $config, $dockerfile );
-		} elseif ( $image === 'cli' ) {
-			// Replace tags inside the WP-CLI Dockerfile template.
-			if ( $config ) {
-				$dockerfile = preg_replace( '|\n%%OLD_PHP%%.*%%/OLD_PHP%%\n|s', '', $dockerfile );
-				$dockerfile = str_replace( '%%MYSQL_CLIENT%%', $config['mysql_client'], $dockerfile );
-				$dockerfile = str_replace( '%%DOWNLOAD_URL%%', $config['download_url'], $dockerfile );
-			} else {
-				// WP-CLI isn't available for this version of PHP.
+
+			if ( '5.2' === $version ) {
 				$dockerfile = preg_replace( '|\n%%NEW_PHP%%.*%%/NEW_PHP%%\n|s', '', $dockerfile );
+			} else {
+				$dockerfile = preg_replace( '|\n%%OLD_PHP%%.*%%/OLD_PHP%%\n|s', '', $dockerfile );
 			}
+		} elseif ( $image === 'cli' ) {
+			if ( '5.2' !== $version ) {
+				$dockerfile = preg_replace( '|\n%%OLD_PHP%%.*%%/OLD_PHP%%\n|s', '', $dockerfile );
+			}
+
+			// Replace tags inside the WP-CLI Dockerfile template.
+			$dockerfile = str_replace( '%%MYSQL_CLIENT%%', $config['mysql_client'], $dockerfile );
+			$dockerfile = str_replace( '%%DOWNLOAD_URL%%', $config['download_url'], $dockerfile );
 		}
 
 		// Cleanup any leftover tags.
@@ -414,6 +431,9 @@ foreach ( $php_versions as $version => $images ) {
 			} else {
 				$version_tag = "$php_version-fpm";
 			}
+
+			$dockerfile = preg_replace( '|\n%%OLD_PHP%%.*%%/OLD_PHP%%\n|s', '', $dockerfile );
+
 			$dockerfile = str_replace( '%%VERSION_TAG%%', $version_tag, $dockerfile );
 
 			$dockerfile = str_replace( '%%PHPUNIT_VERSION%%', $phpunit_version, $dockerfile );

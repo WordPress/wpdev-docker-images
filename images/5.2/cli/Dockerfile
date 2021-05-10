@@ -1,6 +1,6 @@
 ARG PACKAGE_REGISTRY
 ARG PR_TAG
-FROM $PACKAGE_REGISTRY/php:5.2-fpm$PR_TAG
+FROM $PACKAGE_REGISTRY/php:5.3-fpm$PR_TAG
 
 ##########################################################################
 #
@@ -10,7 +10,29 @@ FROM $PACKAGE_REGISTRY/php:5.2-fpm$PR_TAG
 #
 
 
-ENTRYPOINT [ "echo", "WP-CLI is not available for PHP 5.2-fpm.\nCommand was not executed:" ]
+# install wp-cli dependences
+RUN set -ex; \
+	\
+	apt-get update; \
+	\
+	apt-get install -y --no-install-recommends \
+		less \
+		mysql-client \
+	;
+
+RUN set -ex; \
+	\
+	curl -L -o /usr/local/bin/wp https://github.com/wp-cli/wp-cli/releases/download/v1.5.1/wp-cli-1.5.1.phar; \
+	\
+	chmod +x /usr/local/bin/wp; \
+	\
+	wp --allow-root --version;
+
+COPY entrypoint.sh /entrypoint.sh
+
+RUN chmod +x /entrypoint.sh
+
+ENTRYPOINT [ "/entrypoint.sh" ]
 
 
 WORKDIR /var/www
