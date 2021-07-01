@@ -59,7 +59,7 @@ $php_versions = array(
 		'phpunit' => 4,
 		'cli' => array(
 			'mysql_client' => 'mysql-client',
-			'download_url' => 'https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar',
+			'download_url' => 'https://github.com/wp-cli/wp-cli/releases/download/v2.4.0/wp-cli-2.4.0.phar',
 		),
 	),
 	'5.5' => array(
@@ -73,7 +73,7 @@ $php_versions = array(
 		'phpunit' => 4,
 		'cli' => array(
 			'mysql_client' => 'mysql-client',
-			'download_url' => 'https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar',
+			'download_url' => 'https://github.com/wp-cli/wp-cli/releases/download/v2.4.0/wp-cli-2.4.0.phar',
 		),
 	),
 	'5.6.20' => array( // WordPress' minumum PHP requirement as of WordPress 5.3.

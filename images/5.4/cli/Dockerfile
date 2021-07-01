@@ -22,7 +22,7 @@ RUN set -ex; \
 
 RUN set -ex; \
 	\
-	curl -L -o /usr/local/bin/wp https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar; \
+	curl -L -o /usr/local/bin/wp https://github.com/wp-cli/wp-cli/releases/download/v2.4.0/wp-cli-2.4.0.phar; \
 	\
 	chmod +x /usr/local/bin/wp; \
 	\
