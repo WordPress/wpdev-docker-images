@@ -39,7 +39,7 @@ RUN set -ex; \
 			echo 'Integrity check failed, installer is either corrupt or worse.' . PHP_EOL; \
 			exit( 1 ); \
 		}"; \
-	php /tmp/installer.php --no-ansi --install-dir=/usr/bin --filename=composer --version=latest-1.x; \
+	php /tmp/installer.php --no-ansi --install-dir=/usr/bin --filename=composer --version=1.10.22; \
 	composer --ansi --version --no-interaction; \
 	rm -f /tmp/installer.php /tmp/installer.sig;
 
