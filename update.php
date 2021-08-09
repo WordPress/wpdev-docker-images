@@ -214,6 +214,7 @@ $php_versions = array(
  */
 $phpunit_versions = array(
 	'9' => array(
+		'8.1',
 		'8.0',
 		'7.4',
 		'7.3',
