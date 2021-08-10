@@ -24,9 +24,26 @@ env:
   PR_TAG: -${{ github.event.number }}
 
 jobs:
+  check-for-changes:
+    name: Check for uncommitted changes
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Setup PHP
+        uses: shivammathur/setup-php@947009a71769c25ab5292f073f5343624b7c879d # v.2.12.0
+        with:
+          php-version: 'latest'
+
+      - name: Build images
+        run: php update.php
+
+      - name: Ensure version-controlled files are not modified or deleted
+        run: git diff --exit-code
+
   build-php-images:
     name: PHP ${{ matrix.php }} Image
     runs-on: ubuntu-latest
+    needs: [ check-for-changes ]
     strategy:
       matrix:
         php: [ '5.2', '5.3', '5.4', '5.5', '5.6.20', '5.6', '7.0', '7.1', '7.2', '7.3', '7.4', '8.0', '8.1' ]
