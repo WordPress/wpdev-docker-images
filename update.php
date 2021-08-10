@@ -76,7 +76,7 @@ $php_versions = array(
 			'download_url' => 'https://github.com/wp-cli/wp-cli/releases/download/v2.4.0/wp-cli-2.4.0.phar',
 		),
 	),
-	'5.6.20' => array( // WordPress' minumum PHP requirement as of WordPress 5.3.
+	'5.6.20' => array( // WordPress' minumum PHP requirement as of WordPress 5.2.
 		'php' => array(
 			'base_name'       => 'php:5.6.20-fpm',
 			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libwebp-dev', 'libzip-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libicu-dev', 'libonig-dev', 'locales', 'sudo', 'rsync', 'libxslt-dev' ),
