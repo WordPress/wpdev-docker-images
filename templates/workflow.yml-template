@@ -4,7 +4,12 @@ name: Build and publish images to Docker Hub
 
 on:
   push:
-    branches: master
+    branches:
+      - master
+    paths:
+      - 'config'
+      - 'entrypoint'
+      - 'images'
   # Once weekly On Sundays at 00:00 UTC.
   schedule:
     - cron: '0 0 * * 0'
@@ -29,23 +34,38 @@ env:
   PACKAGE_REGISTRY: ghcr.io/wordpress/wpdev-docker-images
   PR_TAG: -${{ github.event.number }}
 %%/GITHUB%%
+# Cancels all previous workflow runs for pull requests that have not completed.
+concurrency:
+  # The concurrency group contains the workflow name and the branch name for pull requests
+  # or the commit hash for any other events.
+  group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}
+  cancel-in-progress: true
 
 jobs:
-  # Checks for any incomplete preceding workflow runs and cancels them.
-  check-for-duplicates:
-    name: Cancel duplicate workflow runs
+%%GITHUB%%
+  check-for-changes:
+    name: Check for uncommitted changes
     runs-on: ubuntu-latest
-    steps:
-      - name: Cancel previous runs of this workflow (pull requests only)
-        if: ${{ github.event_name == 'pull_request' }}
-        uses: styfle/cancel-workflow-action@0.6.0
-        with:
-          access_token: ${{ github.token }}
 
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f # v2.3.4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@947009a71769c25ab5292f073f5343624b7c879d # v.2.12.0
+        with:
+          php-version: 'latest'
+
+      - name: Build images
+        run: php update.php
+
+      - name: Ensure version-controlled files are not modified or deleted
+        run: git diff --exit-code
+%%/GITHUB%%
   build-php-images:
     name: PHP ${{ matrix.php }} Image
     runs-on: ubuntu-latest
-    needs: check-for-duplicates
+    %%GITHUB%%needs: [ check-for-changes ]%%/GITHUB%%
     strategy:
       matrix:
         php: [ %%PHP_VERSION_LIST%% ]
@@ -55,7 +75,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f # v2.3.4
 
       - name: Login to the package registry
         run: |
@@ -91,7 +111,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f # v2.3.4
 
       - name: Login to the package registry
         run: |
@@ -125,7 +145,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f # v2.3.4
 
       - name: Login to the package registry
         run: |
@@ -154,7 +174,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f # v2.3.4
 
       - name: Login to the package registry
         run: |

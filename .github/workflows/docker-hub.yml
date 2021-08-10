@@ -15,17 +15,9 @@ on:
       - 'config'
       - 'entrypoint'
       - 'images'
-      - 'templates'
   # Once weekly On Sundays at 00:00 UTC.
   schedule:
     - cron: '0 0 * * 0'
-
-# Cancels all previous workflow runs for pull requests that have not completed.
-concurrency:
-  # The concurrency group contains the workflow name and the branch name for pull requests
-  # or the commit hash for any other events.
-  group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}
-  cancel-in-progress: true
 
 env:
   REGISTRY_USERNAME: garypendergast
@@ -34,10 +26,20 @@ env:
   PACKAGE_REGISTRY: wordpressdevelop
   PR_TAG:
 
+
+# Cancels all previous workflow runs for pull requests that have not completed.
+concurrency:
+  # The concurrency group contains the workflow name and the branch name for pull requests
+  # or the commit hash for any other events.
+  group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}
+  cancel-in-progress: true
+
 jobs:
+
   build-php-images:
     name: PHP ${{ matrix.php }} Image
     runs-on: ubuntu-latest
+    
     strategy:
       matrix:
         php: [ '5.2', '5.3', '5.4', '5.5', '5.6.20', '5.6', '7.0', '7.1', '7.2', '7.3', '7.4', '8.0', '8.1' ]
