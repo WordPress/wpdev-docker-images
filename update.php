@@ -466,7 +466,7 @@ foreach ( $php_versions as $version => $images ) {
 
 	foreach ( $workflow_templates as $name => $remove_pattern ) {
 		// Save two GitHub Action workflows.
-		$workflow_contents = preg_replace( "|\n%%$remove_pattern%%.*%%/$remove_pattern%%\n|s", '', $workflow_template );
+		$workflow_contents = preg_replace( "/%%$remove_pattern%%[\s\S]+?%%\/$remove_pattern%%/", '', $workflow_template );
 		$workflow_contents = preg_replace( '/%%[^%]+%%/', '', $workflow_contents );
 
 		write_file( '.github/workflows/' . $name, $workflow_contents );
