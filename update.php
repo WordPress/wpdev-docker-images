@@ -76,7 +76,7 @@ $php_versions = array(
 			'download_url' => 'https://github.com/wp-cli/wp-cli/releases/download/v2.4.0/wp-cli-2.4.0.phar',
 		),
 	),
-	'5.6.20' => array( // WordPress' minumum PHP requirement as of WordPress 5.3.
+	'5.6.20' => array( // WordPress' minumum PHP requirement as of WordPress 5.2.
 		'php' => array(
 			'base_name'       => 'php:5.6.20-fpm',
 			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libwebp-dev', 'libzip-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libicu-dev', 'libonig-dev', 'locales', 'sudo', 'rsync', 'libxslt-dev' ),
@@ -179,7 +179,7 @@ $php_versions = array(
 			'base_name'       => 'php:8.0-fpm',
 			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libwebp-dev', 'libzip-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libonig-dev', 'locales', 'sudo', 'rsync', 'libxslt-dev' ),
 			'extensions'      => array( 'gd', 'opcache', 'mysqli', 'zip', 'exif', 'intl', 'mbstring', 'xml', 'xsl' ),
-			'pecl_extensions' => array( 'memcached-3.1.5', 'xdebug-3.0.2' ),
+			'pecl_extensions' => array( 'memcached-3.1.5', 'xdebug-3.0.4' ),
 			'composer'        => true,
 		),
 		'phpunit' => 9,
@@ -193,7 +193,7 @@ $php_versions = array(
 			'base_name'       => 'php:8.1.0beta2-fpm',
 			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libwebp-dev', 'libzip-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libonig-dev', 'locales', 'sudo', 'rsync', 'libxslt-dev' ),
 			'extensions'      => array( 'gd', 'opcache', 'mysqli', 'zip', 'exif', 'intl', 'mbstring', 'xml', 'xsl' ),
-			'pecl_extensions' => array( 'memcached-3.1.5', 'xdebug-3.0.2' ),
+			'pecl_extensions' => array( 'memcached-3.1.5', 'xdebug-3.0.4' ),
 			'composer'        => true,
 		),
 		'phpunit' => 9,
@@ -214,11 +214,14 @@ $php_versions = array(
  */
 $phpunit_versions = array(
 	'9' => array(
+		'8.1',
 		'8.0',
 		'7.4',
 		'7.3',
 	),
 	'8' => array(
+		'8.1',
+		'8.0',
 		'7.4',
 		'7.3',
 		'7.2',
@@ -331,7 +334,7 @@ foreach ( $php_versions as $version => $images ) {
 					$install_extensions .= " \\\n\t\\\n";
 
 					if ( version_compare( $version, '7.4', '>' ) === true ) {
-						$install_extensions .= "\tcurl --location --output /usr/local/bin/pickle https://github.com/FriendsOfPHP/pickle/releases/download/v0.7.0/pickle.phar; \\\n";
+						$install_extensions .= "\tcurl --location --output /usr/local/bin/pickle https://github.com/FriendsOfPHP/pickle/releases/download/v0.7.4/pickle.phar; \\\n";
 						$install_extensions .= "\tchmod +x /usr/local/bin/pickle; \\\n\t\\\n";
 					}
 
