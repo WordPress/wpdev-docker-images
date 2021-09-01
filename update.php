@@ -190,7 +190,7 @@ $php_versions = array(
 	),
 	'8.1' => array(
 		'php' => array(
-			'base_name'       => 'php:8.1.0beta2-fpm',
+			'base_name'       => 'php:8.1.0beta3-fpm',
 			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libwebp-dev', 'libzip-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libonig-dev', 'locales', 'sudo', 'rsync', 'libxslt-dev' ),
 			'extensions'      => array( 'gd', 'opcache', 'mysqli', 'zip', 'exif', 'intl', 'mbstring', 'xml', 'xsl' ),
 			'pecl_extensions' => array( 'memcached-3.1.5', 'xdebug-3.0.4', 'imagick' ),
