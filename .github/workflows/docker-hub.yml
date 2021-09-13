@@ -16,6 +16,7 @@ on:
       - 'entrypoint/**'
       - 'images/**'
       - '.github/workflows/docker-hub.yml'
+  workflow_dispatch:
   # Once weekly On Sundays at 00:00 UTC.
   schedule:
     - cron: '0 0 * * 0'
