@@ -12,9 +12,9 @@ on:
     branches:
       - master
     paths:
-      - 'config'
-      - 'entrypoint'
-      - 'images'
+      - 'config/**'
+      - 'entrypoint/**'
+      - 'images/**'
       - '.github/workflows/docker-hub.yml'
   # Once weekly On Sundays at 00:00 UTC.
   schedule:
