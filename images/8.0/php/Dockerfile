@@ -31,7 +31,7 @@ RUN set -ex; \
 	pickle install memcached-3.1.5; \
 	pickle install xdebug-3.0.4; \
 	pickle install imagick; \
-	docker-php-ext-enable imagick; \
+	docker-php-ext-enable imagick;
 RUN curl --silent --fail --location --retry 3 --output /tmp/installer.php --url https://getcomposer.org/installer; \
 	curl --silent --fail --location --retry 3 --output /tmp/installer.sig --url https://composer.github.io/installer.sig; \
 	php -r " \
