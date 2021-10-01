@@ -357,10 +357,9 @@ foreach ( $php_versions as $version => $images ) {
 					}, '' );
 				}
 
-
 				if ( $config['composer'] ) {
-					$install_extensions .= " \\\n\t\\\n";
-					$install_extensions .= "\tcurl --silent --fail --location --retry 3 --output /tmp/installer.php --url https://getcomposer.org/installer; \\\n";
+					$install_extensions .= " \\\nRUN ";
+					$install_extensions .= "curl --silent --fail --location --retry 3 --output /tmp/installer.php --url https://getcomposer.org/installer; \\\n";
 					$install_extensions .= "\tcurl --silent --fail --location --retry 3 --output /tmp/installer.sig --url https://composer.github.io/installer.sig; \\\n";
 					$install_extensions .= "\tphp -r \" \\\n";
 					$install_extensions .= "\t\t\\\$signature = file_get_contents( '/tmp/installer.sig' ); \\\n";

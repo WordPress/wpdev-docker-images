@@ -27,8 +27,7 @@ RUN set -ex; \
 	\
 	pecl install zendopcache-7.0.5; \
 	pecl install xdebug-2.2.7; \
-	\
-	curl --silent --fail --location --retry 3 --output /tmp/installer.php --url https://getcomposer.org/installer; \
+RUN curl --silent --fail --location --retry 3 --output /tmp/installer.php --url https://getcomposer.org/installer; \
 	curl --silent --fail --location --retry 3 --output /tmp/installer.sig --url https://composer.github.io/installer.sig; \
 	php -r " \
 		\$signature = file_get_contents( '/tmp/installer.sig' ); \
