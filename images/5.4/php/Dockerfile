@@ -30,8 +30,7 @@ RUN set -ex; \
 	pecl install memcached-2.2.0; \
 	pecl install imagick-3.4.4; \
 	docker-php-ext-enable imagick; \
-	\
-	curl --silent --fail --location --retry 3 --output /tmp/installer.php --url https://getcomposer.org/installer; \
+RUN curl --silent --fail --location --retry 3 --output /tmp/installer.php --url https://getcomposer.org/installer; \
 	curl --silent --fail --location --retry 3 --output /tmp/installer.sig --url https://composer.github.io/installer.sig; \
 	php -r " \
 		\$signature = file_get_contents( '/tmp/installer.sig' ); \
