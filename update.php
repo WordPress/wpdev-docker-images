@@ -357,6 +357,7 @@ foreach ( $php_versions as $version => $images ) {
 					}, '' );
 				}
 
+
 				if ( $config['composer'] ) {
 					$install_extensions .= " \\\n\t\\\n";
 					$install_extensions .= "\tcurl --silent --fail --location --retry 3 --output /tmp/installer.php --url https://getcomposer.org/installer; \\\n";
