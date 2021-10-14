@@ -18,6 +18,8 @@ RUN set -ex; \
 	apt-get update; \
 	\
 	apt-get install -y --no-install-recommends sudo rsync; \
+	apt-get upgrade openssl -y; \
+	update-ca-certificates --fresh; \
 	\
 	pecl install zendopcache-7.0.5; \
 	pecl install xdebug-2.2.7;

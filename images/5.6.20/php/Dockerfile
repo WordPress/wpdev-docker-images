@@ -18,6 +18,8 @@ RUN set -ex; \
 	apt-get update; \
 	\
 	apt-get install -y --no-install-recommends libjpeg-dev libpng-dev libwebp-dev libzip-dev libmemcached-dev unzip libmagickwand-dev ghostscript libicu-dev libonig-dev locales sudo rsync libxslt-dev git; \
+	apt-get upgrade openssl -y; \
+	update-ca-certificates --fresh; \
 	sed -i 's/^# *\(\(ru_RU\|fr_FR\|de_DE\|es_ES\|ja_JP\).UTF-8\)/\1/' /etc/locale.gen; \
 	locale-gen; \
 	\

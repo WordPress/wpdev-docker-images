@@ -308,6 +308,10 @@ foreach ( $php_versions as $version => $images ) {
 					$install_extensions .= " \\\n\t\\\n\t";
 					$install_extensions .= "apt-get update; \\\n\t\\\n\tapt-get install -y --no-install-recommends " . implode( ' ', $config['apt'] ) . ";";
 
+					// Ensure certificates are updated.
+					$install_extensions .= " \\\n\tapt-get upgrade openssl -y;";
+					$install_extensions .= " \\\n\tupdate-ca-certificates --fresh;";
+
 					// We need to add some locales for testing.
 					if ( array_search( 'locales', $config['apt'], true ) ) {
 						$install_extensions .= " \\\n\tsed -i 's/^# *\(\(ru_RU\|fr_FR\|de_DE\|es_ES\|ja_JP\).UTF-8\)/\\1/' /etc/locale.gen;";
@@ -383,6 +387,10 @@ foreach ( $php_versions as $version => $images ) {
 		} elseif ( $image === 'phpunit' ) {
 			// Replace tags inside the PHPUnit Dockerfile template.
 			$dockerfile = str_replace( '%%PHPUNIT_VERSION%%', $config, $dockerfile );
+
+			if ( in_array( $version, array( '5.3', '5.4', '5.6.20', '7.0' ), true ) ) {
+				$dockerfile = str_replace( 'RUN curl -sL', 'RUN curl -sLK', $dockerfile );
+			}
 		} elseif ( $image === 'cli' ) {
 			// Replace tags inside the WP-CLI Dockerfile template.
 			if ( $config ) {
@@ -423,6 +431,10 @@ foreach ( $php_versions as $version => $images ) {
 			echo shell_exec( "mkdir -p images/phpunit/{$phpunit_version}-php-{$php_version}" );
 
 			$dockerfile = $templates['phpunit'];
+
+			if ( in_array( $version, array( '5.3', '5.4', '5.6.20', '7.0' ), true ) ) {
+				$dockerfile = str_replace( 'RUN curl -sL', 'RUN curl -sLK', $dockerfile );
+			}
 
 			$dockerfile = str_replace( '%%GENERATED_WARNING%%', $generated_warning, $dockerfile );
 
