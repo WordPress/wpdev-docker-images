@@ -389,7 +389,7 @@ foreach ( $php_versions as $version => $images ) {
 			$dockerfile = str_replace( '%%PHPUNIT_VERSION%%', $config, $dockerfile );
 
 			if ( in_array( $version, array( '5.3', '5.4', '5.6.20', '7.0' ), true ) ) {
-				$dockerfile = str_replace( 'RUN curl -sL', 'RUN curl -sLK', $dockerfile );
+				$dockerfile = str_replace( 'RUN curl -sL', 'RUN curl -sLk', $dockerfile );
 			}
 		} elseif ( $image === 'cli' ) {
 			// Replace tags inside the WP-CLI Dockerfile template.
