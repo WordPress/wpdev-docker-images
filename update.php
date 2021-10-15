@@ -388,7 +388,7 @@ foreach ( $php_versions as $version => $images ) {
 			// Replace tags inside the PHPUnit Dockerfile template.
 			$dockerfile = str_replace( '%%PHPUNIT_VERSION%%', $config, $dockerfile );
 
-			if ( in_array( $version, array( '5.3', '5.4', '5.6.20', '7.0' ), true ) ) {
+			if ( '7.1' > $version ) {
 				$dockerfile = str_replace( 'RUN curl -sL', 'RUN curl -sLk', $dockerfile );
 			}
 		} elseif ( $image === 'cli' ) {
@@ -432,8 +432,8 @@ foreach ( $php_versions as $version => $images ) {
 
 			$dockerfile = $templates['phpunit'];
 
-			if ( in_array( $version, array( '5.3', '5.4', '5.6.20', '7.0' ), true ) ) {
-				$dockerfile = str_replace( 'RUN curl -sL', 'RUN curl -sLK', $dockerfile );
+			if ( '7.1' > $version ) {
+				$dockerfile = str_replace( 'RUN curl -sL', 'RUN curl -sLk', $dockerfile );
 			}
 
 			$dockerfile = str_replace( '%%GENERATED_WARNING%%', $generated_warning, $dockerfile );
