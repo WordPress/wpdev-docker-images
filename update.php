@@ -388,6 +388,7 @@ foreach ( $php_versions as $version => $images ) {
 			// Replace tags inside the PHPUnit Dockerfile template.
 			$dockerfile = str_replace( '%%PHPUNIT_VERSION%%', $config, $dockerfile );
 
+			// Ensure PHPUnit can be successfully downloaded in older containers.
 			if ( '7.1' > $version ) {
 				$dockerfile = str_replace( 'RUN curl -sL', 'RUN curl -sLk', $dockerfile );
 			}
@@ -432,6 +433,7 @@ foreach ( $php_versions as $version => $images ) {
 
 			$dockerfile = $templates['phpunit'];
 
+			// Ensure PHPUnit can be successfully downloaded in older containers.
 			if ( '7.1' > $version ) {
 				$dockerfile = str_replace( 'RUN curl -sL', 'RUN curl -sLk', $dockerfile );
 			}
