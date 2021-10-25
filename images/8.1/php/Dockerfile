@@ -27,11 +27,11 @@ RUN set -ex; \
 	\
 	docker-php-ext-install gd opcache mysqli zip exif intl mbstring xml xsl; \
 	\
-	curl --location --output /usr/local/bin/pickle https://github.com/FriendsOfPHP/pickle/releases/download/v0.7.4/pickle.phar; \
+	curl --location --output /usr/local/bin/pickle https://github.com/FriendsOfPHP/pickle/releases/download/v0.7.7/pickle.phar; \
 	chmod +x /usr/local/bin/pickle; \
 	\
 	pickle install memcached-3.1.5; \
-	pickle install xdebug-3.0.4; \
+	pickle install xdebug-3.1.1; \
 	pickle install imagick; \
 	docker-php-ext-enable imagick; \
 	\
