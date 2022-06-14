@@ -10,6 +10,7 @@ name: Build test images
 
 on:
   pull_request:
+  workflow_dispatch:
 
 env:
   REGISTRY_USERNAME: desrosj
