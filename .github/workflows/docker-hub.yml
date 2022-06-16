@@ -10,7 +10,7 @@ name: Build and publish images to Docker Hub
 on:
   push:
     branches:
-      - master
+      - trunk
     paths:
       - 'config/**'
       - 'entrypoint/**'
