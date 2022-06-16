@@ -31,7 +31,7 @@ RUN set -ex; \
 	chmod +x /usr/local/bin/pickle; \
 	\
 	pickle install memcached-3.1.5; \
-	pickle install xdebug-3.1.1; \
+	pickle install xdebug-3.1.5; \
 	pickle install imagick; \
 	docker-php-ext-enable imagick; \
 	\
