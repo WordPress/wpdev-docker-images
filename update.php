@@ -338,7 +338,7 @@ foreach ( $php_versions as $version => $images ) {
 					$install_extensions .= " \\\n\t\\\n";
 
 					if ( version_compare( $version, '7.4', '>' ) === true ) {
-						$install_extensions .= "\tcurl --location --output /usr/local/bin/pickle https://github.com/FriendsOfPHP/pickle/releases/download/v0.7.7/pickle.phar; \\\n";
+						$install_extensions .= "\tcurl --location --output /usr/local/bin/pickle https://github.com/FriendsOfPHP/pickle/releases/download/v0.7.11/pickle.phar; \\\n";
 						$install_extensions .= "\tchmod +x /usr/local/bin/pickle; \\\n\t\\\n";
 					}
 
