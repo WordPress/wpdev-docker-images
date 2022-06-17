@@ -207,6 +207,7 @@ $php_versions = array(
 			'base_name'       => 'php:8.2-rc-fpm',
 			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libwebp-dev', 'libzip-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libonig-dev', 'locales', 'sudo', 'rsync', 'libxslt-dev' ),
 			'extensions'      => array( 'gd', 'opcache', 'mysqli', 'zip', 'exif', 'intl', 'mbstring', 'xml', 'xsl' ),
+			'pecl_extensions' => array(),
 			'composer'        => true,
 		),
 		'phpunit' => 9,
