@@ -36,7 +36,7 @@ $php_versions = array(
 	),
 	'5.3' => array(
 		'php' => array(
-			'base_name'       => 'devilbox/php-fpm-5.3:0.24',
+			'base_name'       => 'devilbox/php-fpm-5.3:0.21',
 			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libzip-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libicu-dev', 'libonig-dev', 'locales', 'sudo', 'rsync', 'libxslt-dev' ),
 			'extensions'      => array( 'gd', 'mysql', 'mysqli', 'zip', 'exif', 'intl', 'mbstring', 'xml', 'xsl' ),
 			'pecl_extensions' => array( 'zendopcache-7.0.5', 'xdebug-2.2.7' ),

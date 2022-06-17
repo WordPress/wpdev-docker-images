@@ -1,4 +1,4 @@
-FROM devilbox/php-fpm-5.3:0.24
+FROM devilbox/php-fpm-5.3:0.21
 
 WORKDIR /var/www
 
