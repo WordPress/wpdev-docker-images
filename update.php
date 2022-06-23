@@ -202,6 +202,20 @@ $php_versions = array(
 			'download_url' => 'https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar',
 		),
 	),
+	'8.2' => array(
+		'php' => array(
+			'base_name'       => 'php:8.2-rc-fpm',
+			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libwebp-dev', 'libzip-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libonig-dev', 'locales', 'sudo', 'rsync', 'libxslt-dev' ),
+			'extensions'      => array( 'gd', 'opcache', 'mysqli', 'zip', 'exif', 'intl', 'mbstring', 'xml', 'xsl' ),
+			'pecl_extensions' => array(),
+			'composer'        => true,
+		),
+		'phpunit' => 9,
+		'cli' => array(
+			'mysql_client' => 'virtual-mysql-client',
+			'download_url' => 'https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar',
+		),
+	),
 );
 
 /**
@@ -214,12 +228,14 @@ $php_versions = array(
  */
 $phpunit_versions = array(
 	'9' => array(
+		'8.2',
 		'8.1',
 		'8.0',
 		'7.4',
 		'7.3',
 	),
 	'8' => array(
+		'8.2',
 		'8.1',
 		'8.0',
 		'7.4',
