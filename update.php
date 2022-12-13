@@ -477,7 +477,10 @@ foreach ( array_merge( $legacy_php_versions, $php_versions ) as $version => $ima
 			echo str_pad( "phpunit $phpunit_version", 15, '.' );
 
 			$php_version = $version;
-			$phpunit_combinations[] = "{$phpunit_version}-php-{$php_version}";
+
+			if ( ! isset( $legacy_php_versions[ $php_version ] ) ) {
+				$phpunit_combinations[] = "{$phpunit_version}-php-{$php_version}";
+			}
 			echo shell_exec( "mkdir -p images/phpunit/{$phpunit_version}-php-{$php_version}" );
 
 			$dockerfile = $templates['phpunit'];
