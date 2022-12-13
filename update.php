@@ -8,6 +8,10 @@ $latest = '7.4';
  *
  * Each PHP version has settings for the PHP base image, the PHPUnit image, and the WP_CLI image.
  *
+ * The minimum version of PHP required as of WordPress 5.2 is 5.6.20+.
+ *
+ * @see https://make.wordpress.org/core/handbook/references/php-compatibility-and-wordpress-versions/
+ *
  * @param array $php {
  *     @type string $base_name       The name of the Docker image to base our image off of.
  *     @type array  $apt             An array of apt packages that need to be installed.
@@ -23,60 +27,7 @@ $latest = '7.4';
  * }
  */
 $php_versions = array(
-	'5.2' => array(
-		'php' => array(
-			'base_name'       => 'devilbox/php-fpm-5.2:latest',
-			'apt'             => array( 'sudo', 'rsync' ),
-			'extensions'      => array(),
-			'pecl_extensions' => array( 'zendopcache-7.0.5', 'xdebug-2.2.7' ),
-			'composer'        => false,
-		),
-		'phpunit' => 3,
-		'cli' => false,
-	),
-	'5.3' => array(
-		'php' => array(
-			'base_name'       => 'devilbox/php-fpm-5.3:0.21',
-			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libzip-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libicu-dev', 'libonig-dev', 'locales', 'sudo', 'rsync', 'libxslt-dev' ),
-			'extensions'      => array( 'gd', 'mysql', 'mysqli', 'zip', 'exif', 'intl', 'mbstring', 'xml', 'xsl' ),
-			'pecl_extensions' => array( 'zendopcache-7.0.5', 'xdebug-2.2.7' ),
-			'composer'        => true,
-		),
-		'phpunit' => 4,
-		'cli' => array(
-			'mysql_client' => 'mysql-client',
-			'download_url' => 'https://github.com/wp-cli/wp-cli/releases/download/v1.5.1/wp-cli-1.5.1.phar',
-		),
-	),
-	'5.4' => array(
-		'php' => array(
-			'base_name'       => 'php:5.4-fpm',
-			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libzip-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libicu-dev', 'libonig-dev', 'locales', 'sudo', 'rsync', 'libxslt-dev' ),
-			'extensions'      => array( 'gd', 'mysql', 'mysqli', 'zip', 'exif', 'intl', 'mbstring', 'xml', 'xsl' ),
-			'pecl_extensions' => array( 'zendopcache-7.0.5', 'xdebug-2.4.1', 'memcached-2.2.0', 'imagick-3.4.4' ),
-			'composer'        => true,
-		),
-		'phpunit' => 4,
-		'cli' => array(
-			'mysql_client' => 'mysql-client',
-			'download_url' => 'https://github.com/wp-cli/wp-cli/releases/download/v2.4.0/wp-cli-2.4.0.phar',
-		),
-	),
-	'5.5' => array(
-		'php' => array(
-			'base_name'       => 'php:5.5-fpm',
-			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libzip-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libicu-dev', 'libonig-dev', 'locales', 'sudo', 'rsync', 'libxslt-dev' ),
-			'extensions'      => array( 'gd', 'mysql', 'mysqli', 'zip', 'exif', 'intl', 'mbstring', 'xml', 'xsl' ),
-			'pecl_extensions' => array( 'xdebug-2.5.5', 'memcached-2.2.0', 'imagick-3.4.4' ),
-			'composer'        => true,
-		),
-		'phpunit' => 4,
-		'cli' => array(
-			'mysql_client' => 'mysql-client',
-			'download_url' => 'https://github.com/wp-cli/wp-cli/releases/download/v2.4.0/wp-cli-2.4.0.phar',
-		),
-	),
-	'5.6.20' => array( // WordPress' minumum PHP requirement as of WordPress 5.2.
+	'5.6.20' => array(
 		'php' => array(
 			'base_name'       => 'php:5.6.20-fpm',
 			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libwebp-dev', 'libzip-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libicu-dev', 'libonig-dev', 'locales', 'sudo', 'rsync', 'libxslt-dev' ),
@@ -219,6 +170,85 @@ $php_versions = array(
 );
 
 /**
+ * An array of all legacy PHP versions that we need to generate images for, and their config settings.
+ *
+ * Each PHP version has settings for the PHP base image, the PHPUnit image, and the WP_CLI image.
+ *
+ * These versions of PHP have been unsupported for some time, and rarely need to be regenerated.
+ *
+ * @see https://make.wordpress.org/core/handbook/references/php-compatibility-and-wordpress-versions/
+ *
+ * @param array $php {
+ *     @type string $base_name       The name of the Docker image to base our image off of.
+ *     @type array  $apt             An array of apt packages that need to be installed.
+ *     @type array  $extensions      An array of PHP extensions that need to be enabled.
+ *     @type array  $pecl_extensions An array of PECL-sourced PHP extensions that will be installed, but not enabled.
+ * }
+ *
+ * @param int $phpunit The major version branch of PHPUnit to install on this image.
+ *
+ * @param array|false $cli {
+ *     @type string $mysql_client The name of the MySQL client Ubuntu package on this image.
+ *     @type string $download_url The download URL for the version of WP-CLI to install on this image.
+ * }
+ */
+$legacy_php_versions = array(
+	'5.2' => array(
+		'php' => array(
+			'base_name'       => 'devilbox/php-fpm-5.2:latest',
+			'apt'             => array( 'sudo', 'rsync' ),
+			'extensions'      => array(),
+			'pecl_extensions' => array( 'zendopcache-7.0.5', 'xdebug-2.2.7' ),
+			'composer'        => false,
+		),
+		'phpunit' => 3,
+		'cli' => false,
+	),
+	'5.3' => array(
+		'php' => array(
+			'base_name'       => 'devilbox/php-fpm-5.3:0.21',
+			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libzip-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libicu-dev', 'libonig-dev', 'locales', 'sudo', 'rsync', 'libxslt-dev' ),
+			'extensions'      => array( 'gd', 'mysql', 'mysqli', 'zip', 'exif', 'intl', 'mbstring', 'xml', 'xsl' ),
+			'pecl_extensions' => array( 'zendopcache-7.0.5', 'xdebug-2.2.7' ),
+			'composer'        => true,
+		),
+		'phpunit' => 4,
+		'cli' => array(
+			'mysql_client' => 'mysql-client',
+			'download_url' => 'https://github.com/wp-cli/wp-cli/releases/download/v1.5.1/wp-cli-1.5.1.phar',
+		),
+	),
+	'5.4' => array(
+		'php' => array(
+			'base_name'       => 'php:5.4-fpm',
+			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libzip-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libicu-dev', 'libonig-dev', 'locales', 'sudo', 'rsync', 'libxslt-dev' ),
+			'extensions'      => array( 'gd', 'mysql', 'mysqli', 'zip', 'exif', 'intl', 'mbstring', 'xml', 'xsl' ),
+			'pecl_extensions' => array( 'zendopcache-7.0.5', 'xdebug-2.4.1', 'memcached-2.2.0', 'imagick-3.4.4' ),
+			'composer'        => true,
+		),
+		'phpunit' => 4,
+		'cli' => array(
+			'mysql_client' => 'mysql-client',
+			'download_url' => 'https://github.com/wp-cli/wp-cli/releases/download/v2.4.0/wp-cli-2.4.0.phar',
+		),
+	),
+	'5.5' => array(
+		'php' => array(
+			'base_name'       => 'php:5.5-fpm',
+			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libzip-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libicu-dev', 'libonig-dev', 'locales', 'sudo', 'rsync', 'libxslt-dev' ),
+			'extensions'      => array( 'gd', 'mysql', 'mysqli', 'zip', 'exif', 'intl', 'mbstring', 'xml', 'xsl' ),
+			'pecl_extensions' => array( 'xdebug-2.5.5', 'memcached-2.2.0', 'imagick-3.4.4' ),
+			'composer'        => true,
+		),
+		'phpunit' => 4,
+		'cli' => array(
+			'mysql_client' => 'mysql-client',
+			'download_url' => 'https://github.com/wp-cli/wp-cli/releases/download/v2.4.0/wp-cli-2.4.0.phar',
+		),
+	),
+);
+
+/**
  * An array of all PHPUnit and PHP version combinations that we need to generate images for.
  *
  * Different WordPress versions support different versions of PHP and different versions of PHPUnit.
@@ -286,7 +316,7 @@ $templates = array(
 $phpunit_combinations = array();
 
 // Loop through each PHP version, and generate the Dockerfiles.
-foreach ( $php_versions as $version => $images ) {
+foreach ( array_merge( $legacy_php_versions, $php_versions ) as $version => $images ) {
 	$title = "| PHP $version |";
 	echo str_repeat( '-', strlen( $title ) ) . "\n";
 	echo "$title\n";
