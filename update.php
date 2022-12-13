@@ -130,7 +130,7 @@ $php_versions = array(
 			'base_name'       => 'php:8.2-fpm',
 			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libwebp-dev', 'libzip-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libonig-dev', 'locales', 'sudo', 'rsync', 'libxslt-dev' ),
 			'extensions'      => array( 'gd', 'opcache', 'mysqli', 'zip', 'exif', 'intl', 'mbstring', 'xml', 'xsl' ),
-			'pecl_extensions' => array( 'xdebug-3.2.0' ),
+			'pecl_extensions' => array( 'memcached-3.2.0', 'xdebug-3.2.0', 'imagick' ),
 			'composer'        => true,
 		),
 		'phpunit' => 9,
