@@ -30,7 +30,7 @@ RUN set -ex; \
 	curl --location --output /usr/local/bin/pickle https://github.com/FriendsOfPHP/pickle/releases/download/v0.7.11/pickle.phar; \
 	chmod +x /usr/local/bin/pickle; \
 	\
-	pickle install memcached-3.1.5; \
+	pickle install memcached-3.2.0; \
 	pickle install xdebug-3.2.0; \
 	pickle install imagick; \
 	docker-php-ext-enable imagick; \
