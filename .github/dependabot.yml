@@ -1,0 +1,10 @@
+# Configure Dependabot scanning.
+version: 2
+
+updates:
+  # Check for updates to GitHub Actions.
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 10
