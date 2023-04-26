@@ -355,6 +355,11 @@ foreach ( array_merge( $legacy_php_versions, $php_versions ) as $version => $ima
 
 				if ( $config['apt'] ) {
 					$install_extensions .= " \\\n\t\\\n\t";
+					// Debian 9/stretch was moved to archive.debian.org in March 2023. See https://lists.debian.org/debian-devel-announce/2023/03/msg00006.html.
+					if ( $version == '7.0' ) {
+						$install_extensions .= "echo 'deb http://archive.debian.org/debian stretch main contrib non-free' | tee /etc/apt/sources.list; \\\n\t\\\n\t";
+					}
+
 					$install_extensions .= "apt-get update; \\\n\t\\\n\tapt-get install -y --no-install-recommends " . implode( ' ', $config['apt'] ) . ";";
 
 					// Ensure certificates are updated.
