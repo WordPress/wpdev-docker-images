@@ -15,6 +15,8 @@ ENV COMPOSER_HOME /tmp
 # install the PHP extensions we need
 RUN set -ex; \
 	\
+	echo 'deb http://archive.debian.org/debian stretch main contrib non-free' | tee /etc/apt/sources.list; \
+	\
 	apt-get update; \
 	\
 	apt-get install -y --no-install-recommends libjpeg-dev libpng-dev libwebp-dev libzip-dev libmemcached-dev unzip libmagickwand-dev ghostscript libonig-dev locales sudo rsync libxslt-dev git; \
