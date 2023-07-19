@@ -345,7 +345,7 @@ foreach ( array_merge( $legacy_php_versions, $php_versions ) as $version => $ima
             // Temporarily enforce using an image that is correctly installing `libmemcached-dev`.
 			$current_base_name = $config['base_name'];
 			if ( in_array( $config['base_name'], array( 'php:8.1-fpm', 'php:8.2-fpm' ) ) ) {
-            	$current_base_name = str_replace( '-fpm', '-fpm-bullseye',  );
+            	$current_base_name = str_replace( '-fpm', '-fpm-bullseye', $current_base_name );
 			}
 
             // Replace tags inside the PHP Dockerfile template.
