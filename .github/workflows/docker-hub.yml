@@ -44,7 +44,7 @@ jobs:
     
     strategy:
       matrix:
-        php: [ '7.0', '7.1', '7.2', '7.3', '7.4', '8.0', '8.1', '8.2' ]
+        php: [ '7.0', '7.1', '7.2', '7.3', '7.4', '8.0', '8.1', '8.2', '8.3' ]
     env:
       PHP_VERSION: ${{ matrix.php }}
       PHP_LATEST: '7.4'
@@ -79,7 +79,7 @@ jobs:
     needs: build-php-images
     strategy:
       matrix:
-        php: [ '7.0', '7.1', '7.2', '7.3', '7.4', '8.0', '8.1', '8.2' ]
+        php: [ '7.0', '7.1', '7.2', '7.3', '7.4', '8.0', '8.1', '8.2', '8.3' ]
 
     env:
       PHP_VERSION: ${{ matrix.php }}
@@ -114,7 +114,7 @@ jobs:
     needs: build-php-images
     strategy:
       matrix:
-        phpunit: [ '7-php-7.0', '6-php-7.0', '5-php-7.0', '7-php-7.1', '6-php-7.1', '8-php-7.2', '7-php-7.2', '6-php-7.2', '9-php-7.3', '8-php-7.3', '7-php-7.3', '6-php-7.3', '9-php-7.4', '8-php-7.4', '7-php-7.4', '9-php-8.0', '8-php-8.0', '9-php-8.1', '8-php-8.1', '9-php-8.2', '8-php-8.2' ]
+        phpunit: [ '7-php-7.0', '6-php-7.0', '5-php-7.0', '7-php-7.1', '6-php-7.1', '8-php-7.2', '7-php-7.2', '6-php-7.2', '9-php-7.3', '8-php-7.3', '7-php-7.3', '6-php-7.3', '9-php-7.4', '8-php-7.4', '7-php-7.4', '9-php-8.0', '8-php-8.0', '9-php-8.1', '8-php-8.1', '9-php-8.2', '8-php-8.2', '9-php-8.3' ]
 
     env:
       PHPUNIT_VERSION: ${{ matrix.phpunit }}
@@ -142,7 +142,7 @@ jobs:
     needs: build-php-images
     strategy:
       matrix:
-        php: [ '7.0', '7.1', '7.2', '7.3', '7.4', '8.0', '8.1', '8.2' ]
+        php: [ '7.0', '7.1', '7.2', '7.3', '7.4', '8.0', '8.1', '8.2', '8.3' ]
 
     env:
       PHP_VERSION: ${{ matrix.php }}
