@@ -1,7 +1,7 @@
 <?php
 
 // The latest stable version of PHP that is supported in WordPress trunk.
-$latest = '8.2';
+$latest = '8.3';
 
 /**
  * An array of all PHP versions that we need to generate images for, and their config settings.
@@ -141,7 +141,7 @@ $php_versions = array(
 	),
 	'8.3' => array(
 		'php' => array(
-			'base_name'       => 'php:8.3-rc-fpm',
+			'base_name'       => 'php:8.3-fpm',
 			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libwebp-dev', 'libzip-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libonig-dev', 'locales', 'sudo', 'rsync', 'libxslt-dev' ),
 			'extensions'      => array( 'gd', 'opcache', 'mysqli', 'zip', 'exif', 'intl', 'mbstring', 'xml', 'xsl' ),
 			'pecl_extensions' => array(),
