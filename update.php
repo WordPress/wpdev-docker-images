@@ -144,7 +144,7 @@ $php_versions = array(
 			'base_name'       => 'php:8.3-fpm',
 			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libwebp-dev', 'libzip-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libonig-dev', 'locales', 'sudo', 'rsync', 'libxslt-dev' ),
 			'extensions'      => array( 'gd', 'opcache', 'mysqli', 'zip', 'exif', 'intl', 'mbstring', 'xml', 'xsl' ),
-			'pecl_extensions' => array(),
+			'pecl_extensions' => array( 'xdebug-3.3.1' ),
 			'composer'        => true,
 		),
 		'phpunit' => 9,
