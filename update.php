@@ -274,6 +274,11 @@ $legacy_php_versions = array(
  * @param array $phpunit_version A list of PHP versions for each PHPUnit version.
  */
 $phpunit_versions = array(
+	'10' => array(
+		'8.3',
+		'8.2',
+		'8.1',
+	),
 	'9' => array(
 		'8.3',
 		'8.2',
