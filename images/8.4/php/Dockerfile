@@ -1,4 +1,4 @@
-FROM php:8.4-fpm
+FROM php:8.4-rc-fpm
 
 WORKDIR /var/www
 
