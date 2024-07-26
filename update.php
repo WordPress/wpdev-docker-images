@@ -153,6 +153,20 @@ $php_versions = array(
 			'download_url' => 'https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar',
 		),
 	),
+	'8.4' => array(
+		'php' => array(
+			'base_name'       => 'php:8.4-fpm',
+			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libwebp-dev', 'libzip-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libonig-dev', 'locales', 'sudo', 'rsync', 'libxslt-dev' ),
+			'extensions'      => array( 'gd', 'opcache', 'mysqli', 'zip', 'exif', 'intl', 'mbstring', 'xml', 'xsl' ),
+			'pecl_extensions' => array(),
+			'composer'        => true,
+		),
+		'phpunit' => 9,
+		'cli' => array(
+			'mysql_client' => 'virtual-mysql-client',
+			'download_url' => 'https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar',
+		),
+	),
 );
 
 /**
