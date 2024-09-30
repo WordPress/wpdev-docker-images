@@ -8,7 +8,7 @@ $latest = '8.2';
  *
  * Each PHP version has settings for the PHP base image, the PHPUnit image, and the WP_CLI image.
  *
- * The minimum version of PHP required as of WordPress 5.2 is 5.6.20+.
+ * The minimum version of PHP required as of WordPress 6.6 is 7.2.24+.
  *
  * @see https://make.wordpress.org/core/handbook/references/php-compatibility-and-wordpress-versions/
  *
@@ -27,34 +27,6 @@ $latest = '8.2';
  * }
  */
 $php_versions = array(
-	'7.0' => array(
-		'php' => array(
-			'base_name'       => 'php:7.0-fpm',
-			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libwebp-dev', 'libzip-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libonig-dev', 'locales', 'sudo', 'rsync', 'libxslt-dev' ),
-			'extensions'      => array( 'gd', 'opcache', 'mysqli', 'zip', 'exif', 'intl', 'mbstring', 'xml', 'xsl' ),
-			'pecl_extensions' => array( 'xdebug-2.7.2', 'memcached-3.1.5', 'imagick' ),
-			'composer'        => true,
-		),
-		'phpunit' => 6,
-		'cli' => array(
-			'mysql_client' => 'virtual-mysql-client',
-			'download_url' => 'https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar',
-		),
-	),
-	'7.1' => array(
-		'php' => array(
-			'base_name'       => 'php:7.1-fpm',
-			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libwebp-dev', 'libzip-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libonig-dev', 'locales', 'sudo', 'rsync', 'libxslt-dev' ),
-			'extensions'      => array( 'gd', 'opcache', 'mysqli', 'zip', 'exif', 'intl', 'mbstring', 'xml', 'xsl' ),
-			'pecl_extensions' => array( 'xdebug-2.9.8', 'memcached-3.1.5', 'imagick' ),
-			'composer'        => true,
-		),
-		'phpunit' => 7,
-		'cli' => array(
-			'mysql_client' => 'virtual-mysql-client',
-			'download_url' => 'https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar',
-		),
-	),
 	'7.2' => array(
 		'php' => array(
 			'base_name'       => 'php:7.2-fpm',
@@ -176,9 +148,6 @@ $php_versions = array(
  *
  * These versions of PHP have been unsupported for some time, and rarely need to be regenerated.
  *
- * Note: PHP 5.6 is still supported by WordPress, but suffers from the same problems as earlier versions.
- * 5.6 is also still supported, but does not need to be regenerated.
- *
  * @see https://make.wordpress.org/core/handbook/references/php-compatibility-and-wordpress-versions/
  *
  * @param array $php {
@@ -272,6 +241,34 @@ $legacy_php_versions = array(
 			'composer'        => true,
 		),
 		'phpunit' => 5,
+		'cli' => array(
+			'mysql_client' => 'virtual-mysql-client',
+			'download_url' => 'https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar',
+		),
+	),
+	'7.0' => array(
+		'php' => array(
+			'base_name'       => 'php:7.0-fpm',
+			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libwebp-dev', 'libzip-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libonig-dev', 'locales', 'sudo', 'rsync', 'libxslt-dev' ),
+			'extensions'      => array( 'gd', 'opcache', 'mysqli', 'zip', 'exif', 'intl', 'mbstring', 'xml', 'xsl' ),
+			'pecl_extensions' => array( 'xdebug-2.7.2', 'memcached-3.1.5', 'imagick' ),
+			'composer'        => true,
+		),
+		'phpunit' => 6,
+		'cli' => array(
+			'mysql_client' => 'virtual-mysql-client',
+			'download_url' => 'https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar',
+		),
+	),
+	'7.1' => array(
+		'php' => array(
+			'base_name'       => 'php:7.1-fpm',
+			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libwebp-dev', 'libzip-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libonig-dev', 'locales', 'sudo', 'rsync', 'libxslt-dev' ),
+			'extensions'      => array( 'gd', 'opcache', 'mysqli', 'zip', 'exif', 'intl', 'mbstring', 'xml', 'xsl' ),
+			'pecl_extensions' => array( 'xdebug-2.9.8', 'memcached-3.1.5', 'imagick' ),
+			'composer'        => true,
+		),
+		'phpunit' => 7,
 		'cli' => array(
 			'mysql_client' => 'virtual-mysql-client',
 			'download_url' => 'https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar',
