@@ -409,7 +409,7 @@ foreach ( array_merge( $legacy_php_versions, $php_versions ) as $version => $ima
 					$install_extensions .= " \\\n\t\\\n\t";
 
 					if ( version_compare( $version, '8.1' ) >= 0 ) {
-						$install_extensions .= "docker-php-ext-configure gd --enable-gd --with-jpeg=/usr --with-webp=/usr --with-webp=/avif;";
+						$install_extensions .= "docker-php-ext-configure gd --enable-gd --with-jpeg=/usr --with-webp=/usr --with-avif=/usr;";
 					} elseif ( version_compare( $version, '7.4' ) >= 0 ) {
 						$install_extensions .= "docker-php-ext-configure gd --enable-gd --with-jpeg=/usr --with-webp=/usr;";
 					} else {
