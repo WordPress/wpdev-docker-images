@@ -423,21 +423,12 @@ foreach ( array_merge( $legacy_php_versions, $php_versions ) as $version => $ima
 				if ( $config['pecl_extensions'] ) {
 					$install_extensions .= " \\\n\t\\\n";
 
-					if ( version_compare( $version, '7.4', '>' ) === true ) {
-						$install_extensions .= "\tcurl --location --output /usr/local/bin/pickle https://github.com/FriendsOfPHP/pickle/releases/download/v0.7.11/pickle.phar; \\\n";
-						$install_extensions .= "\tchmod +x /usr/local/bin/pickle; \\\n\t\\\n";
-					}
-
 					$install_extensions .= array_reduce( $config['pecl_extensions'], function ( $command, $extension ) use ( $version ) {
 						if ( $command ) {
 							$command .= " \\\n";
 						}
 
-						if ( version_compare( $version, '7.4', '>' ) === true ) {
-							$command .= "\tpickle install $extension;";
-						} else {
-							$command .= "\tpecl install $extension;";
-						}
+						$command .= "\tpecl install $extension;";
 
 						if ( 0 === strpos( $extension, 'imagick' ) ) {
 							$command .= " \\\n\tdocker-php-ext-enable imagick;";
