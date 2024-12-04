@@ -30,6 +30,7 @@ RUN set -ex; \
 	curl --location --output /usr/local/bin/pickle https://github.com/FriendsOfPHP/pickle/releases/download/v0.7.11/pickle.phar; \
 	chmod +x /usr/local/bin/pickle; \
 	\
+	pickle install memcached-3.3.0; \
 	pickle install xdebug-3.4.0; \
 	\
 	curl --silent --fail --location --retry 3 --output /tmp/installer.php --url https://getcomposer.org/installer; \
