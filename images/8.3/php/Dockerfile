@@ -27,7 +27,7 @@ RUN set -ex; \
 	\
 	docker-php-ext-install gd opcache mysqli zip exif intl mbstring xml xsl; \
 	\
-	pecl install memcached-3.2.0; \
+	pecl install memcached-3.3.0; \
 	pecl install xdebug-3.4.0; \
 	\
 	curl --silent --fail --location --retry 3 --output /tmp/installer.php --url https://getcomposer.org/installer; \
