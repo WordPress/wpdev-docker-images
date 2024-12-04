@@ -30,7 +30,7 @@ RUN set -ex; \
 	curl --location --output /usr/local/bin/pickle https://github.com/FriendsOfPHP/pickle/releases/download/v0.7.11/pickle.phar; \
 	chmod +x /usr/local/bin/pickle; \
 	\
-	pickle install xdebug-3.3.2; \
+	pickle install xdebug-3.4.0; \
 	\
 	curl --silent --fail --location --retry 3 --output /tmp/installer.php --url https://getcomposer.org/installer; \
 	curl --silent --fail --location --retry 3 --output /tmp/installer.sig --url https://composer.github.io/installer.sig; \
