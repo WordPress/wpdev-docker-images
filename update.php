@@ -282,9 +282,12 @@ $legacy_php_versions = array(
  * Different WordPress versions support different versions of PHP and different versions of PHPUnit.
  * This creates a need to run multiple versions of PHPUnit on each version of PHP.
  *
- * @param array $phpunit_version A list of PHP versions for each PHPUnit version.
+ * These versions of PHPUnit are no longer supported and do not receive updates.
+ * Regenerating these containers should very rarely be required.
+ *
+ * @param array $legacy_phpunit_versions A list of PHP versions for each PHPUnit version.
  */
-$phpunit_versions = array(
+$legacy_phpunit_versions = array(
 	'9' => array(
 		'8.3',
 		'8.2',
@@ -341,8 +344,6 @@ $templates = array(
 	'phpunit' => file_get_contents( 'templates/Dockerfile-phpunit.template' ),
 	'cli'     => file_get_contents( 'templates/Dockerfile-cli.template' ),
 );
-
-$phpunit_combinations = array();
 
 // Loop through each PHP version, and generate the Dockerfiles.
 foreach ( array_merge( $legacy_php_versions, $php_versions ) as $version => $images ) {
@@ -500,50 +501,6 @@ foreach ( array_merge( $legacy_php_versions, $php_versions ) as $version => $ima
 		echo "✅\n";
 	}
 
-	foreach ( $phpunit_versions as $phpunit_version => $supported_php_versions ) {
-		if ( in_array( $version, $supported_php_versions, true ) ) {
-			echo str_pad( "phpunit $phpunit_version", 15, '.' );
-
-			$php_version = $version;
-
-			if ( ! isset( $legacy_php_versions[ $php_version ] ) ) {
-				$phpunit_combinations[] = "{$phpunit_version}-php-{$php_version}";
-			}
-			echo shell_exec( "mkdir -p images/phpunit/{$phpunit_version}-php-{$php_version}" );
-
-			$dockerfile = $templates['phpunit'];
-
-			// Ensure PHPUnit can be successfully downloaded in older containers.
-			if ( '7.1' > $version ) {
-				$dockerfile = str_replace( 'RUN curl -sL', 'RUN curl -sLk', $dockerfile );
-			}
-
-			$dockerfile = str_replace( '%%GENERATED_WARNING%%', $generated_warning, $dockerfile );
-
-			if ( 'latest' === $php_version ) {
-				$version_tag = 'latest';
-			} else {
-				$version_tag = "$php_version-fpm";
-			}
-			$dockerfile = str_replace( '%%VERSION_TAG%%', $version_tag, $dockerfile );
-
-			$dockerfile = str_replace( '%%PHPUNIT_VERSION%%', $phpunit_version, $dockerfile );
-
-			// Cleanup any leftover tags.
-			$dockerfile = preg_replace( '/%%[^%]+%%/', '', $dockerfile );
-
-			// Write the real Dockerfile.
-			write_file( "images/phpunit/{$phpunit_version}-php-{$php_version}/Dockerfile", $dockerfile );
-
-			// Copy the entrypoint script, if it exists.
-			if ( file_exists( "entrypoint/entrypoint-phpunit.sh" ) ) {
-				copy( "entrypoint/entrypoint-phpunit.sh", "images/phpunit/{$phpunit_version}-php-{$php_version}/entrypoint.sh" );
-			}
-
-			echo "✅\n";
-		}
-	}
-
 	$workflow_templates = array(
 		'docker-hub.yml' => 'GITHUB',
 		'github-container-registry.yml' => 'DOCKER_HUB',
@@ -555,9 +512,6 @@ foreach ( array_merge( $legacy_php_versions, $php_versions ) as $version => $ima
 
 	$php_version_list = "'" . implode( "', '", array_keys( $php_versions ) ) . "'";
 	$workflow_template = str_replace( '%%PHP_VERSION_LIST%%', $php_version_list, $workflow_template );
-
-	$phpunit_version_list = "'" . implode( "', '", array_values( $phpunit_combinations ) ) . "'";
-	$workflow_template = str_replace( '%%PHPUNIT_COMBINATIONS%%', $phpunit_version_list, $workflow_template );
 
 	$workflow_template = str_replace( '%%PHP_LATEST%%', $latest, $workflow_template );
 

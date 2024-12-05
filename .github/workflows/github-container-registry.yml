@@ -82,69 +82,6 @@ jobs:
           docker images
           docker push $PACKAGE_REGISTRY/php:latest$PR_TAG
 
-  build-phpunit-images:
-    name: PHPUnit on PHP ${{ matrix.php }}
-    runs-on: ubuntu-latest
-    needs: build-php-images
-    strategy:
-      matrix:
-        php: [ '7.2', '7.3', '7.4', '8.0', '8.1', '8.2', '8.3', '8.4' ]
-
-    env:
-      PHP_VERSION: ${{ matrix.php }}
-      PHP_LATEST: '8.2'
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
-
-      - name: Login to the package registry
-        run: |
-          echo "$REGISTRY_PASSWORD" | docker login $PACKAGE_REGISTRY_HOST -u "$REGISTRY_USERNAME" --password-stdin
-
-      - name: Build Docker image
-        run: docker build --build-arg PACKAGE_REGISTRY=$PACKAGE_REGISTRY --build-arg PR_TAG=$PR_TAG -t $PACKAGE_REGISTRY/phpunit:$PHP_VERSION-fpm$PR_TAG images/$PHP_VERSION/phpunit
-
-      - name: Log Docker images
-        run: docker images
-
-      - name: Push Docker image
-        run: docker push $PACKAGE_REGISTRY/phpunit:$PHP_VERSION-fpm$PR_TAG
-
-      - name: Tag and push image as latest
-        if: ${{ env.PHP_LATEST == env.PHP_VERSION }}
-        run: |
-          docker image tag $PACKAGE_REGISTRY/phpunit:$PHP_VERSION-fpm$PR_TAG $PACKAGE_REGISTRY/phpunit:latest$PR_TAG
-          docker push $PACKAGE_REGISTRY/phpunit:latest$PR_TAG
-
-  build-specific-phpunit-images:
-    name: PHPUnit ${{ matrix.phpunit }}
-    runs-on: ubuntu-latest
-    needs: build-php-images
-    strategy:
-      matrix:
-        phpunit: [ '8-php-7.2', '7-php-7.2', '6-php-7.2', '9-php-7.3', '8-php-7.3', '7-php-7.3', '6-php-7.3', '9-php-7.4', '8-php-7.4', '7-php-7.4', '9-php-8.0', '8-php-8.0', '9-php-8.1', '8-php-8.1', '9-php-8.2', '8-php-8.2', '9-php-8.3' ]
-
-    env:
-      PHPUNIT_VERSION: ${{ matrix.phpunit }}
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
-
-      - name: Login to the package registry
-        run: |
-          echo "$REGISTRY_PASSWORD" | docker login $PACKAGE_REGISTRY_HOST -u "$REGISTRY_USERNAME" --password-stdin
-
-      - name: Build Docker image
-        run: docker build --build-arg PACKAGE_REGISTRY=$PACKAGE_REGISTRY --build-arg PR_TAG=$PR_TAG -t $PACKAGE_REGISTRY/phpunit:$PHPUNIT_VERSION-fpm$PR_TAG images/phpunit/$PHPUNIT_VERSION
-
-      - name: Log Docker images
-        run: docker images
-
-      - name: Push Docker image
-        run: docker push $PACKAGE_REGISTRY/phpunit:$PHPUNIT_VERSION-fpm$PR_TAG
-
   build-cli-images:
     name: CLI on PHP ${{ matrix.php }}
     runs-on: ubuntu-latest
