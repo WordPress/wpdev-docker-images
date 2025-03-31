@@ -25,7 +25,7 @@ RUN set -ex; \
 	\
 	docker-php-ext-configure gd --with-png-dir=/usr --with-jpeg-dir=/usr --with-webp-dir=/usr; \
 	\
-	docker-php-ext-install gd mysql mysqli zip exif intl mbstring xml xsl; \
+	docker-php-ext-install gd mysql mysqli zip exif intl mbstring xml xsl ftp; \
 	\
 	pecl install zendopcache-7.0.5; \
 	pecl install xdebug-2.2.7; \
