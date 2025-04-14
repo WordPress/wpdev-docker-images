@@ -25,7 +25,7 @@ RUN set -ex; \
 	\
 	docker-php-ext-configure gd --enable-gd --with-jpeg=/usr --with-webp=/usr; \
 	\
-	docker-php-ext-install gd opcache mysqli zip exif intl mbstring xml xsl; \
+	docker-php-ext-install gd opcache mysqli zip exif intl mbstring xml xsl ftp; \
 	\
 	pecl install memcached-3.3.0; \
 	pecl install xdebug-3.4.0; \
