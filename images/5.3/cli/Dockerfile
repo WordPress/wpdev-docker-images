@@ -1,6 +1,6 @@
-ARG PACKAGE_REGISTRY
+ARG PHP_BASE_IMAGE
 ARG PR_TAG
-FROM $PACKAGE_REGISTRY/php:5.3-fpm$PR_TAG
+FROM $PHP_BASE_IMAGE:5.3-fpm$PR_TAG
 
 ##########################################################################
 #

@@ -22,10 +22,6 @@ on:
     - cron: '0 0 * * 0'
 
 env:
-  REGISTRY_USERNAME: garypendergast
-  REGISTRY_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-  PACKAGE_REGISTRY_HOST:
-  PACKAGE_REGISTRY: wordpressdevelop
   PR_TAG:
 
 
@@ -39,71 +35,222 @@ concurrency:
 jobs:
 
   build-php-images:
-    name: PHP ${{ matrix.php }} Image
-    runs-on: ubuntu-latest
+    name: PHP ${{ matrix.php }} (${{ matrix.arch.type }}) Image
+    runs-on: ${{ matrix.arch.runner }}
     
     strategy:
+      fail-fast: false
       matrix:
         php: [ '7.2', '7.3', '7.4', '8.0', '8.1', '8.2', '8.3', '8.4' ]
-    env:
-      PHP_VERSION: ${{ matrix.php }}
-      PHP_LATEST: '8.2'
+        arch:
+          - type: linux/amd64
+            runner: ubuntu-24.04
+          - type: linux/arm64
+            runner: ubuntu-24.04-arm
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
-
-      - name: Login to the package registry
+      - name: Prepare
         run: |
-          echo "$REGISTRY_PASSWORD" | docker login $PACKAGE_REGISTRY_HOST -u "$REGISTRY_USERNAME" --password-stdin
+          platform=php-${{ matrix.php }}-${{ matrix.arch.type }}
+          echo "PLATFORM_PAIR=${platform//\//-}" >> $GITHUB_ENV
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@902fa8ec7d6ecbf8d84d538b9b233a880e428804 # 5.7.0
+        with:
+          images: ${{ vars.DOCKERHUB_PHP_IMAGE }}
+      - name: Login to Registry
+        uses: docker/login-action@74a5d142397b4f367a81961eba4e8cd7edddf772 # 3.4.0
+        with:
 
-      - name: Build Docker image
-        run: docker build --build-arg PACKAGE_REGISTRY=$PACKAGE_REGISTRY --build-arg PR_TAG=$PR_TAG -t $PACKAGE_REGISTRY/php:$PHP_VERSION-fpm$PR_TAG images/$PHP_VERSION/php
 
-      - name: Log Docker images
-        run: docker images
+          username: ${{ vars.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Push Docker image
-        run: docker push $PACKAGE_REGISTRY/php:$PHP_VERSION-fpm$PR_TAG
 
-      - name: Push image as latest
-        if: ${{ env.PHP_LATEST == env.PHP_VERSION }}
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@b5ca514318bd6ebac0fb2aedd5d36ec1b5c232a2 # 3.10.0
+
+      - name: Build and push by digest
+        id: build
+        uses: docker/build-push-action@v6
+        with:
+          platforms: ${{ matrix.arch.type }}
+          labels: ${{ steps.meta.outputs.labels }}
+          tags: ${{ vars.DOCKERHUB_PHP_IMAGE }}
+          outputs: type=image,push-by-digest=true,name-canonical=true,push=true
+          context: "{{defaultContext}}:images/${{ matrix.php }}/php"
+          build-args: |
+            PR_TAG=${{ env.PR_TAG }}
+
+      - name: Export digest
         run: |
-          docker image tag $PACKAGE_REGISTRY/php:$PHP_VERSION-fpm$PR_TAG $PACKAGE_REGISTRY/php:latest$PR_TAG
-          docker images
-          docker push $PACKAGE_REGISTRY/php:latest$PR_TAG
+          mkdir -p ${{ runner.temp }}/digests
+          digest="${{ steps.build.outputs.digest }}"
+          touch "${{ runner.temp }}/digests/${digest#sha256:}"
+
+      - name: Upload digest
+        uses: actions/upload-artifact@v4
+        with:
+          name: digests-${{ env.PLATFORM_PAIR }}
+          path: ${{ runner.temp }}/digests/*
+          if-no-files-found: error
+          retention-days: 1
+
+  complete-php-images-platform:
+    name: Package multi-arch container image for PHP ${{ matrix.php }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php: [ '7.2', '7.3', '7.4', '8.0', '8.1', '8.2', '8.3', '8.4' ]
+    needs:
+      - build-php-images
+    steps:
+      - name: Download digests
+        uses: actions/download-artifact@v4
+        with:
+          path: ${{ runner.temp }}/digests
+          pattern: digests-php-${{ matrix.php }}-*
+          merge-multiple: true
+
+      - name: Login to Registry
+        uses: docker/login-action@74a5d142397b4f367a81961eba4e8cd7edddf772 # 3.4.0
+        with:
+
+
+          username: ${{ vars.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@b5ca514318bd6ebac0fb2aedd5d36ec1b5c232a2 # 3.10.0
+
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ vars.DOCKERHUB_PHP_IMAGE }}
+          tags: |
+            type=raw,value=${{ matrix.php }}-fpm${{ env.PR_TAG }}
+            type=raw,value=latest${{ env.PR_TAG }},enable=${{ '8.2' == matrix.php }}
+
+      - name: Create manifest list and push
+        working-directory: ${{ runner.temp }}/digests
+        run: |
+          docker buildx imagetools create $(jq -cr '.tags | map("-t " + .) | join(" ")' <<< "$DOCKER_METADATA_OUTPUT_JSON") \
+            $(printf '${{ vars.DOCKERHUB_PHP_IMAGE }}@sha256:%s ' *)
+
+      - name: Inspect image
+        run: |
+          docker buildx imagetools inspect ${{ vars.DOCKERHUB_PHP_IMAGE }}:${{ steps.meta.outputs.version }}
 
   build-cli-images:
-    name: CLI on PHP ${{ matrix.php }}
-    runs-on: ubuntu-latest
-    needs: build-php-images
+    name: Build CLI on PHP ${{ matrix.php }} (${{ matrix.arch.type }})
+    runs-on: ${{ matrix.arch.runner }}
+    needs: complete-php-images-platform
     strategy:
+      fail-fast: false
       matrix:
         php: [ '7.2', '7.3', '7.4', '8.0', '8.1', '8.2', '8.3', '8.4' ]
-
-    env:
-      PHP_VERSION: ${{ matrix.php }}
-      PHP_LATEST: '8.2'
+        arch:
+          - type: linux/amd64
+            runner: ubuntu-24.04
+          - type: linux/arm64
+            runner: ubuntu-24.04-arm
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
-
-      - name: Login to the package registry
+      - name: Prepare
         run: |
-          echo "$REGISTRY_PASSWORD" | docker login $PACKAGE_REGISTRY_HOST -u "$REGISTRY_USERNAME" --password-stdin
+          platform=cli-${{ matrix.php }}-${{ matrix.arch.type }}
+          echo "PLATFORM_PAIR=${platform//\//-}" >> $GITHUB_ENV
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@902fa8ec7d6ecbf8d84d538b9b233a880e428804 # 5.7.0
+        with:
+          images: ${{ vars.DOCKERHUB_CLI_IMAGE }}
+      - name: Login to Registry
+        uses: docker/login-action@74a5d142397b4f367a81961eba4e8cd7edddf772 # 3.4.0
+        with:
 
-      - name: Build Docker image
-        run: docker build --build-arg PACKAGE_REGISTRY=$PACKAGE_REGISTRY --build-arg PR_TAG=$PR_TAG -t $PACKAGE_REGISTRY/cli:$PHP_VERSION-fpm$PR_TAG images/$PHP_VERSION/cli
 
-      - name: Log Docker images
-        run: docker images
+          username: ${{ vars.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Push Docker image
-        run: docker push $PACKAGE_REGISTRY/cli:$PHP_VERSION-fpm$PR_TAG
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@b5ca514318bd6ebac0fb2aedd5d36ec1b5c232a2 # 3.10.0
 
-      - name: Push image as latest
-        if: ${{ env.PHP_LATEST == env.PHP_VERSION }}
+      - name: Build and push by digest
+        id: build
+        uses: docker/build-push-action@v6
+        with:
+          platforms: ${{ matrix.arch.type }}
+          labels: ${{ steps.meta.outputs.labels }}
+          tags: ${{ vars.DOCKERHUB_CLI_IMAGE }}
+          outputs: type=image,push-by-digest=true,name-canonical=true,push=true
+          context: "{{defaultContext}}:images/${{ matrix.php }}/cli"
+          build-args: |
+            PHP_BASE_IMAGE=${{ vars.DOCKERHUB_PHP_IMAGE }}
+            PR_TAG=${{ env.PR_TAG }}
+
+      - name: Export digest
         run: |
-          docker image tag $PACKAGE_REGISTRY/cli:$PHP_VERSION-fpm$PR_TAG $PACKAGE_REGISTRY/cli:latest$PR_TAG
-          docker push $PACKAGE_REGISTRY/cli:latest$PR_TAG
+          mkdir -p ${{ runner.temp }}/digests
+          digest="${{ steps.build.outputs.digest }}"
+          touch "${{ runner.temp }}/digests/${digest#sha256:}"
+
+      - name: Upload digest
+        uses: actions/upload-artifact@v4
+        with:
+          name: digests-${{ env.PLATFORM_PAIR }}
+          path: ${{ runner.temp }}/digests/*
+          if-no-files-found: error
+          retention-days: 1
+
+
+  complete-cli-images-platform:
+    name: Package multi-arch container image for CLI ${{ matrix.php }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php: [ '7.2', '7.3', '7.4', '8.0', '8.1', '8.2', '8.3', '8.4' ]
+    needs:
+      - build-cli-images
+    steps:
+      - name: Download digests
+        uses: actions/download-artifact@v4
+        with:
+          path: ${{ runner.temp }}/digests
+          pattern: digests-cli-${{ matrix.php }}-*
+          merge-multiple: true
+
+      - name: Login to Registry
+        uses: docker/login-action@74a5d142397b4f367a81961eba4e8cd7edddf772 # 3.4.0
+        with:
+
+
+          username: ${{ vars.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@b5ca514318bd6ebac0fb2aedd5d36ec1b5c232a2 # 3.10.0
+
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ vars.DOCKERHUB_CLI_IMAGE }}
+          tags: |
+            type=raw,value=${{ matrix.php }}-fpm${{ env.PR_TAG }}
+            type=raw,value=latest${{ env.PR_TAG }},enable=${{ '8.2' == matrix.php }}
+
+      - name: Create manifest list and push
+        working-directory: ${{ runner.temp }}/digests
+        run: |
+          docker buildx imagetools create $(jq -cr '.tags | map("-t " + .) | join(" ")' <<< "$DOCKER_METADATA_OUTPUT_JSON") \
+            $(printf '${{ vars.DOCKERHUB_CLI_IMAGE }}@sha256:%s ' *)
+
+      - name: Inspect image
+        run: |
+          docker buildx imagetools inspect ${{ vars.DOCKERHUB_CLI_IMAGE }}:${{ steps.meta.outputs.version }}
