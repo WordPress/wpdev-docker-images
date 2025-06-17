@@ -76,23 +76,28 @@ jobs:
 
       - name: Login to the package registry
         run: |
-          echo "$REGISTRY_PASSWORD" | docker login $PACKAGE_REGISTRY_HOST -u "$REGISTRY_USERNAME" --password-stdin
+          echo "$REGISTRY_PASSWORD" | docker login "$PACKAGE_REGISTRY_HOST" -u "$REGISTRY_USERNAME" --password-stdin
 
       - name: Build Docker image
-        run: docker build --build-arg PACKAGE_REGISTRY=$PACKAGE_REGISTRY --build-arg PR_TAG=$PR_TAG -t $PACKAGE_REGISTRY/php:$PHP_VERSION-fpm$PR_TAG images/$PHP_VERSION/php
+        run: |
+          docker build \
+          --build-arg PACKAGE_REGISTRY="$PACKAGE_REGISTRY" \
+          --build-arg PR_TAG="$PR_TAG" \
+          -t "$PACKAGE_REGISTRY/php:$PHP_VERSION-fpm$PR_TAG" \
+          "images/$PHP_VERSION/php"
 
       - name: Log Docker images
         run: docker images
 
       - name: Push Docker image
-        run: docker push $PACKAGE_REGISTRY/php:$PHP_VERSION-fpm$PR_TAG
+        run: docker push "$PACKAGE_REGISTRY/php:$PHP_VERSION-fpm$PR_TAG"
 
       - name: Push image as latest
         if: ${{ env.PHP_LATEST == env.PHP_VERSION }}
         run: |
-          docker image tag $PACKAGE_REGISTRY/php:$PHP_VERSION-fpm$PR_TAG $PACKAGE_REGISTRY/php:latest$PR_TAG
+          docker image tag "$PACKAGE_REGISTRY/php:$PHP_VERSION-fpm$PR_TAG" "$PACKAGE_REGISTRY/php:latest$PR_TAG"
           docker images
-          docker push $PACKAGE_REGISTRY/php:latest$PR_TAG
+          docker push "$PACKAGE_REGISTRY/php:latest$PR_TAG"
 
   build-cli-images:
     name: CLI on PHP ${{ matrix.php }}
@@ -116,19 +121,24 @@ jobs:
 
       - name: Login to the package registry
         run: |
-          echo "$REGISTRY_PASSWORD" | docker login $PACKAGE_REGISTRY_HOST -u "$REGISTRY_USERNAME" --password-stdin
+          echo "$REGISTRY_PASSWORD" | docker login "$PACKAGE_REGISTRY_HOST" -u "$REGISTRY_USERNAME" --password-stdin
 
       - name: Build Docker image
-        run: docker build --build-arg PACKAGE_REGISTRY=$PACKAGE_REGISTRY --build-arg PR_TAG=$PR_TAG -t $PACKAGE_REGISTRY/cli:$PHP_VERSION-fpm$PR_TAG images/$PHP_VERSION/cli
+        run: |
+          docker build \
+          --build-arg PACKAGE_REGISTRY="$PACKAGE_REGISTRY" \
+          --build-arg PR_TAG="$PR_TAG" \
+          -t "$PACKAGE_REGISTRY/cli:$PHP_VERSION-fpm$PR_TAG" \
+          "images/$PHP_VERSION/cli"
 
       - name: Log Docker images
         run: docker images
 
       - name: Push Docker image
-        run: docker push $PACKAGE_REGISTRY/cli:$PHP_VERSION-fpm$PR_TAG
+        run: docker push "$PACKAGE_REGISTRY/cli:$PHP_VERSION-fpm$PR_TAG"
 
       - name: Push image as latest
         if: ${{ env.PHP_LATEST == env.PHP_VERSION }}
         run: |
-          docker image tag $PACKAGE_REGISTRY/cli:$PHP_VERSION-fpm$PR_TAG $PACKAGE_REGISTRY/cli:latest$PR_TAG
-          docker push $PACKAGE_REGISTRY/cli:latest$PR_TAG
+          docker image tag "$PACKAGE_REGISTRY/cli:$PHP_VERSION-fpm$PR_TAG" "$PACKAGE_REGISTRY/cli:latest$PR_TAG"
+          docker push "$PACKAGE_REGISTRY/cli:latest$PR_TAG"
