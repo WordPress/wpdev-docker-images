@@ -68,10 +68,10 @@ jobs:
       - name: Build Docker image
         run: |
           docker build \
-          --build-arg PACKAGE_REGISTRY="$PACKAGE_REGISTRY" \
-          --build-arg PR_TAG="$PR_TAG" \
-          -t "$PACKAGE_REGISTRY/php:$PHP_VERSION-fpm$PR_TAG" \
-          "images/$PHP_VERSION/php"
+            --build-arg PACKAGE_REGISTRY="$PACKAGE_REGISTRY" \
+            --build-arg PR_TAG="$PR_TAG" \
+            -t "$PACKAGE_REGISTRY/php:$PHP_VERSION-fpm$PR_TAG" \
+            "images/$PHP_VERSION/php"
 
       - name: Log Docker images
         run: docker images
@@ -113,10 +113,10 @@ jobs:
       - name: Build Docker image
         run: |
           docker build \
-          --build-arg PACKAGE_REGISTRY="$PACKAGE_REGISTRY" \
-          --build-arg PR_TAG="$PR_TAG" \
-          -t "$PACKAGE_REGISTRY/cli:$PHP_VERSION-fpm$PR_TAG" \
-          "images/$PHP_VERSION/cli"
+            --build-arg PACKAGE_REGISTRY="$PACKAGE_REGISTRY" \
+            --build-arg PR_TAG="$PR_TAG" \
+            -t "$PACKAGE_REGISTRY/cli:$PHP_VERSION-fpm$PR_TAG" \
+            "images/$PHP_VERSION/cli"
 
       - name: Log Docker images
         run: docker images
