@@ -54,7 +54,7 @@ jobs:
                   filter_triggers: ''
 
             - name: Upload SARIF file
-              uses: github/codeql-action/upload-sarif@b6a472f63d85b9c78a3ac5e89422239fc15e9b3c # v3.28.1
+              uses: github/codeql-action/upload-sarif@ce28f5bb42b7a9f2c824e633a3f6ee835bab6858 # v3.29.0
               with:
                   sarif_file: ${{steps.octoscan.outputs.sarif_output}}
                   category: octoscan
@@ -73,16 +73,16 @@ jobs:
                   persist-credentials: false
 
             - name: Install the latest version of uv
-              uses: astral-sh/setup-uv@b5f58b2abc5763ade55e4e9d0fe52cd1ff7979ca # v5.2.1
+              uses: astral-sh/setup-uv@f0ec1fc3b38f5e7cd731bb6ce540c5af426746bb # v6.1.0
 
             # https://github.com/woodruffw/zizmor
             - name: Run zizmor
-              run: uvx zizmor@1.2.2 --format sarif . > results.sarif
+              run: uvx zizmor@1.9.0 --format sarif . > results.sarif
               env:
                   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
             - name: Upload SARIF file
-              uses: github/codeql-action/upload-sarif@b6a472f63d85b9c78a3ac5e89422239fc15e9b3c # v3.28.1
+              uses: github/codeql-action/upload-sarif@ce28f5bb42b7a9f2c824e633a3f6ee835bab6858 # v3.29.0
               with:
                   sarif_file: results.sarif
                   category: zizmor
@@ -103,7 +103,7 @@ jobs:
           uses: boostsecurityio/poutine-action@84c0a0d32e8d57ae12651222be1eb15351429228 # v0.15.2
 
         - name: Upload SARIF file
-          uses: github/codeql-action/upload-sarif@b6a472f63d85b9c78a3ac5e89422239fc15e9b3c # v3.28.1
+          uses: github/codeql-action/upload-sarif@ce28f5bb42b7a9f2c824e633a3f6ee835bab6858 # v3.29.0
           with:
               sarif_file: results.sarif
               category: poutine
