@@ -26,15 +26,23 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}
   cancel-in-progress: true
 
+# Disable permissions for all available scopes by default.
+# Any needed permissions should be configured at the job level.
+permissions: {}
+
 jobs:
 
   check-for-changes:
     name: Check for uncommitted changes
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+        with:
+          persist-credentials: false
 
       - name: Setup PHP
         uses: shivammathur/setup-php@c541c155eee45413f5b09a52248675b1a2575231 # v.2.31.1
@@ -57,10 +65,14 @@ jobs:
     env:
       PHP_VERSION: ${{ matrix.php }}
       PHP_LATEST: '8.2'
+    permissions:
+      contents: read
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+        with:
+          persist-credentials: false
 
       - name: Login to the package registry
         run: |
@@ -89,6 +101,8 @@ jobs:
     strategy:
       matrix:
         php: [ '7.2', '7.3', '7.4', '8.0', '8.1', '8.2', '8.3', '8.4' ]
+    permissions:
+      contents: read
 
     env:
       PHP_VERSION: ${{ matrix.php }}
@@ -97,6 +111,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+        with:
+          persist-credentials: false
 
       - name: Login to the package registry
         run: |
