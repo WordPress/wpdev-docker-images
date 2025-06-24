@@ -87,7 +87,7 @@ jobs:
     steps:
       - name: Prepare
         run: |
-          platform="php-$PHP_VERSION-$ARCH_TYPE"
+          platform="php-${PHP_VERSION}-${ARCH_TYPE}"
           echo "PLATFORM_PAIR=${platform//\//-}" >> $GITHUB_ENV
       - name: Docker meta
         id: meta
@@ -213,7 +213,7 @@ jobs:
     steps:
       - name: Prepare
         run: |
-          platform="cli-$PHP_VERSION-$ARCH_TYPE"
+          platform="cli-${PHP_VERSION}-${ARCH_TYPE}"
           echo "PLATFORM_PAIR=${platform//\//-}" >> $GITHUB_ENV
       - name: Docker meta
         id: meta
