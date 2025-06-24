@@ -69,6 +69,8 @@ jobs:
     name: PHP ${{ matrix.php }} (${{ matrix.arch.type }}) Image
     runs-on: ${{ matrix.arch.runner }}
     %%GITHUB%%needs: [ check-for-changes ]%%/GITHUB%%
+    permissions:
+        contents: read
     strategy:
       fail-fast: false
       matrix:
@@ -78,11 +80,14 @@ jobs:
             runner: ubuntu-24.04
           - type: linux/arm64
             runner: ubuntu-24.04-arm
+    env:
+      PHP_VERSION: ${{ matrix.php }}
+      ARCH_TYPE: ${{ matrix.arch.type }}
 
     steps:
       - name: Prepare
         run: |
-          platform=php-${{ matrix.php }}-${{ matrix.arch.type }}
+          platform="php-$PHP_VERSION-$ARCH_TYPE"
           echo "PLATFORM_PAIR=${platform//\//-}" >> $GITHUB_ENV
       - name: Docker meta
         id: meta
@@ -109,11 +114,11 @@ jobs:
         id: build
         uses: docker/build-push-action@1dc73863535b631f98b2378be8619f83b136f4a0 # 6.17.0
         with:
-          platforms: ${{ matrix.arch.type }}
+          platforms: ${{ env.ARCH_TYPE }}
           labels: ${{ steps.meta.outputs.labels }}
           tags: %%GITHUB%%${{ vars.GHCR_PHP_IMAGE }}%%/GITHUB%%%%DOCKER_HUB%%${{ vars.DOCKERHUB_PHP_IMAGE }}%%/DOCKER_HUB%%
           outputs: type=image,push-by-digest=true,name-canonical=true,push=true
-          context: "{{defaultContext}}:images/${{ matrix.php }}/php"
+          context: "{{defaultContext}}:images/${{ env.PHP_VERSION }}/php"
           build-args: |
             PR_TAG=${{ env.PR_TAG }}
 
@@ -140,12 +145,15 @@ jobs:
         php: [ %%PHP_VERSION_LIST%% ]
     needs:
       - build-php-images
+    env:
+      PHP_VERSION: ${{ matrix.php }}
+
     steps:
       - name: Download digests
         uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # 4.3.0
         with:
           path: ${{ runner.temp }}/digests
-          pattern: digests-php-${{ matrix.php }}-*
+          pattern: digests-php-${{ env.PHP_VERSION }}-*
           merge-multiple: true
 
       - name: Login to Registry
@@ -170,13 +178,13 @@ jobs:
         with:
           images: %%GITHUB%%${{ vars.GHCR_PHP_IMAGE }}%%/GITHUB%%%%DOCKER_HUB%%${{ vars.DOCKERHUB_PHP_IMAGE }}%%/DOCKER_HUB%%
           tags: |
-            type=raw,value=${{ matrix.php }}-fpm${{ env.PR_TAG }}
-            type=raw,value=latest${{ env.PR_TAG }},enable=${{ '%%PHP_LATEST%%' == matrix.php }}
+            type=raw,value=${{ env.PHP_VERSION }}-fpm${{ env.PR_TAG }}
+            type=raw,value=latest${{ env.PR_TAG }},enable=${{ '%%PHP_LATEST%%' == env.PHP_VERSION }}
 
       - name: Create manifest list and push
         working-directory: ${{ runner.temp }}/digests
         run: |
-          docker buildx imagetools create $(jq -cr '.tags | map("-t " + .) | join(" ")' <<< "$DOCKER_METADATA_OUTPUT_JSON") \
+          docker buildx imagetools create "$(jq -cr '.tags | map("-t " + .) | join(" ")' <<< "$DOCKER_METADATA_OUTPUT_JSON")" \
             $(printf '%%GITHUB%%${{ vars.GHCR_PHP_IMAGE }}%%/GITHUB%%%%DOCKER_HUB%%${{ vars.DOCKERHUB_PHP_IMAGE }}%%/DOCKER_HUB%%@sha256:%s ' *)
 
       - name: Inspect image
@@ -187,6 +195,8 @@ jobs:
     name: Build CLI on PHP ${{ matrix.php }} (${{ matrix.arch.type }})
     runs-on: ${{ matrix.arch.runner }}
     needs: complete-php-images-platform
+    permissions:
+      contents: read
     strategy:
       fail-fast: false
       matrix:
@@ -196,11 +206,14 @@ jobs:
             runner: ubuntu-24.04
           - type: linux/arm64
             runner: ubuntu-24.04-arm
+    env:
+      PHP_VERSION: ${{ matrix.php }}
+      ARCH_TYPE: ${{ matrix.arch.type }}
 
     steps:
       - name: Prepare
         run: |
-          platform=cli-${{ matrix.php }}-${{ matrix.arch.type }}
+          platform="cli-$PHP_VERSION-$ARCH_TYPE"
           echo "PLATFORM_PAIR=${platform//\//-}" >> $GITHUB_ENV
       - name: Docker meta
         id: meta
@@ -226,11 +239,11 @@ jobs:
         id: build
         uses: docker/build-push-action@1dc73863535b631f98b2378be8619f83b136f4a0 # 6.17.0
         with:
-          platforms: ${{ matrix.arch.type }}
+          platforms: ${{ env.ARCH_TYPE }}
           labels: ${{ steps.meta.outputs.labels }}
           tags: %%GITHUB%%${{ vars.GHCR_CLI_IMAGE }}%%/GITHUB%%%%DOCKER_HUB%%${{ vars.DOCKERHUB_CLI_IMAGE }}%%/DOCKER_HUB%%
           outputs: type=image,push-by-digest=true,name-canonical=true,push=true
-          context: "{{defaultContext}}:images/${{ matrix.php }}/cli"
+          context: "{{defaultContext}}:images/${{ env.PHP_VERSION }}/cli"
           build-args: |
             PHP_BASE_IMAGE=%%GITHUB%%${{ vars.GHCR_PHP_IMAGE }}%%/GITHUB%%%%DOCKER_HUB%%${{ vars.DOCKERHUB_PHP_IMAGE }}%%/DOCKER_HUB%%
             PR_TAG=${{ env.PR_TAG }}
@@ -259,12 +272,15 @@ jobs:
         php: [ %%PHP_VERSION_LIST%% ]
     needs:
       - build-cli-images
+    env:
+      PHP_VERSION: ${{ matrix.php }}
+
     steps:
       - name: Download digests
         uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # 4.3.0
         with:
           path: ${{ runner.temp }}/digests
-          pattern: digests-cli-${{ matrix.php }}-*
+          pattern: digests-cli-${{ env.PHP_VERSION }}-*
           merge-multiple: true
 
       - name: Login to Registry
@@ -289,13 +305,13 @@ jobs:
         with:
           images: %%GITHUB%%${{ vars.GHCR_CLI_IMAGE }}%%/GITHUB%%%%DOCKER_HUB%%${{ vars.DOCKERHUB_CLI_IMAGE }}%%/DOCKER_HUB%%
           tags: |
-            type=raw,value=${{ matrix.php }}-fpm${{ env.PR_TAG }}
-            type=raw,value=latest${{ env.PR_TAG }},enable=${{ '%%PHP_LATEST%%' == matrix.php }}
+            type=raw,value=${{ env.PHP_VERSION }}-fpm${{ env.PR_TAG }}
+            type=raw,value=latest${{ env.PR_TAG }},enable=${{ '%%PHP_LATEST%%' == env.PHP_VERSION }}
 
       - name: Create manifest list and push
         working-directory: ${{ runner.temp }}/digests
         run: |
-          docker buildx imagetools create $(jq -cr '.tags | map("-t " + .) | join(" ")' <<< "$DOCKER_METADATA_OUTPUT_JSON") \
+          docker buildx imagetools create "$(jq -cr '.tags | map("-t " + .) | join(" ")' <<< "$DOCKER_METADATA_OUTPUT_JSON")" \
             $(printf '%%GITHUB%%${{ vars.GHCR_CLI_IMAGE }}%%/GITHUB%%%%DOCKER_HUB%%${{ vars.DOCKERHUB_CLI_IMAGE }}%%/DOCKER_HUB%%@sha256:%s ' *)
 
       - name: Inspect image
