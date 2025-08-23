@@ -1,7 +1,7 @@
 <?php
 
 // The latest stable version of PHP that is supported in WordPress trunk.
-$latest = '8.2';
+$latest = '8.3';
 
 /**
  * An array of all PHP versions that we need to generate images for, and their config settings.
