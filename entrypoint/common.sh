@@ -4,7 +4,7 @@ set -e
 # Check if an extension is available
 extension_available() {
 	local ext=$1
-	if [ -f "/usr/local/lib/php/extensions/no-debug-non-zts-$(php -r 'echo PHP_EXTENSION_DIR;' | xargs basename)/${ext}.so" ]; then
+	if [ -f "/usr/local/lib/php/extensions/$(php -r 'echo PHP_EXTENSION_DIR;' | xargs basename)/${ext}.so" ]; then
 		return 0
 	fi
 	return 1
