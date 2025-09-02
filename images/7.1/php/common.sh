@@ -2,8 +2,8 @@
 set -e
 
 # When a MySQL CA certificate is provided, install it to ensure the image is trusted.
-if [ -f /run/mysql-ca/db-ca.pem ]; then
-  install -D -m 0644 /run/mysql-ca/db-ca.pem /usr/local/share/ca-certificates/mysql-ca.crt
+if [ -f /var/www/tools/local-env/certs/db-ca.pem ]; then
+  install -D -m 0644 /var/www/tools/local-env/certs/db-ca.pem /usr/local/share/ca-certificates/mysql-ca.crt
   update-ca-certificates >/dev/null 2>&1 || true
 fi
 
