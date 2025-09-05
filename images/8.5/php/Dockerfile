@@ -17,7 +17,7 @@ RUN set -ex; \
 	\
 	apt-get update; \
 	\
-	apt-get install -y --no-install-recommends libjpeg-dev libpng-dev libwebp-dev libzip-dev libssl-dev libmemcached-dev unzip libmagickwand-dev ghostscript libonig-dev locales sudo rsync git; \
+	apt-get install -y --no-install-recommends libjpeg-dev libpng-dev libwebp-dev libzip-dev libssl-dev libmemcached-dev unzip ghostscript libonig-dev locales sudo rsync libicu-dev git; \
 	apt-get upgrade openssl -y; \
 	update-ca-certificates --fresh; \
 	sed -i 's/^# *\(\(ru_RU\|fr_FR\|de_DE\|es_ES\|ja_JP\).UTF-8\)/\1/' /etc/locale.gen; \
@@ -26,6 +26,14 @@ RUN set -ex; \
 	docker-php-ext-configure gd --enable-gd --with-jpeg=/usr --with-webp=/usr; \
 	\
 	docker-php-ext-install gd mysqli zip exif intl mbstring; \
+	\
+	git clone https://github.com/ImageMagick/ImageMagick6.git ImageMagick6; \
+	cd ImageMagick6; \
+	./configure; \
+	make; \
+	make install; \
+	cd ..; \
+	rm -rf ImageMagick6; \
 	\
 	curl --silent --fail --location --retry 3 --output /tmp/installer.php --url https://getcomposer.org/installer; \
 	curl --silent --fail --location --retry 3 --output /tmp/installer.sig --url https://composer.github.io/installer.sig; \

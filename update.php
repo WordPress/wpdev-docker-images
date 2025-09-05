@@ -114,7 +114,7 @@ $php_versions = array(
 	'8.3' => array(
 		'php' => array(
 			'base_name'       => 'php:8.3-fpm',
-			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libwebp-dev', 'libzip-dev', 'libssl-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libonig-dev', 'locales', 'sudo', 'rsync', 'libxslt-dev' ),
+			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libwebp-dev', 'libzip-dev', 'libssl-dev', 'libmemcached-dev', 'unzip', 'ghostscript', 'libonig-dev', 'locales', 'sudo', 'rsync', 'libxslt-dev', 'libicu-dev' ),
 			'extensions'      => array( 'gd', 'opcache', 'mysqli', 'zip', 'exif', 'intl', 'mbstring', 'xml', 'xsl' ),
 			'pecl_extensions' => array( 'memcached-3.3.0', 'xdebug-3.4.0', 'imagick' ),
 			'composer'        => true,
@@ -128,7 +128,7 @@ $php_versions = array(
 	'8.4' => array(
 		'php' => array(
 			'base_name'       => 'php:8.4-fpm',
-			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libwebp-dev', 'libzip-dev', 'libssl-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libonig-dev', 'locales', 'sudo', 'rsync', 'libxslt-dev' ),
+			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libwebp-dev', 'libzip-dev', 'libssl-dev', 'libmemcached-dev', 'unzip', 'ghostscript', 'libonig-dev', 'locales', 'sudo', 'rsync', 'libxslt-dev', 'libicu-dev' ),
 			'extensions'      => array( 'gd', 'opcache', 'mysqli', 'zip', 'exif', 'intl', 'mbstring', 'xml', 'xsl' ),
 			'pecl_extensions' => array( 'memcached-3.3.0', 'xdebug-3.4.0', 'imagick' ),
 			'composer'        => true,
@@ -142,7 +142,7 @@ $php_versions = array(
 	'8.5' => array(
 		'php' => array(
 			'base_name'       => 'php:8.5-rc-fpm',
-			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libwebp-dev', 'libzip-dev', 'libssl-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libonig-dev', 'locales', 'sudo', 'rsync' ),
+			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libwebp-dev', 'libzip-dev', 'libssl-dev', 'libmemcached-dev', 'unzip', 'ghostscript', 'libonig-dev', 'locales', 'sudo', 'rsync', 'libicu-dev' ),
 			'extensions'      => array( 'gd', 'mysqli', 'zip', 'exif', 'intl', 'mbstring' ),
 			'pecl_extensions' => array(),
 			'composer'        => true,
@@ -439,6 +439,19 @@ foreach ( array_merge( $legacy_php_versions, $php_versions ) as $version => $ima
 				if ( $config['extensions'] ) {
 					$install_extensions .= " \\\n\t\\\n\t";
 					$install_extensions .= "docker-php-ext-install " . implode( ' ', $config['extensions'] ) . ";";
+				}
+
+				if ( in_array( 'libicu-dev', $config['apt'], true ) ) {
+					if ( version_compare( $version, '7.3' ) >= 0 ) {
+						$install_extensions .= " \\\n\t\\\n\t";
+						$install_extensions .= "git clone https://github.com/ImageMagick/ImageMagick6.git ImageMagick6; \\\n\t";
+						$install_extensions .= "cd ImageMagick6; \\\n\t";
+						$install_extensions .= "./configure; \\\n\t";
+						$install_extensions .= "make; \\\n\t";
+						$install_extensions .= "make install; \\\n\t";
+						$install_extensions .= "cd ..; \\\n\t";
+						$install_extensions .= "rm -rf ImageMagick6;";
+					}
 				}
 
 				if ( $config['pecl_extensions'] ) {
