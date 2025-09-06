@@ -35,7 +35,7 @@ RUN set -ex; \
 	    --with-avif=yes \
 	    --enable-shared \
 	    --disable-static \
-	    --with-modules; \
+	    --with-modules \
 	    --enable-delegate-build \
 	    --with-pkg-config-path=/usr/lib/pkgconfig:/usr/lib/x86_64-linux-gnu/pkgconfig; \
 	grep -i avif config.log || echo "AVIF not found in config.log"; \

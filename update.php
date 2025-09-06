@@ -436,7 +436,7 @@ foreach ( array_merge( $legacy_php_versions, $php_versions ) as $version => $ima
 						$install_extensions .= "    --with-avif=yes \\\n\t";
 						$install_extensions .= "    --enable-shared \\\n\t";
 						$install_extensions .= "    --disable-static \\\n\t";
-						$install_extensions .= "    --with-modules; \\\n\t";
+						$install_extensions .= "    --with-modules \\\n\t";
 						$install_extensions .= "    --enable-delegate-build \\\n\t";
 						$install_extensions .= "    --with-pkg-config-path=/usr/lib/pkgconfig:/usr/lib/x86_64-linux-gnu/pkgconfig; \\\n\t";
 
