@@ -17,7 +17,7 @@ RUN set -ex; \
 	\
 	apt-get update; \
 	\
-	apt-get install -y --no-install-recommends libjpeg-dev libpng-dev libwebp-dev libzip-dev libmemcached-dev unzip ghostscript libonig-dev locales sudo rsync libxslt-dev git;\
+	apt-get install -y --no-install-recommends libjpeg-dev libpng-dev libwebp-dev libzip-dev libmemcached-dev unzip libmagickwand-dev ghostscript libonig-dev locales sudo rsync libxslt-dev git;\
 	\
 	apt-get remove -y libmagickwand-dev libmagickcore-7.q16-* libmagickwand-7.q16-*; \
 	cd /tmp; \
