@@ -17,7 +17,25 @@ RUN set -ex; \
 	\
 	apt-get update; \
 	\
-	apt-get install -y --no-install-recommends libjpeg-dev libpng-dev libwebp-dev libzip-dev libmemcached-dev unzip libmagickwand-dev ghostscript libonig-dev locales sudo rsync libxslt-dev libheif-dev libaom-dev libavif-dev git; \
+	apt-get install -y --no-install-recommends libjpeg-dev libpng-dev libwebp-dev libzip-dev libmemcached-dev unzip ghostscript libonig-dev locales sudo rsync libxslt-dev git;\
+	\
+	apt-get remove -y libmagickwand-dev libmagickcore-7.q16-* libmagickwand-7.q16-*; \
+	cd /tmp; \
+	CURRENT_VERSION=$(magick -version | head -1 | awk '{print $3}' | tr -d '-'); \
+	curl -L https://github.com/ImageMagick/ImageMagick/archive/${CURRENT_VERSION}.tar.gz -o imagemagick.tar.gz; \
+	tar xzf imagemagick.tar.gz; \
+	cd ImageMagick-${CURRENT_VERSION}; \
+	./configure \
+	    --with-quantum-depth=16 \
+	    --with-heic=yes \
+	    --with-avif=yes \
+	    --enable-shared \
+	    --disable-static \
+	    --with-modules; \
+	make -j$(nproc); \
+	make install; \
+	ldconfig; \
+	 \
 	apt-get upgrade openssl -y; \
 	update-ca-certificates --fresh; \
 	sed -i 's/^# *\(\(ru_RU\|fr_FR\|de_DE\|es_ES\|ja_JP\).UTF-8\)/\1/' /etc/locale.gen; \
