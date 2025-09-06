@@ -17,10 +17,12 @@ RUN set -ex; \
 	\
 	apt-get update; \
 	\
-	apt-get install -y --no-install-recommends libjpeg-dev libpng-dev libwebp-dev libzip-dev libssl-dev libmemcached-dev unzip libmagickwand-dev ghostscript libonig-dev locales sudo rsync libxslt-dev libheif-dev libaom-dev libavif-dev build-essential pkg-config autoconf libtool git;\
+	apt-get install -y --no-install-recommends libjpeg-dev libpng-dev libwebp-dev libzip-dev libssl-dev libmemcached-dev unzip libmagickwand-dev ghostscript libonig-dev locales sudo rsync libxslt-dev libheif-dev libaom-dev libavif-dev libde265-dev libx265-dev build-essential pkg-config autoconf libtool git;pkg-config --exists libavif && echo "libavif found" || echo "libavif NOT found"; \
+	pkg-config --exists aom && echo "aom found" || echo "aom NOT found"; \
+	pkg-config --exists libheif && echo "libheif found" || echo "libheif NOT found"; \
+	\
 	\
 	IMAGEMAGICK_VERSION="7.1.1-43"; \
-	apt-get remove -y libmagickwand-dev libmagickcore-7.q16-* libmagickwand-7.q16-*; \
 	cd /tmp; \
 	curl -L https://github.com/ImageMagick/ImageMagick/archive/${IMAGEMAGICK_VERSION}.tar.gz -o imagemagick.tar.gz; \
 	tar xzf imagemagick.tar.gz; \
@@ -32,9 +34,15 @@ RUN set -ex; \
 	    --enable-shared \
 	    --disable-static \
 	    --with-modules; \
+	    --enable-delegate-build \
+	    --with-pkg-config-path=/usr/lib/pkgconfig:/usr/lib/x86_64-linux-gnu/pkgconfig; \
+	grep -i avif config.log || echo "AVIF not found in config.log"; \
 	make -j$(nproc); \
 	make install; \
 	ldconfig; \
+	/usr/local/bin/magick -version; \
+	/usr/local/bin/magick -list delegate | grep -i avif || echo "No AVIF delegate found"; \
+	/usr/local/bin/magick -list format | grep -i avif || echo "No AVIF format found"; \
 	 \
 	apt-get upgrade openssl -y; \
 	update-ca-certificates --fresh; \

@@ -86,7 +86,7 @@ $php_versions = array(
 	'8.1' => array(
 		'php' => array(
 			'base_name'       => 'php:8.1-fpm',
-			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libwebp-dev', 'libzip-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libonig-dev', 'locales', 'sudo', 'rsync', 'libxslt-dev', 'libheif-dev', 'libaom-dev','libavif-dev', 'build-essential', 'pkg-config', 'autoconf', 'libtool' ),
+			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libwebp-dev', 'libzip-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libonig-dev', 'locales', 'sudo', 'rsync', 'libxslt-dev', 'libheif-dev', 'libaom-dev','libavif-dev', 'libde265-dev', 'libx265-dev', 'build-essential', 'pkg-config', 'autoconf', 'libtool' ),
 			'extensions'      => array( 'gd', 'opcache', 'mysqli', 'zip', 'exif', 'intl', 'mbstring', 'xml', 'xsl' ),
 			'pecl_extensions' => array( 'memcached-3.3.0', 'xdebug-3.4.0', 'imagick' ),
 			'composer'        => true,
@@ -100,7 +100,7 @@ $php_versions = array(
 	'8.2' => array(
 		'php' => array(
 			'base_name'       => 'php:8.2-fpm',
-			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libwebp-dev', 'libzip-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libonig-dev', 'locales', 'sudo', 'rsync', 'libxslt-dev', 'libheif-dev', 'libaom-dev','libavif-dev', 'build-essential', 'pkg-config', 'autoconf', 'libtool' ),
+			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libwebp-dev', 'libzip-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libonig-dev', 'locales', 'sudo', 'rsync', 'libxslt-dev', 'libheif-dev', 'libaom-dev','libavif-dev', 'libde265-dev', 'libx265-dev', 'build-essential', 'pkg-config', 'autoconf', 'libtool' ),
 			'extensions'      => array( 'gd', 'opcache', 'mysqli', 'zip', 'exif', 'intl', 'mbstring', 'xml', 'xsl' ),
 			'pecl_extensions' => array( 'memcached-3.3.0', 'xdebug-3.4.0', 'imagick' ),
 			'composer'        => true,
@@ -114,7 +114,7 @@ $php_versions = array(
 	'8.3' => array(
 		'php' => array(
 			'base_name'       => 'php:8.3-fpm',
-			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libwebp-dev', 'libzip-dev', 'libssl-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libonig-dev', 'locales', 'sudo', 'rsync', 'libxslt-dev', 'libheif-dev', 'libaom-dev','libavif-dev', 'build-essential', 'pkg-config', 'autoconf', 'libtool' ),
+			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libwebp-dev', 'libzip-dev', 'libssl-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libonig-dev', 'locales', 'sudo', 'rsync', 'libxslt-dev', 'libheif-dev', 'libaom-dev','libavif-dev', 'libde265-dev', 'libx265-dev', 'build-essential', 'pkg-config', 'autoconf', 'libtool' ),
 			'extensions'      => array( 'gd', 'opcache', 'mysqli', 'zip', 'exif', 'intl', 'mbstring', 'xml', 'xsl' ),
 			'pecl_extensions' => array( 'memcached-3.3.0', 'xdebug-3.4.0', 'imagick' ),
 			'composer'        => true,
@@ -128,7 +128,7 @@ $php_versions = array(
 	'8.4' => array(
 		'php' => array(
 			'base_name'       => 'php:8.4-fpm',
-			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libwebp-dev', 'libzip-dev', 'libssl-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libonig-dev', 'locales', 'sudo', 'rsync', 'libxslt-dev', 'libheif-dev', 'libaom-dev','libavif-dev', 'build-essential', 'pkg-config', 'autoconf', 'libtool' ),
+			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libwebp-dev', 'libzip-dev', 'libssl-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libonig-dev', 'locales', 'sudo', 'rsync', 'libxslt-dev', 'libheif-dev', 'libaom-dev','libavif-dev', 'libde265-dev', 'libx265-dev', 'build-essential', 'pkg-config', 'autoconf', 'libtool' ),
 			'extensions'      => array( 'gd', 'opcache', 'mysqli', 'zip', 'exif', 'intl', 'mbstring', 'xml', 'xsl' ),
 			'pecl_extensions' => array( 'memcached-3.3.0', 'xdebug-3.4.0', 'imagick' ),
 			'composer'        => true,
@@ -416,9 +416,12 @@ foreach ( array_merge( $legacy_php_versions, $php_versions ) as $version => $ima
 					$install_extensions .= "apt-get update; \\\n\t\\\n\tapt-get install -y --no-install-recommends " . implode( ' ', $config['apt'] ) . ";";
 
 					if ( in_array( $version, array( '8.1', '8.2', '8.3', '8.4' ) ) ) {
+						$install_extensions .= 'pkg-config --exists libavif && echo "libavif found" || echo "libavif NOT found"; ' . "\\\n\t";
+                        $install_extensions .= 'pkg-config --exists aom && echo "aom found" || echo "aom NOT found"; ' . "\\\n\t";
+                        $install_extensions .= 'pkg-config --exists libheif && echo "libheif found" || echo "libheif NOT found"; ' . "\\\n\t";
+
 						# Remove the pre-installed ImageMagick
 						$install_extensions .= "\\\n\t\\\n\t" . 'IMAGEMAGICK_VERSION="7.1.1-43"; ' . "\\\n\t";
-						$install_extensions .= "apt-get remove -y libmagickwand-dev libmagickcore-7.q16-* libmagickwand-7.q16-*; \\\n\t";
 
 						# Download and compile ImageMagick with AVIF support
 						$install_extensions .= "cd /tmp; \\\n\t";
@@ -434,9 +437,18 @@ foreach ( array_merge( $legacy_php_versions, $php_versions ) as $version => $ima
 						$install_extensions .= "    --enable-shared \\\n\t";
 						$install_extensions .= "    --disable-static \\\n\t";
 						$install_extensions .= "    --with-modules; \\\n\t";
+						$install_extensions .= "    --enable-delegate-build \\\n\t";
+						$install_extensions .= "    --with-pkg-config-path=/usr/lib/pkgconfig:/usr/lib/x86_64-linux-gnu/pkgconfig; \\\n\t";
+
+						$install_extensions .= 'grep -i avif config.log || echo "AVIF not found in config.log"; ' . "\\\n\t";
+
 						$install_extensions .= "make -j$(nproc); \\\n\t";
 						$install_extensions .= "make install; \\\n\t";
 						$install_extensions .= "ldconfig; \\\n\t";
+
+						$install_extensions .= "/usr/local/bin/magick -version; \\\n\t";
+						$install_extensions .= '/usr/local/bin/magick -list delegate | grep -i avif || echo "No AVIF delegate found"; ' . "\\\n\t";
+						$install_extensions .= '/usr/local/bin/magick -list format | grep -i avif || echo "No AVIF format found"; ' . "\\\n\t";
 					}
 
 					// Ensure certificates are updated.
