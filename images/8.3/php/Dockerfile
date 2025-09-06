@@ -17,12 +17,11 @@ RUN set -ex; \
 	\
 	apt-get update; \
 	\
-	apt-get install -y --no-install-recommends libjpeg-dev libpng-dev libwebp-dev libzip-dev libssl-dev libmemcached-dev unzip libmagickwand-dev ghostscript libonig-dev locales sudo rsync libxslt-dev git;\
+	apt-get install -y --no-install-recommends libjpeg-dev libpng-dev libwebp-dev libzip-dev libssl-dev libmemcached-dev unzip libmagickwand-dev ghostscript libonig-dev locales sudo rsync libxslt-dev libheif-dev libaom-dev libavif-dev build-essential pkg-config autoconf libtool git;\
 	\
 	IMAGEMAGICK_VERSION="7.1.1-43"; \
 	apt-get remove -y libmagickwand-dev libmagickcore-7.q16-* libmagickwand-7.q16-*; \
 	cd /tmp; \
-	CURRENT_VERSION=$(magick -version | head -1 | awk '{print $3}' | tr -d '-'); \
 	curl -L https://github.com/ImageMagick/ImageMagick/archive/${IMAGEMAGICK_VERSION}.tar.gz -o imagemagick.tar.gz; \
 	tar xzf imagemagick.tar.gz; \
 	cd ImageMagick-${IMAGEMAGICK_VERSION}; \
