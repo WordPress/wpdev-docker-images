@@ -17,7 +17,9 @@ RUN set -ex; \
 	\
 	apt-get update; \
 	\
-	apt-get install -y --no-install-recommends libjpeg-dev libpng-dev libwebp-dev libzip-dev libssl-dev libmemcached-dev unzip libmagickwand-dev ghostscript libonig-dev locales sudo rsync libxslt-dev libheif-dev libaom-dev libavif-dev libde265-dev libx265-dev build-essential pkg-config autoconf libtool git;pkg-config --exists libavif && echo "libavif found" || echo "libavif NOT found"; \
+	apt-get install -y --no-install-recommends libjpeg-dev libpng-dev libwebp-dev libzip-dev libssl-dev libmemcached-dev unzip libmagickwand-dev ghostscript libonig-dev locales sudo rsync libxslt-dev libheif-dev libaom-dev libavif-dev libde265-dev libx265-dev build-essential pkg-config autoconf libtool git;\
+	\
+	pkg-config --exists libavif && echo "libavif found" || echo "libavif NOT found"; \
 	pkg-config --exists aom && echo "aom found" || echo "aom NOT found"; \
 	pkg-config --exists libheif && echo "libheif found" || echo "libheif NOT found"; \
 	\

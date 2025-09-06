@@ -416,7 +416,7 @@ foreach ( array_merge( $legacy_php_versions, $php_versions ) as $version => $ima
 					$install_extensions .= "apt-get update; \\\n\t\\\n\tapt-get install -y --no-install-recommends " . implode( ' ', $config['apt'] ) . ";";
 
 					if ( in_array( $version, array( '8.1', '8.2', '8.3', '8.4' ) ) ) {
-						$install_extensions .= 'pkg-config --exists libavif && echo "libavif found" || echo "libavif NOT found"; ' . "\\\n\t";
+						$install_extensions .= "\\\n\t\\\n\t" . 'pkg-config --exists libavif && echo "libavif found" || echo "libavif NOT found"; ' . "\\\n\t";
                         $install_extensions .= 'pkg-config --exists aom && echo "aom found" || echo "aom NOT found"; ' . "\\\n\t";
                         $install_extensions .= 'pkg-config --exists libheif && echo "libheif found" || echo "libheif NOT found"; ' . "\\\n\t";
 
