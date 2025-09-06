@@ -417,14 +417,15 @@ foreach ( array_merge( $legacy_php_versions, $php_versions ) as $version => $ima
 
 					if ( in_array( $version, array( '8.1', '8.2', '8.3', '8.4' ) ) ) {
 						# Remove the pre-installed ImageMagick
-						$install_extensions .= "\\\n\t\\\n\tapt-get remove -y libmagickwand-dev libmagickcore-7.q16-* libmagickwand-7.q16-*; \\\n\t";
+						$install_extensions .= "\\\n\t\\\n\t" . 'IMAGEMAGICK_VERSION="7.1.1-43"; ' . "\\\n\t";
+						$install_extensions .= "apt-get remove -y libmagickwand-dev libmagickcore-7.q16-* libmagickwand-7.q16-*; \\\n\t";
 
 						# Download and compile ImageMagick with AVIF support
 						$install_extensions .= "cd /tmp; \\\n\t";
 						$install_extensions .= "CURRENT_VERSION=$(magick -version | head -1 | awk '{print $3}' | tr -d '-'); \\\n\t";
-						$install_extensions .= 'curl -L https://github.com/ImageMagick/ImageMagick/archive/${CURRENT_VERSION}.tar.gz -o imagemagick.tar.gz;' . " \\\n\t";
+						$install_extensions .= 'curl -L https://github.com/ImageMagick/ImageMagick/archive/${IMAGEMAGICK_VERSION}.tar.gz -o imagemagick.tar.gz;' . " \\\n\t";
 						$install_extensions .= "tar xzf imagemagick.tar.gz; \\\n\t";
-						$install_extensions .= 'cd ImageMagick-${CURRENT_VERSION}; ' . "\\\n\t";
+						$install_extensions .= 'cd ImageMagick-${IMAGEMAGICK_VERSION}; ' . "\\\n\t";
 
 						# Use the same key configuration as the original, adding AVIF support
 						$install_extensions .= "./configure \\\n\t";

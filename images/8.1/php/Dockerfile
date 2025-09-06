@@ -19,12 +19,13 @@ RUN set -ex; \
 	\
 	apt-get install -y --no-install-recommends libjpeg-dev libpng-dev libwebp-dev libzip-dev libmemcached-dev unzip libmagickwand-dev ghostscript libonig-dev locales sudo rsync libxslt-dev git;\
 	\
+	IMAGEMAGICK_VERSION="7.1.1-43"; \
 	apt-get remove -y libmagickwand-dev libmagickcore-7.q16-* libmagickwand-7.q16-*; \
 	cd /tmp; \
 	CURRENT_VERSION=$(magick -version | head -1 | awk '{print $3}' | tr -d '-'); \
-	curl -L https://github.com/ImageMagick/ImageMagick/archive/${CURRENT_VERSION}.tar.gz -o imagemagick.tar.gz; \
+	curl -L https://github.com/ImageMagick/ImageMagick/archive/${IMAGEMAGICK_VERSION}.tar.gz -o imagemagick.tar.gz; \
 	tar xzf imagemagick.tar.gz; \
-	cd ImageMagick-${CURRENT_VERSION}; \
+	cd ImageMagick-${IMAGEMAGICK_VERSION}; \
 	./configure \
 	    --with-quantum-depth=16 \
 	    --with-heic=yes \
@@ -69,7 +70,7 @@ COPY entrypoint.sh /entrypoint.sh
 COPY common.sh /common.sh
 COPY php-fpm.conf /usr/local/etc/php-fpm.d/zz-wordpress.conf
 
-ARG imagemagic_config=/etc/ImageMagick-6/policy.xml
+ARG imagemagic_config=/etc/ImageMagick-7/policy.xml
 RUN if [ -f $imagemagic_config ] ; then \
 		sed -i 's/<policy domain="coder" rights="none" pattern="PDF" \/>/<policy domain="coder" rights="read|write" pattern="PDF" \/>/g' $imagemagic_config; \
 	else \
