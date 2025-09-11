@@ -429,11 +429,35 @@ foreach ( array_merge( $legacy_php_versions, $php_versions ) as $version => $ima
 				if ( in_array( 'gd', $config['extensions'], true ) ) {
 					$install_extensions .= " \\\n\t\\\n\t";
 
+					$gd_options = array();
+
+
 					if ( version_compare( $version, '7.4' ) >= 0 ) {
-						$install_extensions .= "docker-php-ext-configure gd --enable-gd --with-jpeg=/usr --with-webp=/usr;";
+						$gd_options = array_merge(
+							array(
+								'--enable-gd',
+								'--with-jpeg=/usr',
+								'--with-webp=/usr',
+							),
+							$gd_options
+						);
 					} else {
-						$install_extensions .= "docker-php-ext-configure gd --with-png-dir=/usr --with-jpeg-dir=/usr --with-webp-dir=/usr;";
+						$gd_options = array_merge(
+							array(
+								'--with-gd',
+								'--with-jpeg-dir=/usr',
+								'-with-png-dir=/usr',
+								'--with-webp-dir=/usr',
+							),
+							$gd_options
+						);
 					}
+
+					if ( version_compare( $version, '8.1' ) >= 0 ) {
+						$gd_options[] = '--with-avif=/usr';
+					}
+
+					$install_extensions .= 'docker-php-ext-configure gd ' . implode( ' ', $gd_options ) . ';';
 				}
 
 				if ( $config['extensions'] ) {
