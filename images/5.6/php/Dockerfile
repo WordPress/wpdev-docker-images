@@ -9,8 +9,8 @@ WORKDIR /var/www
 # You can find the relevant template in the `/templates` folder.
 #
 
-ENV COMPOSER_ALLOW_SUPERUSER 1
-ENV COMPOSER_HOME /tmp
+ENV COMPOSER_ALLOW_SUPERUSER=1
+ENV COMPOSER_HOME=/tmp
 
 # install the PHP extensions we need
 RUN set -ex; \
