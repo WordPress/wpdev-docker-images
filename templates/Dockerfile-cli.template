@@ -24,7 +24,7 @@ RUN set -ex; \
 	wp --allow-root --version;
 
 COPY entrypoint.sh /entrypoint.sh
-
+%%DISABLE_SSL%%
 RUN chmod +x /entrypoint.sh
 
 # WP CLI config

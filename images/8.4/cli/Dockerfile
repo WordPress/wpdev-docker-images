@@ -29,6 +29,7 @@ RUN set -ex; \
 	wp --allow-root --version;
 
 COPY entrypoint.sh /entrypoint.sh
+COPY /etc/mysql/conf.d/no-ssl.cnf /no-ssl.cnf
 
 RUN chmod +x /entrypoint.sh
 
