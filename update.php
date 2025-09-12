@@ -500,7 +500,7 @@ foreach ( array_merge( $legacy_php_versions, $php_versions ) as $version => $ima
 				// Copy the configuration file that disables SSL for the MySQL client.
 				if ( version_compare( $version, '8.1' ) >= 0 && file_exists( "config/no-ssl.cnf" ) ) {
 					copy( "config/no-ssl.cnf", "images/{$version}/{$image}/no-ssl.cnf" );
-					$dockerfile = preg_replace( '|\n%%DISABLE_SSL%%\n|s', "\nCOPY /etc/mysql/conf.d/no-ssl.cnf /no-ssl.cnf\n\n", $dockerfile );
+					$dockerfile = preg_replace( '|\n%%DISABLE_SSL%%\n|s', "\nCOPY no-ssl.cnf /etc/mysql/conf.d/no-ssl.cnf\n\n", $dockerfile );
 				}
 			} else {
 				// WP-CLI isn't available for this version of PHP.
