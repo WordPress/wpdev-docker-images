@@ -10,6 +10,11 @@ name: Build test images
 
 on:
   pull_request:
+    paths:
+      - 'config/**'
+      - 'entrypoint/**'
+      - 'images/**'
+      - '.github/workflows/github-container-registry.yml'
   workflow_dispatch:
 
 env:
