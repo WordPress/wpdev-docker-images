@@ -10,6 +10,7 @@ on:
       - 'config/**'
       - 'entrypoint/**'
       - 'images/**'
+      - 'templates/workflow.yml-template'
       - '.github/workflows/docker-hub.yml'
   workflow_dispatch:
   # Once weekly On Sundays at 00:00 UTC.
@@ -32,6 +33,7 @@ on:
       - 'config/**'
       - 'entrypoint/**'
       - 'images/**'
+      - 'templates/workflow.yml-template'
       - '.github/workflows/github-container-registry.yml'
   workflow_dispatch:
 
