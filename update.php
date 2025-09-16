@@ -433,7 +433,7 @@ foreach ( $php_versions as $version => $images ) {
 					$gd_options = array();
 
 
-					if ( version_compare( $version, '7.4' ) > 0 ) {
+					if ( version_compare( $version, '7.4' ) >= 0 ) {
 						$gd_options = array_merge(
 							array(
 								'--with-jpeg=/usr',
