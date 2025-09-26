@@ -453,7 +453,7 @@ foreach ( $php_versions as $version => $images ) {
 						);
 					}
 
-					if ( version_compare( $version, '8.1' ) >= 0 ) {
+					if ( version_compare( $version, '8.3' ) >= 0 ) {
 						$gd_options[] = '--with-avif=/usr';
 					}
 
