@@ -17,13 +17,13 @@ RUN set -ex; \
 	\
 	apt-get update; \
 	\
-	apt-get install -y --no-install-recommends libjpeg-dev libpng-dev libwebp-dev libheif-dev libzip-dev libssl-dev libmemcached-dev unzip libmagickwand-dev ghostscript libonig-dev locales sudo rsync git; \
+	apt-get install -y --no-install-recommends libjpeg-dev libpng-dev libwebp-dev libavif-dev libaom-dev libdav1d-dev libheif-dev libzip-dev libssl-dev libmemcached-dev unzip libmagickwand-dev ghostscript libonig-dev locales sudo rsync git; \
 	apt-get upgrade openssl -y; \
 	update-ca-certificates --fresh; \
 	sed -i 's/^# *\(\(ru_RU\|fr_FR\|de_DE\|es_ES\|ja_JP\).UTF-8\)/\1/' /etc/locale.gen; \
 	locale-gen; \
 	\
-	docker-php-ext-configure gd --enable-gd --with-jpeg=/usr --with-webp=/usr; \
+	docker-php-ext-configure gd --with-jpeg=/usr --with-webp=/usr --with-avif=/usr; \
 	\
 	docker-php-ext-install gd mysqli zip exif intl mbstring; \
 	\

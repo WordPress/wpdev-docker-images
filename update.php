@@ -74,7 +74,7 @@ $php_versions = array(
 			'base_name'       => 'php:8.0-fpm',
 			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libwebp-dev', 'libheif-dev', 'libzip-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libonig-dev', 'locales', 'sudo', 'rsync', 'libxslt-dev' ),
 			'extensions'      => array( 'gd', 'opcache', 'mysqli', 'zip', 'exif', 'intl', 'mbstring', 'xml', 'xsl' ),
-			'pecl_extensions' => array( 'memcached-3.3.0', 'xdebug-3.4.0', 'imagick' ),
+			'pecl_extensions' => array( 'memcached-3.3.0', 'xdebug-3.4.5', 'imagick' ),
 			'composer'        => true,
 		),
 		'phpunit' => 9,
@@ -86,9 +86,9 @@ $php_versions = array(
 	'8.1' => array(
 		'php' => array(
 			'base_name'       => 'php:8.1-fpm',
-			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libwebp-dev', 'libheif-dev', 'libzip-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libonig-dev', 'locales', 'sudo', 'rsync', 'libxslt-dev' ),
+			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libwebp-dev', 'libavif-dev', 'libaom-dev', 'libdav1d-dev', 'libheif-dev', 'libzip-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libonig-dev', 'locales', 'sudo', 'rsync', 'libxslt-dev' ),
 			'extensions'      => array( 'gd', 'opcache', 'mysqli', 'zip', 'exif', 'intl', 'mbstring', 'xml', 'xsl' ),
-			'pecl_extensions' => array( 'memcached-3.3.0', 'xdebug-3.4.0', 'imagick' ),
+			'pecl_extensions' => array( 'memcached-3.3.0', 'xdebug-3.4.5', 'imagick' ),
 			'composer'        => true,
 		),
 		'phpunit' => 9,
@@ -100,9 +100,9 @@ $php_versions = array(
 	'8.2' => array(
 		'php' => array(
 			'base_name'       => 'php:8.2-fpm',
-			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libwebp-dev', 'libheif-dev', 'libzip-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libonig-dev', 'locales', 'sudo', 'rsync', 'libxslt-dev' ),
+			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libwebp-dev', 'libavif-dev', 'libaom-dev', 'libdav1d-dev', 'libheif-dev', 'libzip-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libonig-dev', 'locales', 'sudo', 'rsync', 'libxslt-dev' ),
 			'extensions'      => array( 'gd', 'opcache', 'mysqli', 'zip', 'exif', 'intl', 'mbstring', 'xml', 'xsl' ),
-			'pecl_extensions' => array( 'memcached-3.3.0', 'xdebug-3.4.0', 'imagick' ),
+			'pecl_extensions' => array( 'memcached-3.3.0', 'xdebug-3.4.5', 'imagick' ),
 			'composer'        => true,
 		),
 		'phpunit' => 9,
@@ -114,9 +114,9 @@ $php_versions = array(
 	'8.3' => array(
 		'php' => array(
 			'base_name'       => 'php:8.3-fpm',
-			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libwebp-dev', 'libheif-dev', 'libzip-dev', 'libssl-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libonig-dev', 'locales', 'sudo', 'rsync', 'libxslt-dev' ),
+			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libwebp-dev', 'libavif-dev', 'libaom-dev', 'libheif-dev', 'libzip-dev', 'libssl-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libonig-dev', 'locales', 'sudo', 'rsync', 'libxslt-dev' ),
 			'extensions'      => array( 'gd', 'opcache', 'mysqli', 'zip', 'exif', 'intl', 'mbstring', 'xml', 'xsl' ),
-			'pecl_extensions' => array( 'memcached-3.3.0', 'xdebug-3.4.0', 'imagick' ),
+			'pecl_extensions' => array( 'memcached-3.3.0', 'xdebug-3.4.5', 'imagick' ),
 			'composer'        => true,
 		),
 		'phpunit' => 9,
@@ -128,9 +128,9 @@ $php_versions = array(
 	'8.4' => array(
 		'php' => array(
 			'base_name'       => 'php:8.4-fpm',
-			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libwebp-dev', 'libheif-dev', 'libzip-dev', 'libssl-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libonig-dev', 'locales', 'sudo', 'rsync', 'libxslt-dev' ),
+			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libwebp-dev', 'libavif-dev', 'libaom-dev', 'libdav1d-dev', 'libheif-dev', 'libzip-dev', 'libssl-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libonig-dev', 'locales', 'sudo', 'rsync', 'libxslt-dev' ),
 			'extensions'      => array( 'gd', 'opcache', 'mysqli', 'zip', 'exif', 'intl', 'mbstring', 'xml', 'xsl' ),
-			'pecl_extensions' => array( 'memcached-3.3.0', 'xdebug-3.4.0', 'imagick' ),
+			'pecl_extensions' => array( 'memcached-3.3.0', 'xdebug-3.4.5', 'imagick' ),
 			'composer'        => true,
 		),
 		'phpunit' => 9,
@@ -142,7 +142,7 @@ $php_versions = array(
 	'8.5' => array(
 		'php' => array(
 			'base_name'       => 'php:8.5-rc-fpm',
-			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libwebp-dev', 'libheif-dev', 'libzip-dev', 'libssl-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libonig-dev', 'locales', 'sudo', 'rsync' ),
+			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libwebp-dev', 'libavif-dev', 'libaom-dev', 'libdav1d-dev', 'libheif-dev', 'libzip-dev', 'libssl-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libonig-dev', 'locales', 'sudo', 'rsync' ),
 			'extensions'      => array( 'gd', 'mysqli', 'zip', 'exif', 'intl', 'mbstring' ),
 			'pecl_extensions' => array(),
 			'composer'        => true,
@@ -156,11 +156,12 @@ $php_versions = array(
 );
 
 /**
- * An array of all legacy PHP versions that we need to generate images for, and their config settings.
+ * An array of all legacy PHP versions that images are no longer generated for, and their config settings.
  *
  * Each PHP version has settings for the PHP base image, the PHPUnit image, and the WP_CLI image.
  *
  * These versions of PHP have been unsupported for some time, and rarely need to be regenerated.
+ * This configuration is kept for historical purposes, and in case a regeneration is ever required.
  *
  * @see https://make.wordpress.org/core/handbook/references/php-compatibility-and-wordpress-versions/
  *
@@ -360,7 +361,7 @@ $templates = array(
 );
 
 // Loop through each PHP version, and generate the Dockerfiles.
-foreach ( array_merge( $legacy_php_versions, $php_versions ) as $version => $images ) {
+foreach ( $php_versions as $version => $images ) {
 	$title = "| PHP $version |";
 	echo str_repeat( '-', strlen( $title ) ) . "\n";
 	echo "$title\n";
@@ -429,11 +430,34 @@ foreach ( array_merge( $legacy_php_versions, $php_versions ) as $version => $ima
 				if ( in_array( 'gd', $config['extensions'], true ) ) {
 					$install_extensions .= " \\\n\t\\\n\t";
 
+					$gd_options = array();
+
+
 					if ( version_compare( $version, '7.4' ) >= 0 ) {
-						$install_extensions .= "docker-php-ext-configure gd --enable-gd --with-jpeg=/usr --with-webp=/usr;";
+						$gd_options = array_merge(
+							array(
+								'--with-jpeg=/usr',
+								'--with-webp=/usr',
+							),
+							$gd_options
+						);
 					} else {
-						$install_extensions .= "docker-php-ext-configure gd --with-png-dir=/usr --with-jpeg-dir=/usr --with-webp-dir=/usr;";
+						$gd_options = array_merge(
+							array(
+								'--with-gd',
+								'--with-jpeg-dir=/usr',
+								'-with-png-dir=/usr',
+								'--with-webp-dir=/usr',
+							),
+							$gd_options
+						);
 					}
+
+					if ( version_compare( $version, '8.1' ) >= 0 ) {
+						$gd_options[] = '--with-avif=/usr';
+					}
+
+					$install_extensions .= 'docker-php-ext-configure gd ' . implode( ' ', $gd_options ) . ';';
 				}
 
 				if ( $config['extensions'] ) {
@@ -496,9 +520,17 @@ foreach ( array_merge( $legacy_php_versions, $php_versions ) as $version => $ima
 				$dockerfile = preg_replace( '|\n%%OLD_PHP%%.*%%/OLD_PHP%%\n|s', '', $dockerfile );
 				$dockerfile = str_replace( '%%MYSQL_CLIENT%%', $config['mysql_client'], $dockerfile );
 				$dockerfile = str_replace( '%%DOWNLOAD_URL%%', $config['download_url'], $dockerfile );
+
+				// Copy the configuration file that disables SSL for the MySQL client.
+				if ( version_compare( $version, '8.1' ) >= 0 && file_exists( "config/no-ssl.cnf" ) ) {
+					copy( "config/no-ssl.cnf", "images/{$version}/{$image}/no-ssl.cnf" );
+					$dockerfile = preg_replace( '|\n%%DISABLE_SSL%%\n|s', "\nCOPY no-ssl.cnf /etc/mysql/conf.d/no-ssl.cnf\n\n", $dockerfile );
+				}
 			} else {
 				// WP-CLI isn't available for this version of PHP.
 				$dockerfile = preg_replace( '|\n%%NEW_PHP%%.*%%/NEW_PHP%%\n|s', '', $dockerfile );
+				$dockerfile = preg_replace( '|\n%%DISABLE_SSL%%\n|s', '', $dockerfile );
+
 			}
 		}
 
