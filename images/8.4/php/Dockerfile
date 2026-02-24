@@ -27,7 +27,7 @@ RUN set -ex; \
 	\
 	docker-php-ext-install gd opcache mysqli zip exif intl mbstring xml xsl; \
 	\
-	pecl install memcached-3.3.0; \
+	pecl install memcached-3.4.0; \
 	pecl install xdebug-3.4.5; \
 	pecl install imagick; \
 	docker-php-ext-enable imagick; \

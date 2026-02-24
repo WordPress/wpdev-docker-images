@@ -1,7 +1,7 @@
 <?php
 
 // The latest stable version of PHP that is supported in WordPress trunk.
-$latest = '8.2';
+$latest = '8.3';
 
 /**
  * An array of all PHP versions that we need to generate images for, and their config settings.
@@ -74,7 +74,7 @@ $php_versions = array(
 			'base_name'       => 'php:8.0-fpm',
 			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libwebp-dev', 'libzip-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libonig-dev', 'locales', 'sudo', 'rsync', 'libxslt-dev' ),
 			'extensions'      => array( 'gd', 'opcache', 'mysqli', 'zip', 'exif', 'intl', 'mbstring', 'xml', 'xsl' ),
-			'pecl_extensions' => array( 'memcached-3.3.0', 'xdebug-3.4.5', 'imagick' ),
+			'pecl_extensions' => array( 'memcached-3.4.0', 'xdebug-3.4.5', 'imagick' ),
 			'composer'        => true,
 		),
 		'phpunit' => 9,
@@ -86,9 +86,9 @@ $php_versions = array(
 	'8.1' => array(
 		'php' => array(
 			'base_name'       => 'php:8.1-fpm',
-			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libwebp-dev', 'libavif-dev', 'libaom-dev', 'libdav1d-dev', 'libheif-dev', 'libzip-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libonig-dev', 'locales', 'sudo', 'rsync', 'libxslt-dev' ),
+			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libwebp-dev', 'libzip-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libonig-dev', 'locales', 'sudo', 'rsync', 'libxslt-dev' ),
 			'extensions'      => array( 'gd', 'opcache', 'mysqli', 'zip', 'exif', 'intl', 'mbstring', 'xml', 'xsl' ),
-			'pecl_extensions' => array( 'memcached-3.3.0', 'xdebug-3.4.5', 'imagick' ),
+			'pecl_extensions' => array( 'memcached-3.4.0', 'xdebug-3.4.5', 'imagick' ),
 			'composer'        => true,
 		),
 		'phpunit' => 9,
@@ -100,9 +100,9 @@ $php_versions = array(
 	'8.2' => array(
 		'php' => array(
 			'base_name'       => 'php:8.2-fpm',
-			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libwebp-dev', 'libavif-dev', 'libaom-dev', 'libdav1d-dev', 'libheif-dev', 'libzip-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libonig-dev', 'locales', 'sudo', 'rsync', 'libxslt-dev' ),
+			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libwebp-dev', 'libzip-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libonig-dev', 'locales', 'sudo', 'rsync', 'libxslt-dev' ),
 			'extensions'      => array( 'gd', 'opcache', 'mysqli', 'zip', 'exif', 'intl', 'mbstring', 'xml', 'xsl' ),
-			'pecl_extensions' => array( 'memcached-3.3.0', 'xdebug-3.4.5', 'imagick' ),
+			'pecl_extensions' => array( 'memcached-3.4.0', 'xdebug-3.4.5', 'imagick' ),
 			'composer'        => true,
 		),
 		'phpunit' => 9,
@@ -116,7 +116,7 @@ $php_versions = array(
 			'base_name'       => 'php:8.3-fpm',
 			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libwebp-dev', 'libavif-dev', 'libaom-dev', 'libheif-dev', 'libzip-dev', 'libssl-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libonig-dev', 'locales', 'sudo', 'rsync', 'libxslt-dev' ),
 			'extensions'      => array( 'gd', 'opcache', 'mysqli', 'zip', 'exif', 'intl', 'mbstring', 'xml', 'xsl' ),
-			'pecl_extensions' => array( 'memcached-3.3.0', 'xdebug-3.4.5', 'imagick' ),
+			'pecl_extensions' => array( 'memcached-3.4.0', 'xdebug-3.4.5', 'imagick' ),
 			'composer'        => true,
 		),
 		'phpunit' => 9,
@@ -130,7 +130,7 @@ $php_versions = array(
 			'base_name'       => 'php:8.4-fpm',
 			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libwebp-dev', 'libavif-dev', 'libaom-dev', 'libdav1d-dev', 'libheif-dev', 'libzip-dev', 'libssl-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libonig-dev', 'locales', 'sudo', 'rsync', 'libxslt-dev' ),
 			'extensions'      => array( 'gd', 'opcache', 'mysqli', 'zip', 'exif', 'intl', 'mbstring', 'xml', 'xsl' ),
-			'pecl_extensions' => array( 'memcached-3.3.0', 'xdebug-3.4.5', 'imagick' ),
+			'pecl_extensions' => array( 'memcached-3.4.0', 'xdebug-3.4.5', 'imagick' ),
 			'composer'        => true,
 		),
 		'phpunit' => 9,
@@ -141,10 +141,10 @@ $php_versions = array(
 	),
 	'8.5' => array(
 		'php' => array(
-			'base_name'       => 'php:8.5-rc-fpm',
+			'base_name'       => 'php:8.5-fpm',
 			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libwebp-dev', 'libavif-dev', 'libaom-dev', 'libdav1d-dev', 'libheif-dev', 'libzip-dev', 'libssl-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libonig-dev', 'locales', 'sudo', 'rsync' ),
 			'extensions'      => array( 'gd', 'mysqli', 'zip', 'exif', 'intl', 'mbstring' ),
-			'pecl_extensions' => array(),
+			'pecl_extensions' => array( 'memcached-3.4.0', 'imagick' ),
 			'composer'        => true,
 		),
 		'phpunit' => 9,
@@ -449,7 +449,7 @@ foreach ( $php_versions as $version => $images ) {
 						);
 					}
 
-					if ( version_compare( $version, '8.1' ) >= 0 ) {
+					if ( version_compare( $version, '8.3' ) >= 0 ) {
 						$gd_options[] = '--with-avif=/usr';
 					}
 
