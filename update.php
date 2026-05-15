@@ -77,7 +77,6 @@ $php_versions = array(
 			'pecl_extensions' => array( 'imagick', 'memcached-3.4.0', 'xdebug-3.5.1' ),
 			'composer'        => true,
 		),
-		'phpunit' => 9,
 		'cli' => array(
 			'mysql_client' => 'virtual-mysql-client',
 			'download_url' => 'https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar',
@@ -91,7 +90,6 @@ $php_versions = array(
 			'pecl_extensions' => array( 'imagick', 'memcached-3.4.0', 'xdebug-3.5.1' ),
 			'composer'        => true,
 		),
-		'phpunit' => 9,
 		'cli' => array(
 			'mysql_client' => 'virtual-mysql-client',
 			'download_url' => 'https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar',
@@ -105,7 +103,6 @@ $php_versions = array(
 			'pecl_extensions' => array( 'imagick', 'memcached-3.4.0', 'xdebug-3.5.1' ),
 			'composer'        => true,
 		),
-		'phpunit' => 9,
 		'cli' => array(
 			'mysql_client' => 'virtual-mysql-client',
 			'download_url' => 'https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar',
@@ -119,7 +116,6 @@ $php_versions = array(
 			'pecl_extensions' => array( 'imagick', 'memcached-3.4.0', 'xdebug-3.5.1' ),
 			'composer'        => true,
 		),
-		'phpunit' => 9,
 		'cli' => array(
 			'mysql_client' => 'virtual-mysql-client',
 			'download_url' => 'https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar',
@@ -133,7 +129,6 @@ $php_versions = array(
 			'pecl_extensions' => array( 'imagick', 'memcached-3.4.0', 'xdebug-3.5.1' ),
 			'composer'        => true,
 		),
-		'phpunit' => 9,
 		'cli' => array(
 			'mysql_client' => 'virtual-mysql-client',
 			'download_url' => 'https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar',
@@ -147,7 +142,6 @@ $php_versions = array(
 			'pecl_extensions' => array( 'memcached-3.4.0', 'imagick', 'xdebug-3.5.1' ),
 			'composer'        => true,
 		),
-		'phpunit' => 9,
 		'cli' => array(
 			'mysql_client' => 'virtual-mysql-client',
 			'download_url' => 'https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar',
@@ -295,25 +289,21 @@ $legacy_php_versions = array(
  * An array of all PHPUnit and PHP version combinations that we need to generate images for.
  *
  * Different WordPress versions support different versions of PHP and different versions of PHPUnit.
- * This creates a need to run multiple versions of PHPUnit on each version of PHP.
+ * This can create a need to run multiple versions of PHPUnit on each version of PHP.
  *
- * These versions of PHPUnit are no longer supported and do not receive updates.
- * Regenerating these containers should very rarely be required.
+ * These versions of PHP are EOL, so regenerating these containers is not necessary.
+ *
+ * @see https://make.wordpress.org/core/handbook/references/phpunit-compatibility-and-wordpress-versions/
  *
  * @param array $legacy_phpunit_versions A list of PHP versions for each PHPUnit version.
  */
 $legacy_phpunit_versions = array(
 	'9' => array(
-		'8.3',
-		'8.2',
-		'8.1',
 		'8.0',
 		'7.4',
 		'7.3',
 	),
 	'8' => array(
-		'8.2',
-		'8.1',
 		'8.0',
 		'7.4',
 		'7.3',
