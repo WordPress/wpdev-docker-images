@@ -41,17 +41,6 @@ else
 	rm -f /usr/local/etc/php/conf.d/docker-php-ext-memcached.ini
 fi
 
-# If LOCAL_PHP_PCOV=true the PCOV extension will be enabled.
-if [ "$LOCAL_PHP_PCOV" = true ]; then
-	if extension_available "pcov"; then
-		docker-php-ext-enable pcov
-	else
-		echo "Warning: PCOV extension not available, skipping..."
-	fi
-else
-	rm -f /usr/local/etc/php/conf.d/docker-php-ext-pcov.ini
-fi
-
 ### Change UID/GID
 WP_PHP_UID="${PHP_FPM_UID-1000}"
 WP_PHP_GID="${PHP_FPM_GID-1000}"
