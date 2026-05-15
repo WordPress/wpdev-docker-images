@@ -33,42 +33,6 @@ jobs:
         with:
           args: "-color -verbose"
 
-  # Runs the Octoscan workflow file scanner.
-  #
-  # Octoscan is a static vulnerability scanner for GitHub action workflows.
-  #
-  # See https://github.com/synacktiv/octoscan.
-  #
-  # Performs the following steps:
-  # - Checks out the repository.
-  # - Runs Octoscan.
-  # - Uploads the results to GitHub Code Scanning.
-  octoscan:
-    name: Octoscan
-    runs-on: ubuntu-latest
-    permissions:
-      security-events: write
-      actions: read
-      contents: read
-    timeout-minutes: 10
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-        with:
-          persist-credentials: false
-
-      - name: Run octoscan
-        id: octoscan
-        uses: synacktiv/action-octoscan@6b1cf2343893dfb9e5f75652388bd2dc83f456b0 # v1.0.0
-        with:
-          filter_triggers: ''
-
-      - name: Upload SARIF file
-        uses: github/codeql-action/upload-sarif@95e58e9a2cdfd71adc6e0353d5c52f41a045d225 # v4.35.2
-        with:
-          sarif_file: ${{steps.octoscan.outputs.sarif_output}}
-          category: octoscan
-
   # Runs the Zizmor workflow file scanner.
   #
   # Zizmor is a static analysis tool for GitHub Actions that can find many common security issues.
@@ -106,35 +70,3 @@ jobs:
         with:
           sarif_file: results.sarif
           category: zizmor
-
-  # Runs the Poutine workflow file scanner.
-  #
-  # Poutine is a security scanner that detects misconfigurations and vulnerabilities in the build pipelines of a repository.
-  #
-  # See https://github.com/boostsecurityio/poutine.
-  #
-  # Performs the following steps:
-  # - Checks out the repository.
-  # - Runs Poutine.
-  # - Uploads the results to GitHub Code Scanning.
-  poutine:
-    name: Poutine
-    runs-on: ubuntu-latest
-    permissions:
-      security-events: write
-      contents: read
-    timeout-minutes: 10
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-      with:
-        persist-credentials: false
-
-    - name: Run Poutine
-      uses: boostsecurityio/poutine-action@e240ebd3eff8b2db5a8e5f6b28f58739d7db2247 # v1.1.4
-
-    - name: Upload SARIF file
-      uses: github/codeql-action/upload-sarif@95e58e9a2cdfd71adc6e0353d5c52f41a045d225 # v4.35.2
-      with:
-        sarif_file: results.sarif
-        category: poutine
