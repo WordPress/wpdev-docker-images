@@ -19,8 +19,6 @@ $latest = '8.3';
  *     @type array  $pecl_extensions An array of PECL-sourced PHP extensions that will be installed, but not enabled.
  * }
  *
- * @param int $phpunit The major version branch of PHPUnit to install on this image.
- *
  * @param array|false $cli {
  *     @type string $mysql_client The name of the MySQL client Ubuntu package on this image.
  *     @type string $download_url The download URL for the version of WP-CLI to install on this image.
@@ -35,7 +33,6 @@ $php_versions = array(
 			'pecl_extensions' => array( 'imagick', 'xdebug-3.1.6', 'memcached-3.3.0' ),
 			'composer'        => true,
 		),
-		'phpunit' => 7,
 		'cli' => array(
 			'mysql_client' => 'virtual-mysql-client',
 			'download_url' => 'https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar',
@@ -49,7 +46,6 @@ $php_versions = array(
 			'pecl_extensions' => array( 'imagick', 'xdebug-3.1.6', 'memcached-3.3.0' ),
 			'composer'        => true,
 		),
-		'phpunit' => 7,
 		'cli' => array(
 			'mysql_client' => 'virtual-mysql-client',
 			'download_url' => 'https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar',
@@ -63,7 +59,6 @@ $php_versions = array(
 			'pecl_extensions' => array( 'imagick', 'xdebug-3.1.6', 'memcached-3.3.0' ),
 			'composer'        => true,
 		),
-		'phpunit' => 7,
 		'cli' => array(
 			'mysql_client' => 'virtual-mysql-client',
 			'download_url' => 'https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar',
@@ -346,7 +341,6 @@ EOT;
 // Load the templates.
 $templates = array(
 	'php'     => file_get_contents( 'templates/Dockerfile-php.template' ),
-	'phpunit' => file_get_contents( 'templates/Dockerfile-phpunit.template' ),
 	'cli'     => file_get_contents( 'templates/Dockerfile-cli.template' ),
 );
 
@@ -365,7 +359,7 @@ foreach ( $php_versions as $version => $images ) {
 
 		$dockerfile = str_replace( '%%GENERATED_WARNING%%', $generated_warning, $dockerfile );
 
-		// PHPUnit and WP-CLI image parent tags vary depending on whether it's a PHP version, or "latest".
+		// WP-CLI image parent tags vary depending on whether it's a PHP version, or "latest".
 		if ( 'latest' === $version ) {
 			$version_tag = 'latest';
 		} else {
@@ -496,14 +490,6 @@ foreach ( $php_versions as $version => $images ) {
 
 			copy( "entrypoint/common.sh", "images/{$version}/{$image}/common.sh" );
 
-		} elseif ( $image === 'phpunit' ) {
-			// Replace tags inside the PHPUnit Dockerfile template.
-			$dockerfile = str_replace( '%%PHPUNIT_VERSION%%', $config, $dockerfile );
-
-			// Ensure PHPUnit can be successfully downloaded in older containers.
-			if ( '7.1' > $version ) {
-				$dockerfile = str_replace( 'RUN curl -sL', 'RUN curl -sLk', $dockerfile );
-			}
 		} elseif ( $image === 'cli' ) {
 			// Replace tags inside the WP-CLI Dockerfile template.
 			if ( $config ) {
