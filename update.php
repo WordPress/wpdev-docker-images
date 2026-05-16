@@ -6,7 +6,7 @@ $latest = '8.3';
 /**
  * An array of all PHP versions that we need to generate images for, and their config settings.
  *
- * Each PHP version has settings for the PHP base image, the PHPUnit image, and the WP_CLI image.
+ * Each PHP version has settings for the PHP base image, and the WP_CLI image.
  *
  * The minimum version of PHP required as of WordPress 6.6 is 7.2.24+.
  *
