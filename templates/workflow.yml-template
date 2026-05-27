@@ -100,7 +100,6 @@ jobs:
       - name: Build Docker image
         run: |
           docker build \
-            --build-arg PACKAGE_REGISTRY="$PACKAGE_REGISTRY" \
             --build-arg PR_TAG="$PR_TAG" \
             -t "$PACKAGE_REGISTRY/php:$PHP_VERSION-fpm$PR_TAG" \
             "images/$PHP_VERSION/php"
