@@ -65,7 +65,6 @@ jobs:
       PHP_VERSION: ${{ matrix.php }}
       PHP_LATEST: '8.3'
       REGISTRY_USERNAME: ${{ vars.REGISTRY_USERNAME }}
-      REGISTRY_PASSWORD: ${{ secrets.REGISTRY_USERNAME }}
     permissions:
       contents: read
 
@@ -118,7 +117,6 @@ jobs:
       PHP_VERSION: ${{ matrix.php }}
       PHP_LATEST: '8.3'
       REGISTRY_USERNAME: ${{ vars.REGISTRY_USERNAME }}
-      REGISTRY_PASSWORD: ${{ secrets.REGISTRY_USERNAME }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
