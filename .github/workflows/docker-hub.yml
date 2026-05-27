@@ -44,6 +44,7 @@ jobs:
     name: PHP ${{ matrix.php }} Image
     runs-on: ubuntu-latest
     
+    environment: 'production'
     strategy:
       matrix:
         php: [ '7.4', '8.0', '8.1', '8.2', '8.3', '8.4', '8.5' ]
@@ -51,9 +52,8 @@ jobs:
     env:
       PHP_VERSION: ${{ matrix.php }}
       PHP_LATEST: '8.3'
-      REGISTRY_USERNAME: garypendergast
-      REGISTRY_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-      
+      REGISTRY_USERNAME: ${{ var.REGISTRY_USERNAME }}
+      REGISTRY_PASSWORD: ${{ secrets.REGISTRY_USERNAME }}
     permissions:
       contents: read
 
@@ -64,8 +64,10 @@ jobs:
           persist-credentials: false
 
       - name: Login to the package registry
-        run: |
-          echo "$REGISTRY_PASSWORD" | docker login "$PACKAGE_REGISTRY_HOST" -u "$REGISTRY_USERNAME" --password-stdin
+        uses: docker/login-action@4907a6ddec9925e35a0a9e82d7399ccc52663121 # v4.1.0
+        with:
+          username: ${{ env.REGISTRY_USERNAME }}
+          password: ${{ secrets.REGISTRY_PASSWORD }}
 
       - name: Build Docker image
         run: |
@@ -92,6 +94,7 @@ jobs:
     name: CLI on PHP ${{ matrix.php }}
     runs-on: ubuntu-latest
     needs: build-php-images
+    environment: 'production'
     strategy:
       matrix:
         php: [ '7.4', '8.0', '8.1', '8.2', '8.3', '8.4', '8.5' ]
@@ -102,9 +105,8 @@ jobs:
     env:
       PHP_VERSION: ${{ matrix.php }}
       PHP_LATEST: '8.3'
-      REGISTRY_USERNAME: garypendergast
-      REGISTRY_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-      
+      REGISTRY_USERNAME: ${{ var.REGISTRY_USERNAME }}
+      REGISTRY_PASSWORD: ${{ secrets.REGISTRY_USERNAME }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
@@ -112,8 +114,10 @@ jobs:
           persist-credentials: false
 
       - name: Login to the package registry
-        run: |
-          echo "$REGISTRY_PASSWORD" | docker login "$PACKAGE_REGISTRY_HOST" -u "$REGISTRY_USERNAME" --password-stdin
+        uses: docker/login-action@4907a6ddec9925e35a0a9e82d7399ccc52663121 # v4.1.0
+        with:
+          username: ${{ env.REGISTRY_USERNAME }}
+          password: ${{ secrets.REGISTRY_PASSWORD }}
 
       - name: Build Docker image
         run: |
