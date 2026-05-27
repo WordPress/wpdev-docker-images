@@ -22,7 +22,6 @@ on:
     - cron: '0 0 * * 0'
 
 env:
-  PACKAGE_REGISTRY_HOST:
   PACKAGE_REGISTRY: wordpressdevelop
   PR_TAG:
 

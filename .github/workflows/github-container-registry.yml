@@ -13,7 +13,6 @@ on:
   workflow_dispatch:
 
 env:
-  PACKAGE_REGISTRY_HOST: ghcr.io
   PACKAGE_REGISTRY: ghcr.io/wordpress/wpdev-docker-images
   PR_TAG: -${{ github.event.number }}
 

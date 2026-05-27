@@ -17,7 +17,6 @@ on:
     - cron: '0 0 * * 0'
 
 env:
-  PACKAGE_REGISTRY_HOST:
   PACKAGE_REGISTRY: wordpressdevelop
   PR_TAG:
 %%/DOCKER_HUB%%
@@ -29,7 +28,6 @@ on:
   workflow_dispatch:
 
 env:
-  PACKAGE_REGISTRY_HOST: ghcr.io
   PACKAGE_REGISTRY: ghcr.io/wordpress/wpdev-docker-images
   PR_TAG: -${{ github.event.number }}
 %%/GITHUB%%
