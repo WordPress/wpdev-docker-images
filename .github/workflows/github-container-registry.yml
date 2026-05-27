@@ -13,8 +13,6 @@ on:
   workflow_dispatch:
 
 env:
-  REGISTRY_USERNAME: desrosj
-  REGISTRY_PASSWORD: ${{ secrets.GHCR_TOKEN }}
   PACKAGE_REGISTRY_HOST: ghcr.io
   PACKAGE_REGISTRY: ghcr.io/wordpress/wpdev-docker-images
   PR_TAG: -${{ github.event.number }}
@@ -66,6 +64,9 @@ jobs:
     env:
       PHP_VERSION: ${{ matrix.php }}
       PHP_LATEST: '8.3'
+      REGISTRY_USERNAME: desrosj
+      REGISTRY_PASSWORD: ${{ secrets.GHCR_TOKEN }}
+      
     permissions:
       contents: read
 
@@ -114,7 +115,9 @@ jobs:
     env:
       PHP_VERSION: ${{ matrix.php }}
       PHP_LATEST: '8.3'
-
+      REGISTRY_USERNAME: desrosj
+      REGISTRY_PASSWORD: ${{ secrets.GHCR_TOKEN }}
+      
     steps:
       - name: Checkout repository
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2

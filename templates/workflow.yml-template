@@ -17,8 +17,6 @@ on:
     - cron: '0 0 * * 0'
 
 env:
-  REGISTRY_USERNAME: garypendergast
-  REGISTRY_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
   PACKAGE_REGISTRY_HOST:
   PACKAGE_REGISTRY: wordpressdevelop
   PR_TAG:
@@ -31,8 +29,6 @@ on:
   workflow_dispatch:
 
 env:
-  REGISTRY_USERNAME: desrosj
-  REGISTRY_PASSWORD: ${{ secrets.GHCR_TOKEN }}
   PACKAGE_REGISTRY_HOST: ghcr.io
   PACKAGE_REGISTRY: ghcr.io/wordpress/wpdev-docker-images
   PR_TAG: -${{ github.event.number }}
@@ -84,6 +80,11 @@ jobs:
     env:
       PHP_VERSION: ${{ matrix.php }}
       PHP_LATEST: '%%PHP_LATEST%%'
+      %%GITHUB%%REGISTRY_USERNAME: desrosj
+      REGISTRY_PASSWORD: ${{ secrets.GHCR_TOKEN }}
+      %%/GITHUB%%%%DOCKER_HUB%%REGISTRY_USERNAME: garypendergast
+      REGISTRY_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      %%/DOCKER_HUB%%
     permissions:
       contents: read
 
@@ -132,7 +133,11 @@ jobs:
     env:
       PHP_VERSION: ${{ matrix.php }}
       PHP_LATEST: '%%PHP_LATEST%%'
-
+      %%GITHUB%%REGISTRY_USERNAME: desrosj
+      REGISTRY_PASSWORD: ${{ secrets.GHCR_TOKEN }}
+      %%/GITHUB%%%%DOCKER_HUB%%REGISTRY_USERNAME: garypendergast
+      REGISTRY_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      %%/DOCKER_HUB%%
     steps:
       - name: Checkout repository
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
