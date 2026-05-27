@@ -64,7 +64,7 @@ jobs:
     env:
       PHP_VERSION: ${{ matrix.php }}
       PHP_LATEST: '8.3'
-      REGISTRY_USERNAME: ${{ var.REGISTRY_USERNAME }}
+      REGISTRY_USERNAME: ${{ vars.REGISTRY_USERNAME }}
       REGISTRY_PASSWORD: ${{ secrets.REGISTRY_USERNAME }}
     permissions:
       contents: read
@@ -117,7 +117,7 @@ jobs:
     env:
       PHP_VERSION: ${{ matrix.php }}
       PHP_LATEST: '8.3'
-      REGISTRY_USERNAME: ${{ var.REGISTRY_USERNAME }}
+      REGISTRY_USERNAME: ${{ vars.REGISTRY_USERNAME }}
       REGISTRY_PASSWORD: ${{ secrets.REGISTRY_USERNAME }}
     steps:
       - name: Checkout repository
