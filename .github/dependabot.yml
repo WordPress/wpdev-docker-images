@@ -12,5 +12,7 @@ updates:
       default-days: 7
     groups:
       github-actions:
-        patterns:
-          - "*"
+        applies-to: version-updates
+        update-types:
+          - minor
+          - patch
