@@ -103,19 +103,32 @@ $php_versions = array(
 			'download_url' => 'https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar',
 		),
 	),
-	'8.5' => array(
-		'php' => array(
-			'base_name'       => 'php:8.5-fpm',
-			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libwebp-dev', 'libavif-dev', 'libaom-dev', 'libdav1d-dev', 'libheif-dev', 'libzip-dev', 'libssl-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libonig-dev', 'locales', 'sudo', 'rsync' ),
-			'extensions'      => array( 'gd', 'mysqli', 'zip', 'exif', 'intl', 'mbstring' ),
-			'pecl_extensions' => array( 'memcached-3.4.0', 'imagick', 'xdebug-3.5.1' ),
-			'composer'        => true,
-		),
-		'cli' => array(
-			'mysql_client' => 'virtual-mysql-client',
-			'download_url' => 'https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar',
-		),
-	),
+    '8.5' => array(
+        'php' => array(
+            'base_name'       => 'php:8.5-fpm',
+            'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libwebp-dev', 'libavif-dev', 'libaom-dev', 'libdav1d-dev', 'libheif-dev', 'libzip-dev', 'libssl-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libonig-dev', 'locales', 'sudo', 'rsync' ),
+            'extensions'      => array( 'gd', 'mysqli', 'zip', 'exif', 'intl', 'mbstring' ),
+            'pecl_extensions' => array( 'memcached-3.4.0', 'imagick', 'xdebug-3.5.1' ),
+            'composer'        => true,
+        ),
+        'cli' => array(
+            'mysql_client' => 'virtual-mysql-client',
+            'download_url' => 'https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar',
+        ),
+    ),
+    '8.6' => array(
+        'php' => array(
+            'base_name'       => 'php:8.6-rc-fpm',
+            'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libwebp-dev', 'libavif-dev', 'libaom-dev', 'libdav1d-dev', 'libheif-dev', 'libzip-dev', 'libssl-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libonig-dev', 'locales', 'sudo', 'rsync' ),
+            'extensions'      => array( 'gd', 'mysqli', 'zip', 'exif', 'intl', 'mbstring' ),
+            'pecl_extensions' => array( 'memcached-3.4.0', 'imagick', 'xdebug-3.5.3' ),
+            'composer'        => true,
+        ),
+        'cli' => array(
+            'mysql_client' => 'virtual-mysql-client',
+            'download_url' => 'https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar',
+        ),
+    ),
 );
 
 // A warning that will be added to each Dockerfile, to ensure folks don't edit them directly.
