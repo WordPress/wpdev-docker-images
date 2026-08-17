@@ -1,0 +1,13 @@
+# Disables SSL for MySQL client connections.
+#
+# The official database images published by Docker automatically issue a self-signed certificate when initially
+# started. Newer distributions are configured to always require SSL connections. When a self-signed certificate
+# is found in the chain, the connection will be rejected.
+#
+# Because these images are meant to be used for local development only, disabling SSL entirely is a reasonable way to
+# work around this issue without having to generate new certificates using a trusted certificate authority, or adding
+# the custom certificate authority to the trust store of every container using the mysql client to connect to the
+# database.
+#
+[client]
+ssl=0
