@@ -27,10 +27,6 @@ RUN set -ex; \
 	\
 	docker-php-ext-install gd mysqli zip exif intl mbstring; \
 	\
-	pecl install memcached-3.4.0; \
-	pecl install imagick; \
-	docker-php-ext-enable imagick; \
-	\
 	curl --silent --fail --location --retry 3 --output /tmp/installer.php --url https://getcomposer.org/installer; \
 	curl --silent --fail --location --retry 3 --output /tmp/installer.sig --url https://composer.github.io/installer.sig; \
 	php -r " \
