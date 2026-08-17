@@ -121,7 +121,7 @@ $php_versions = array(
             'base_name'       => 'php:8.6-rc-fpm',
             'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libwebp-dev', 'libavif-dev', 'libaom-dev', 'libdav1d-dev', 'libheif-dev', 'libzip-dev', 'libssl-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libonig-dev', 'locales', 'sudo', 'rsync' ),
             'extensions'      => array( 'gd', 'mysqli', 'zip', 'exif', 'intl', 'mbstring' ),
-            'pecl_extensions' => array( 'memcached-3.4.0', 'imagick' ),
+            'pecl_extensions' => array(),
             'composer'        => true,
         ),
         'cli' => array(
