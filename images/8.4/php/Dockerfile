@@ -30,7 +30,7 @@ RUN set -ex; \
 	pecl install imagick; \
 	docker-php-ext-enable imagick; \
 	pecl install memcached-3.4.0; \
-	pecl install xdebug-3.5.1; \
+	pecl install xdebug-3.5.3; \
 	\
 	curl --silent --fail --location --retry 3 --output /tmp/installer.php --url https://getcomposer.org/installer; \
 	curl --silent --fail --location --retry 3 --output /tmp/installer.sig --url https://composer.github.io/installer.sig; \
