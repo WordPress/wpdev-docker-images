@@ -17,9 +17,6 @@ on:
     - cron: '0 0 * * 0'
 
 env:
-  REGISTRY_USERNAME: garypendergast
-  REGISTRY_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-  PACKAGE_REGISTRY_HOST:
   PACKAGE_REGISTRY: wordpressdevelop
   PR_TAG:
 %%/DOCKER_HUB%%
@@ -31,9 +28,6 @@ on:
   workflow_dispatch:
 
 env:
-  REGISTRY_USERNAME: desrosj
-  REGISTRY_PASSWORD: ${{ secrets.GHCR_TOKEN }}
-  PACKAGE_REGISTRY_HOST: ghcr.io
   PACKAGE_REGISTRY: ghcr.io/wordpress/wpdev-docker-images
   PR_TAG: -${{ github.event.number }}
 %%/GITHUB%%
@@ -77,6 +71,7 @@ jobs:
     name: PHP ${{ matrix.php }} Image
     runs-on: ubuntu-latest
     %%GITHUB%%needs: [ check-for-changes ]%%/GITHUB%%
+    environment: '%%GITHUB%%GitHub Container Registry%%/GITHUB%%%%DOCKER_HUB%%Docker Hub%%/DOCKER_HUB%%'
     strategy:
       matrix:
         php: [ %%PHP_VERSION_LIST%% ]
@@ -84,6 +79,7 @@ jobs:
     env:
       PHP_VERSION: ${{ matrix.php }}
       PHP_LATEST: '%%PHP_LATEST%%'
+      REGISTRY_USERNAME: ${{ vars.REGISTRY_USERNAME }}
     permissions:
       contents: read
 
@@ -94,13 +90,15 @@ jobs:
           persist-credentials: false
 
       - name: Login to the package registry
-        run: |
-          echo "$REGISTRY_PASSWORD" | docker login "$PACKAGE_REGISTRY_HOST" -u "$REGISTRY_USERNAME" --password-stdin
+        uses: docker/login-action@4907a6ddec9925e35a0a9e82d7399ccc52663121 # v4.1.0
+        with:%%GITHUB%%
+          registry: ghcr.io%%/GITHUB%%
+          username: ${{ env.REGISTRY_USERNAME }}
+          password: ${{ secrets.REGISTRY_PASSWORD }}
 
       - name: Build Docker image
         run: |
           docker build \
-            --build-arg PACKAGE_REGISTRY="$PACKAGE_REGISTRY" \
             --build-arg PR_TAG="$PR_TAG" \
             -t "$PACKAGE_REGISTRY/php:$PHP_VERSION-fpm$PR_TAG" \
             "images/$PHP_VERSION/php"
@@ -122,6 +120,7 @@ jobs:
     name: CLI on PHP ${{ matrix.php }}
     runs-on: ubuntu-latest
     needs: build-php-images
+    environment: '%%GITHUB%%GitHub Container Registry%%/GITHUB%%%%DOCKER_HUB%%Docker Hub%%/DOCKER_HUB%%'
     strategy:
       matrix:
         php: [ %%PHP_VERSION_LIST%% ]
@@ -132,7 +131,7 @@ jobs:
     env:
       PHP_VERSION: ${{ matrix.php }}
       PHP_LATEST: '%%PHP_LATEST%%'
-
+      REGISTRY_USERNAME: ${{ vars.REGISTRY_USERNAME }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -140,8 +139,11 @@ jobs:
           persist-credentials: false
 
       - name: Login to the package registry
-        run: |
-          echo "$REGISTRY_PASSWORD" | docker login "$PACKAGE_REGISTRY_HOST" -u "$REGISTRY_USERNAME" --password-stdin
+        uses: docker/login-action@4907a6ddec9925e35a0a9e82d7399ccc52663121 # v4.1.0
+        with:%%GITHUB%%
+          registry: ghcr.io%%/GITHUB%%
+          username: ${{ env.REGISTRY_USERNAME }}
+          password: ${{ secrets.REGISTRY_PASSWORD }}
 
       - name: Build Docker image
         run: |
