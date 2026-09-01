@@ -12,6 +12,13 @@ extension_available() {
 
 # If LOCAL_PHP_XDEBUG=true xdebug extension will be enabled
 if [ "$LOCAL_PHP_XDEBUG" = true ]; then
+	# PCOV is not interoperable with xDebug.
+	rm -f /usr/local/etc/php/conf.d/docker-php-ext-pcov.ini
+
+	if [ "$LOCAL_PHP_PCOV" = true ]; then
+		echo "Warning: PCOV extension is not interoperable with xDebug, skipping..."
+	fi
+
 	if extension_available "xdebug"; then
 		docker-php-ext-enable xdebug
 		rm -f /usr/local/etc/php/conf.d/docker-php-ext-opcache.ini
@@ -28,6 +35,17 @@ else
 			echo "Warning: opcache extension not available, skipping..."
 		fi
 	fi
+
+	# If LOCAL_PHP_PCOV=true the PCOV extension will be enabled.
+	if [ "$LOCAL_PHP_PCOV" = true ]; then
+		if extension_available "pcov"; then
+			docker-php-ext-enable pcov
+		else
+			echo "Warning: PCOV extension not available, skipping..."
+		fi
+	else
+		rm -f /usr/local/etc/php/conf.d/docker-php-ext-pcov.ini
+	fi
 fi
 
 # If LOCAL_PHP_MEMCACHED=true memcached extension will be enabled
@@ -39,17 +57,6 @@ if [ "$LOCAL_PHP_MEMCACHED" = true ]; then
 	fi
 else
 	rm -f /usr/local/etc/php/conf.d/docker-php-ext-memcached.ini
-fi
-
-# If LOCAL_PHP_PCOV=true the PCOV extension will be enabled.
-if [ "$LOCAL_PHP_PCOV" = true ]; then
-	if extension_available "pcov"; then
-		docker-php-ext-enable pcov
-	else
-		echo "Warning: PCOV extension not available, skipping..."
-	fi
-else
-	rm -f /usr/local/etc/php/conf.d/docker-php-ext-pcov.ini
 fi
 
 ### Change UID/GID
