@@ -38,6 +38,9 @@ else
 
 	# If LOCAL_PHP_PCOV=true the PCOV extension will be enabled.
 	if [ "$LOCAL_PHP_PCOV" = true ]; then
+		# PCOV is not interoperable with Xdebug.
+		rm -f /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+
 		if extension_available "pcov"; then
 			docker-php-ext-enable pcov
 		else
