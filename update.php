@@ -200,6 +200,15 @@ foreach ( $php_versions as $version => $images ) {
 						$install_extensions .= "sed -i 's|http://security.debian.org/debian-security|http://archive.debian.org/debian-security|g' /etc/apt/sources.list; \\\n\t";
 						$install_extensions .= "sed -i '/buster-updates/d' /etc/apt/sources.list; \\\n\t\\\n\t";
 					}
+					// Debian 11/bullseye reached end of life on August 31, 2026, and was moved to archive.debian.org. See https://www.debian.org/News/2026/20260831.
+					// PHP 7.4 and 8.0 base images are built on bullseye, and the 8.1 and 8.2 images are pinned to it above.
+					if ( in_array( $version, array( '7.4', '8.0', '8.1', '8.2' ), true ) ) {
+						$install_extensions .= "sed -i 's|http://deb.debian.org/debian bullseye|http://archive.debian.org/debian bullseye|g' /etc/apt/sources.list; \\\n\t";
+						// Neither bullseye-security nor bullseye-updates is published to archive.debian.org. Their release files have expired, which
+						// causes apt-get update to fail, so both suites are removed rather than repointed.
+						$install_extensions .= "sed -i '/bullseye-security/d' /etc/apt/sources.list; \\\n\t";
+						$install_extensions .= "sed -i '/bullseye-updates/d' /etc/apt/sources.list; \\\n\t\\\n\t";
+					}
 
 					$install_extensions .= "apt-get update; \\\n\t\\\n\tapt-get install -y --no-install-recommends " . implode( ' ', $config['apt'] ) . ";";
 
