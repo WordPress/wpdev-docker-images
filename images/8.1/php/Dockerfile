@@ -15,8 +15,7 @@ ENV COMPOSER_HOME=/tmp
 # install the PHP extensions we need
 RUN set -ex; \
 	\
-	sed -i 's|http://deb.debian.org/debian bullseye|http://archive.debian.org/debian bullseye|g' /etc/apt/sources.list; \
-	sed -i '/bullseye-security/d' /etc/apt/sources.list; \
+	sed -i 's|http://deb.debian.org/debian|http://archive.debian.org/debian|g' /etc/apt/sources.list; \
 	sed -i '/bullseye-updates/d' /etc/apt/sources.list; \
 	\
 	apt-get update; \
