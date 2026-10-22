@@ -30,7 +30,7 @@ $php_versions = array(
 			'base_name'       => 'php:7.4-fpm',
 			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libwebp-dev', 'libzip-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libonig-dev', 'locales', 'sudo', 'rsync', 'libxslt-dev' ),
 			'extensions'      => array( 'gd', 'opcache', 'mysqli', 'zip', 'exif', 'intl', 'mbstring', 'xml', 'xsl' ),
-			'pecl_extensions' => array( 'imagick', 'xdebug-3.1.6', 'memcached-3.3.0' ),
+			'pecl_extensions' => array( 'imagick', 'xdebug-3.1.6', 'pcov-1.0.12', 'memcached-3.3.0' ),
 			'composer'        => true,
 		),
 		'cli' => array(
@@ -43,7 +43,7 @@ $php_versions = array(
 			'base_name'       => 'php:8.0-fpm',
 			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libwebp-dev', 'libzip-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libonig-dev', 'locales', 'sudo', 'rsync', 'libxslt-dev' ),
 			'extensions'      => array( 'gd', 'opcache', 'mysqli', 'zip', 'exif', 'intl', 'mbstring', 'xml', 'xsl' ),
-			'pecl_extensions' => array( 'imagick', 'memcached-3.4.0', 'xdebug-3.5.3' ),
+			'pecl_extensions' => array( 'imagick', 'memcached-3.4.0', 'pcov-1.0.12', 'xdebug-3.5.3' ),
 			'composer'        => true,
 		),
 		'cli' => array(
@@ -56,7 +56,7 @@ $php_versions = array(
 			'base_name'       => 'php:8.1-fpm',
 			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libwebp-dev', 'libzip-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libonig-dev', 'locales', 'sudo', 'rsync', 'libxslt-dev' ),
 			'extensions'      => array( 'gd', 'opcache', 'mysqli', 'zip', 'exif', 'intl', 'mbstring', 'xml', 'xsl' ),
-			'pecl_extensions' => array( 'imagick', 'memcached-3.4.0', 'xdebug-3.5.3' ),
+			'pecl_extensions' => array( 'imagick', 'memcached-3.4.0', 'pcov-1.0.12', 'xdebug-3.5.3' ),
 			'composer'        => true,
 		),
 		'cli' => array(
@@ -69,7 +69,7 @@ $php_versions = array(
 			'base_name'       => 'php:8.2-fpm',
 			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libwebp-dev', 'libzip-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libonig-dev', 'locales', 'sudo', 'rsync', 'libxslt-dev' ),
 			'extensions'      => array( 'gd', 'opcache', 'mysqli', 'zip', 'exif', 'intl', 'mbstring', 'xml', 'xsl' ),
-			'pecl_extensions' => array( 'imagick', 'memcached-3.4.0', 'xdebug-3.5.3' ),
+			'pecl_extensions' => array( 'imagick', 'memcached-3.4.0', 'pcov-1.0.12', 'xdebug-3.5.3' ),
 			'composer'        => true,
 		),
 		'cli' => array(
@@ -82,7 +82,7 @@ $php_versions = array(
 			'base_name'       => 'php:8.3-fpm',
 			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libwebp-dev', 'libavif-dev', 'libaom-dev', 'libheif-dev', 'libzip-dev', 'libssl-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libonig-dev', 'locales', 'sudo', 'rsync', 'libxslt-dev' ),
 			'extensions'      => array( 'gd', 'opcache', 'mysqli', 'zip', 'exif', 'intl', 'mbstring', 'xml', 'xsl' ),
-			'pecl_extensions' => array( 'imagick', 'memcached-3.4.0', 'xdebug-3.5.3' ),
+			'pecl_extensions' => array( 'imagick', 'memcached-3.4.0', 'pcov-1.0.12', 'xdebug-3.5.3' ),
 			'composer'        => true,
 		),
 		'cli' => array(
@@ -95,7 +95,7 @@ $php_versions = array(
 			'base_name'       => 'php:8.4-fpm',
 			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libwebp-dev', 'libavif-dev', 'libaom-dev', 'libdav1d-dev', 'libheif-dev', 'libzip-dev', 'libssl-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libonig-dev', 'locales', 'sudo', 'rsync', 'libxslt-dev' ),
 			'extensions'      => array( 'gd', 'opcache', 'mysqli', 'zip', 'exif', 'intl', 'mbstring', 'xml', 'xsl' ),
-			'pecl_extensions' => array( 'imagick', 'memcached-3.4.0', 'xdebug-3.5.3' ),
+			'pecl_extensions' => array( 'imagick', 'memcached-3.4.0', 'pcov-1.0.12', 'xdebug-3.5.3' ),
 			'composer'        => true,
 		),
 		'cli' => array(
@@ -108,7 +108,7 @@ $php_versions = array(
 			'base_name'       => 'php:8.5-fpm',
 			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libwebp-dev', 'libavif-dev', 'libaom-dev', 'libdav1d-dev', 'libheif-dev', 'libzip-dev', 'libssl-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libonig-dev', 'locales', 'sudo', 'rsync' ),
 			'extensions'      => array( 'gd', 'mysqli', 'zip', 'exif', 'intl', 'mbstring' ),
-			'pecl_extensions' => array( 'memcached-3.4.0', 'imagick', 'xdebug-3.5.3' ),
+			'pecl_extensions' => array( 'memcached-3.4.0', 'imagick', 'pcov-1.0.12', 'xdebug-3.5.3' ),
 			'composer'        => true,
 		),
 		'cli' => array(
@@ -199,6 +199,19 @@ foreach ( $php_versions as $version => $images ) {
 						$install_extensions .= "sed -i 's|http://deb.debian.org/debian|http://archive.debian.org/debian|g' /etc/apt/sources.list; \\\n\t";
 						$install_extensions .= "sed -i 's|http://security.debian.org/debian-security|http://archive.debian.org/debian-security|g' /etc/apt/sources.list; \\\n\t";
 						$install_extensions .= "sed -i '/buster-updates/d' /etc/apt/sources.list; \\\n\t\\\n\t";
+					}
+					/*
+					 * Debian 11/bullseye reached end of life on August 31, 2026, and was moved to archive.debian.org. See https://www.debian.org/News/2026/20260831.
+					 * PHP 7.4 and 8.0 base images are built on bullseye, and the 8.1 and 8.2 images are pinned to it above.
+					 */
+					if ( in_array( $version, array( '7.4', '8.0', '8.1', '8.2' ), true ) ) {
+						/*
+						 * Both the main and security suites must be repointed to the archive. Security fixes published after the final point release
+						 * only exist in bullseye-security, and newer base images (8.1, 8.2) already have those versions installed, so the matching
+						 * -dev packages cannot be installed without it. This replaces both deb.debian.org/debian and deb.debian.org/debian-security.
+						 */
+						$install_extensions .= "sed -i 's|http://deb.debian.org/debian|http://archive.debian.org/debian|g' /etc/apt/sources.list; \\\n\t";
+						$install_extensions .= "sed -i '/bullseye-updates/d' /etc/apt/sources.list; \\\n\t\\\n\t";
 					}
 
 					$install_extensions .= "apt-get update; \\\n\t\\\n\tapt-get install -y --no-install-recommends " . implode( ' ', $config['apt'] ) . ";";
