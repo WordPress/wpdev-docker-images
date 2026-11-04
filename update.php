@@ -133,19 +133,8 @@ $php_versions = array(
             'base_name'       => 'php:8.6-rc-fpm',
             'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libwebp-dev', 'libavif-dev', 'libaom-dev', 'libdav1d-dev', 'libheif-dev', 'libzip-dev', 'libssl-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libonig-dev', 'locales', 'sudo', 'rsync', 'libtool' ),
             'extensions'      => array( 'gd', 'mysqli', 'zip', 'exif', 'intl', 'mbstring' ),
-            /*
-             * PECL is not bundled with PHP 8.6 images.
-             *
-             * The latest Memcached (3.4.0) and Imagick (3.8.1) releases do not compile against PHP 8.6, so they are pinned to
-             * commits on their default branches that do. These should be replaced with tagged releases once available.
-             *
-             * PCOV does not compile against PHP 8.6 yet.
-             */
-            'pie_extensions'  => array(
-                'imagick/imagick:dev-master#55ed2e9fda264395636a2e27e51f31673f5566ab',
-                'php-memcached/php-memcached:dev-master#0b52d3657140750fa0eddd20cdbfc6edc8fbdadd',
-                'xdebug/xdebug:3.6.0alpha1@alpha',
-            ),
+            // PECL is not bundled with PHP 8.6 images. PCOV, Memcached, and Imagick do not compile against PHP 8.6 yet.
+            'pie_extensions'  => array( 'xdebug/xdebug:3.6.0alpha1@alpha' ),
             'composer'        => true,
         ),
         'cli' => array(
