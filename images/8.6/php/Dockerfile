@@ -29,6 +29,8 @@ RUN --mount=type=bind,from=ghcr.io/php/pie:1.5.5-bin,source=/pie,target=/usr/loc
 	docker-php-ext-install gd mysqli zip exif intl mbstring; \
 	\
 	pie --version; \
+	pie install --no-cache imagick/imagick:dev-master#55ed2e9fda264395636a2e27e51f31673f5566ab; \
+	pie install --no-cache --skip-enable-extension php-memcached/php-memcached:dev-master#0b52d3657140750fa0eddd20cdbfc6edc8fbdadd; \
 	pie install --no-cache --skip-enable-extension xdebug/xdebug:3.6.0alpha1@alpha; \
 	\
 	curl --silent --fail --location --retry 3 --output /tmp/installer.php --url https://getcomposer.org/installer; \
