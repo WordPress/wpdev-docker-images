@@ -12,7 +12,7 @@ WORKDIR /var/www
 ENV COMPOSER_ALLOW_SUPERUSER=1
 ENV COMPOSER_HOME=/tmp
 
-# install the PHP extensions we need
+# install the required PHP extensions
 RUN --mount=type=bind,from=ghcr.io/php/pie:1.5.5-bin,source=/pie,target=/usr/local/bin/pie \
 	set -ex; \
 	\

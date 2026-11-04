@@ -197,7 +197,7 @@ foreach ( $php_versions as $version => $images ) {
 			$config['pie_extensions']  = isset( $config['pie_extensions'] ) ? $config['pie_extensions'] : array();
 
 			if ( $config['apt'] || $config['extensions'] || $config['pecl_extensions'] || $config['pie_extensions'] || $config['composer'] ) {
-				$install_extensions = "# install the PHP extensions we need\nRUN ";
+				$install_extensions = "# install the required PHP extensions\nRUN ";
 
 				// Make PIE available for this RUN instruction only, without adding it to the image.
 				if ( $config['pie_extensions'] ) {

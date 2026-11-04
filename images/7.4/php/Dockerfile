@@ -12,7 +12,7 @@ WORKDIR /var/www
 ENV COMPOSER_ALLOW_SUPERUSER=1
 ENV COMPOSER_HOME=/tmp
 
-# install the PHP extensions we need
+# install the required PHP extensions
 RUN set -ex; \
 	\
 	sed -i 's|http://deb.debian.org/debian|http://archive.debian.org/debian|g' /etc/apt/sources.list; \
