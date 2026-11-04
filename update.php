@@ -3,6 +3,15 @@
 // The latest stable version of PHP that is supported in WordPress trunk.
 $latest = '8.3';
 
+/*
+ * The PIE (PHP Installer for Extensions) binary-only image used to install extensions on PHP 8.1+.
+ *
+ * PIE is bind-mounted during the build, so it is not shipped in the final image.
+ *
+ * @see https://github.com/php/pie
+ */
+$pie_image = 'ghcr.io/php/pie:1.5.5-bin';
+
 /**
  * An array of all PHP versions that we need to generate images for, and their config settings.
  *
@@ -17,6 +26,9 @@ $latest = '8.3';
  *     @type array  $apt             An array of apt packages that need to be installed.
  *     @type array  $extensions      An array of PHP extensions that need to be enabled.
  *     @type array  $pecl_extensions An array of PECL-sourced PHP extensions that will be installed, but not enabled.
+ *                                   Only used for PHP < 8.1, where PIE cannot run.
+ *     @type array  $pie_extensions  An array of PIE packages (`vendor/package:constraint`) that will be installed, but not
+ *                                   enabled. Imagick is the exception, and is enabled.
  * }
  *
  * @param array|false $cli {
@@ -54,9 +66,9 @@ $php_versions = array(
 	'8.1' => array(
 		'php' => array(
 			'base_name'       => 'php:8.1-fpm',
-			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libwebp-dev', 'libzip-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libonig-dev', 'locales', 'sudo', 'rsync', 'libxslt-dev' ),
+			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libwebp-dev', 'libzip-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libonig-dev', 'locales', 'sudo', 'rsync', 'libtool', 'libxslt-dev' ),
 			'extensions'      => array( 'gd', 'opcache', 'mysqli', 'zip', 'exif', 'intl', 'mbstring', 'xml', 'xsl' ),
-			'pecl_extensions' => array( 'imagick', 'memcached-3.4.0', 'pcov-1.0.12', 'xdebug-3.5.3' ),
+			'pie_extensions'  => array( 'imagick/imagick:3.8.1', 'php-memcached/php-memcached:3.4.0', 'pecl/pcov:1.0.12', 'xdebug/xdebug:3.5.3' ),
 			'composer'        => true,
 		),
 		'cli' => array(
@@ -67,9 +79,9 @@ $php_versions = array(
 	'8.2' => array(
 		'php' => array(
 			'base_name'       => 'php:8.2-fpm',
-			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libwebp-dev', 'libzip-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libonig-dev', 'locales', 'sudo', 'rsync', 'libxslt-dev' ),
+			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libwebp-dev', 'libzip-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libonig-dev', 'locales', 'sudo', 'rsync', 'libtool', 'libxslt-dev' ),
 			'extensions'      => array( 'gd', 'opcache', 'mysqli', 'zip', 'exif', 'intl', 'mbstring', 'xml', 'xsl' ),
-			'pecl_extensions' => array( 'imagick', 'memcached-3.4.0', 'pcov-1.0.12', 'xdebug-3.5.3' ),
+			'pie_extensions'  => array( 'imagick/imagick:3.8.1', 'php-memcached/php-memcached:3.4.0', 'pecl/pcov:1.0.12', 'xdebug/xdebug:3.5.3' ),
 			'composer'        => true,
 		),
 		'cli' => array(
@@ -80,9 +92,9 @@ $php_versions = array(
 	'8.3' => array(
 		'php' => array(
 			'base_name'       => 'php:8.3-fpm',
-			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libwebp-dev', 'libavif-dev', 'libaom-dev', 'libheif-dev', 'libzip-dev', 'libssl-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libonig-dev', 'locales', 'sudo', 'rsync', 'libxslt-dev' ),
+			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libwebp-dev', 'libavif-dev', 'libaom-dev', 'libheif-dev', 'libzip-dev', 'libssl-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libonig-dev', 'locales', 'sudo', 'rsync', 'libtool', 'libxslt-dev' ),
 			'extensions'      => array( 'gd', 'opcache', 'mysqli', 'zip', 'exif', 'intl', 'mbstring', 'xml', 'xsl' ),
-			'pecl_extensions' => array( 'imagick', 'memcached-3.4.0', 'pcov-1.0.12', 'xdebug-3.5.3' ),
+			'pie_extensions'  => array( 'imagick/imagick:3.8.1', 'php-memcached/php-memcached:3.4.0', 'pecl/pcov:1.0.12', 'xdebug/xdebug:3.5.3' ),
 			'composer'        => true,
 		),
 		'cli' => array(
@@ -93,9 +105,9 @@ $php_versions = array(
 	'8.4' => array(
 		'php' => array(
 			'base_name'       => 'php:8.4-fpm',
-			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libwebp-dev', 'libavif-dev', 'libaom-dev', 'libdav1d-dev', 'libheif-dev', 'libzip-dev', 'libssl-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libonig-dev', 'locales', 'sudo', 'rsync', 'libxslt-dev' ),
+			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libwebp-dev', 'libavif-dev', 'libaom-dev', 'libdav1d-dev', 'libheif-dev', 'libzip-dev', 'libssl-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libonig-dev', 'locales', 'sudo', 'rsync', 'libtool', 'libxslt-dev' ),
 			'extensions'      => array( 'gd', 'opcache', 'mysqli', 'zip', 'exif', 'intl', 'mbstring', 'xml', 'xsl' ),
-			'pecl_extensions' => array( 'imagick', 'memcached-3.4.0', 'pcov-1.0.12', 'xdebug-3.5.3' ),
+			'pie_extensions'  => array( 'imagick/imagick:3.8.1', 'php-memcached/php-memcached:3.4.0', 'pecl/pcov:1.0.12', 'xdebug/xdebug:3.5.3' ),
 			'composer'        => true,
 		),
 		'cli' => array(
@@ -106,9 +118,9 @@ $php_versions = array(
 	'8.5' => array(
 		'php' => array(
 			'base_name'       => 'php:8.5-fpm',
-			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libwebp-dev', 'libavif-dev', 'libaom-dev', 'libdav1d-dev', 'libheif-dev', 'libzip-dev', 'libssl-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libonig-dev', 'locales', 'sudo', 'rsync' ),
+			'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libwebp-dev', 'libavif-dev', 'libaom-dev', 'libdav1d-dev', 'libheif-dev', 'libzip-dev', 'libssl-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libonig-dev', 'locales', 'sudo', 'rsync', 'libtool' ),
 			'extensions'      => array( 'gd', 'mysqli', 'zip', 'exif', 'intl', 'mbstring' ),
-			'pecl_extensions' => array( 'memcached-3.4.0', 'imagick', 'pcov-1.0.12', 'xdebug-3.5.3' ),
+			'pie_extensions'  => array( 'imagick/imagick:3.8.1', 'php-memcached/php-memcached:3.4.0', 'pecl/pcov:1.0.12', 'xdebug/xdebug:3.5.3' ),
 			'composer'        => true,
 		),
 		'cli' => array(
@@ -119,9 +131,10 @@ $php_versions = array(
     '8.6' => array(
         'php' => array(
             'base_name'       => 'php:8.6-rc-fpm',
-            'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libwebp-dev', 'libavif-dev', 'libaom-dev', 'libdav1d-dev', 'libheif-dev', 'libzip-dev', 'libssl-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libonig-dev', 'locales', 'sudo', 'rsync' ),
+            'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libwebp-dev', 'libavif-dev', 'libaom-dev', 'libdav1d-dev', 'libheif-dev', 'libzip-dev', 'libssl-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libonig-dev', 'locales', 'sudo', 'rsync', 'libtool' ),
             'extensions'      => array( 'gd', 'mysqli', 'zip', 'exif', 'intl', 'mbstring' ),
-            'pecl_extensions' => array(),
+            // PECL is not bundled with PHP 8.6 images. PCOV, Memcached, and Imagick do not compile against PHP 8.6 yet.
+            'pie_extensions'  => array( 'xdebug/xdebug:3.6.0alpha1@alpha' ),
             'composer'        => true,
         ),
         'cli' => array(
@@ -180,8 +193,18 @@ foreach ( $php_versions as $version => $images ) {
             // Replace tags inside the PHP Dockerfile template.
 			$dockerfile = str_replace( '%%BASE_NAME%%', $current_base_name, $dockerfile );
 
-			if ( $config['apt'] || $config['extensions'] || $config['pecl_extensions'] || $config['composer'] ) {
-				$install_extensions = "# install the PHP extensions we need\nRUN set -ex;";
+			$config['pecl_extensions'] = isset( $config['pecl_extensions'] ) ? $config['pecl_extensions'] : array();
+			$config['pie_extensions']  = isset( $config['pie_extensions'] ) ? $config['pie_extensions'] : array();
+
+			if ( $config['apt'] || $config['extensions'] || $config['pecl_extensions'] || $config['pie_extensions'] || $config['composer'] ) {
+				$install_extensions = "# install the PHP extensions we need\nRUN ";
+
+				// Make PIE available for this RUN instruction only, without adding it to the image.
+				if ( $config['pie_extensions'] ) {
+					$install_extensions .= "--mount=type=bind,from={$pie_image},source=/pie,target=/usr/local/bin/pie \\\n\t";
+				}
+
+				$install_extensions .= "set -ex;";
 
 				// Composer requires git to be installed in some circumstances (e.g. `composer install --prefer-source`).
 				if ( $config['composer'] ) {
@@ -281,6 +304,26 @@ foreach ( $php_versions as $version => $images ) {
 
 						return $command;
 					}, '' );
+				}
+
+				/*
+				 * Extensions installed with PIE, the replacement for PECL. PECL is not bundled with PHP 8.6+ images.
+				 *
+				 * PIE enables extensions by default. To match the previous PECL behavior, extensions are only installed, and are
+				 * enabled at runtime by the entrypoint script. Imagick is the exception, and is always enabled.
+				 */
+				if ( $config['pie_extensions'] ) {
+					$install_extensions .= " \\\n\t\\\n\tpie --version;";
+
+					foreach ( $config['pie_extensions'] as $extension ) {
+						$install_extensions .= " \\\n\tpie install --no-cache";
+
+						if ( 0 !== strpos( $extension, 'imagick/' ) ) {
+							$install_extensions .= ' --skip-enable-extension';
+						}
+
+						$install_extensions .= " $extension;";
+					}
 				}
 
 				if ( $config['composer'] ) {

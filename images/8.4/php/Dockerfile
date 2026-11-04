@@ -13,11 +13,12 @@ ENV COMPOSER_ALLOW_SUPERUSER=1
 ENV COMPOSER_HOME=/tmp
 
 # install the PHP extensions we need
-RUN set -ex; \
+RUN --mount=type=bind,from=ghcr.io/php/pie:1.5.5-bin,source=/pie,target=/usr/local/bin/pie \
+	set -ex; \
 	\
 	apt-get update; \
 	\
-	apt-get install -y --no-install-recommends libjpeg-dev libpng-dev libwebp-dev libavif-dev libaom-dev libdav1d-dev libheif-dev libzip-dev libssl-dev libmemcached-dev unzip libmagickwand-dev ghostscript libonig-dev locales sudo rsync libxslt-dev git; \
+	apt-get install -y --no-install-recommends libjpeg-dev libpng-dev libwebp-dev libavif-dev libaom-dev libdav1d-dev libheif-dev libzip-dev libssl-dev libmemcached-dev unzip libmagickwand-dev ghostscript libonig-dev locales sudo rsync libtool libxslt-dev git; \
 	apt-get upgrade openssl -y; \
 	update-ca-certificates --fresh; \
 	sed -i 's/^# *\(\(ru_RU\|fr_FR\|de_DE\|es_ES\|ja_JP\).UTF-8\)/\1/' /etc/locale.gen; \
@@ -27,11 +28,11 @@ RUN set -ex; \
 	\
 	docker-php-ext-install gd opcache mysqli zip exif intl mbstring xml xsl; \
 	\
-	pecl install imagick; \
-	docker-php-ext-enable imagick; \
-	pecl install memcached-3.4.0; \
-	pecl install pcov-1.0.12; \
-	pecl install xdebug-3.5.3; \
+	pie --version; \
+	pie install --no-cache imagick/imagick:3.8.1; \
+	pie install --no-cache --skip-enable-extension php-memcached/php-memcached:3.4.0; \
+	pie install --no-cache --skip-enable-extension pecl/pcov:1.0.12; \
+	pie install --no-cache --skip-enable-extension xdebug/xdebug:3.5.3; \
 	\
 	curl --silent --fail --location --retry 3 --output /tmp/installer.php --url https://getcomposer.org/installer; \
 	curl --silent --fail --location --retry 3 --output /tmp/installer.sig --url https://composer.github.io/installer.sig; \
