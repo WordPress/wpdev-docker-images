@@ -13,11 +13,12 @@ ENV COMPOSER_ALLOW_SUPERUSER=1
 ENV COMPOSER_HOME=/tmp
 
 # install the required PHP extensions
-RUN set -ex; \
+RUN --mount=type=bind,from=ghcr.io/php/pie:1.5.5-bin@sha256:3fca03c16df842d02b654dc382db3756058d9c128064f57cace14f8728779ce9,source=/pie,target=/usr/local/bin/pie \
+	set -ex; \
 	\
 	apt-get update; \
 	\
-	apt-get install -y --no-install-recommends libjpeg-dev libpng-dev libwebp-dev libavif-dev libaom-dev libdav1d-dev libheif-dev libzip-dev libssl-dev libmemcached-dev unzip libmagickwand-dev ghostscript libonig-dev locales sudo rsync git; \
+	apt-get install -y --no-install-recommends libjpeg-dev libpng-dev libwebp-dev libavif-dev libaom-dev libdav1d-dev libheif-dev libzip-dev libssl-dev libmemcached-dev unzip libmagickwand-dev ghostscript libonig-dev locales sudo rsync libtool git; \
 	apt-get upgrade openssl -y; \
 	update-ca-certificates --fresh; \
 	sed -i 's/^# *\(\(ru_RU\|fr_FR\|de_DE\|es_ES\|ja_JP\).UTF-8\)/\1/' /etc/locale.gen; \
@@ -26,6 +27,9 @@ RUN set -ex; \
 	docker-php-ext-configure gd --with-jpeg=/usr --with-webp=/usr --with-avif=/usr; \
 	\
 	docker-php-ext-install gd mysqli zip exif intl mbstring; \
+	\
+	pie --version; \
+	pie install --no-cache --skip-enable-extension xdebug/xdebug:3.6.0alpha1; \
 	\
 	curl --silent --fail --location --retry 3 --output /tmp/installer.php --url https://getcomposer.org/installer; \
 	curl --silent --fail --location --retry 3 --output /tmp/installer.sig --url https://composer.github.io/installer.sig; \
