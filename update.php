@@ -10,7 +10,7 @@ $latest = '8.3';
  *
  * @see https://github.com/php/pie
  */
-$pie_image = 'ghcr.io/php/pie:1.5.5-bin';
+$pie_image = 'ghcr.io/php/pie:1.5.5-bin@sha256:3fca03c16df842d02b654dc382db3756058d9c128064f57cace14f8728779ce9';
 
 /**
  * An array of all PHP versions that we need to generate images for, and their config settings.
@@ -131,10 +131,9 @@ $php_versions = array(
     '8.6' => array(
         'php' => array(
             'base_name'       => 'php:8.6-rc-fpm',
-            'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libwebp-dev', 'libavif-dev', 'libaom-dev', 'libdav1d-dev', 'libheif-dev', 'libzip-dev', 'libssl-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libonig-dev', 'locales', 'sudo', 'rsync', 'libtool' ),
+            'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libwebp-dev', 'libavif-dev', 'libaom-dev', 'libdav1d-dev', 'libheif-dev', 'libzip-dev', 'libssl-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libonig-dev', 'locales', 'sudo', 'rsync' ),
             'extensions'      => array( 'gd', 'mysqli', 'zip', 'exif', 'intl', 'mbstring' ),
-            // PECL is not bundled with PHP 8.6 images. PCOV, Memcached, and Imagick do not compile against PHP 8.6 yet.
-            'pie_extensions'  => array( 'xdebug/xdebug:3.6.0alpha1@alpha' ),
+            'pecl_extensions' => array(),
             'composer'        => true,
         ),
         'cli' => array(

@@ -13,7 +13,7 @@ ENV COMPOSER_ALLOW_SUPERUSER=1
 ENV COMPOSER_HOME=/tmp
 
 # install the required PHP extensions
-RUN --mount=type=bind,from=ghcr.io/php/pie:1.5.5-bin,source=/pie,target=/usr/local/bin/pie \
+RUN --mount=type=bind,from=ghcr.io/php/pie:1.5.5-bin@sha256:3fca03c16df842d02b654dc382db3756058d9c128064f57cace14f8728779ce9,source=/pie,target=/usr/local/bin/pie \
 	set -ex; \
 	\
 	apt-get update; \
