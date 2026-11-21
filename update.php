@@ -130,7 +130,7 @@ $php_versions = array(
 	),
     '8.6' => array(
         'php' => array(
-            'base_name'       => 'php:8.6-rc-fpm',
+            'base_name'       => 'php:8.6-fpm',
             'apt'             => array( 'libjpeg-dev', 'libpng-dev', 'libwebp-dev', 'libavif-dev', 'libaom-dev', 'libdav1d-dev', 'libheif-dev', 'libzip-dev', 'libssl-dev', 'libmemcached-dev', 'unzip', 'libmagickwand-dev', 'ghostscript', 'libonig-dev', 'locales', 'sudo', 'rsync', 'libtool' ),
             'extensions'      => array( 'gd', 'mysqli', 'zip', 'exif', 'intl', 'mbstring' ),
             'pie_extensions'  => array( 'xdebug/xdebug:3.6.0alpha1' ),
