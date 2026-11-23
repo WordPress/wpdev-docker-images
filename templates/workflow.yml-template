@@ -187,8 +187,12 @@ jobs:
         env:
           IMAGE: %%GITHUB%%${{ vars.GHCR_PHP_IMAGE }}%%/GITHUB%%%%DOCKER_HUB%%${{ vars.DOCKERHUB_PHP_IMAGE }}%%/DOCKER_HUB%%
         run: |
-          docker buildx imagetools create "$(jq -cr '.tags | map("-t " + .) | join(" ")' <<< "$DOCKER_METADATA_OUTPUT_JSON")" \
-            $(printf "$IMAGE@sha256:%s " *)
+          mapfile -t tags < <(jq -r '.tags[] | "--tag", .' <<< "$DOCKER_METADATA_OUTPUT_JSON")
+          sources=()
+          for digest in *; do
+            sources+=("$IMAGE@sha256:$digest")
+          done
+          docker buildx imagetools create "${tags[@]}" "${sources[@]}"
 
       - name: Inspect image
         env:
@@ -320,8 +324,12 @@ jobs:
         env:
           IMAGE: %%GITHUB%%${{ vars.GHCR_CLI_IMAGE }}%%/GITHUB%%%%DOCKER_HUB%%${{ vars.DOCKERHUB_CLI_IMAGE }}%%/DOCKER_HUB%%
         run: |
-          docker buildx imagetools create "$(jq -cr '.tags | map("-t " + .) | join(" ")' <<< "$DOCKER_METADATA_OUTPUT_JSON")" \
-            $(printf "$IMAGE@sha256:%s " *)
+          mapfile -t tags < <(jq -r '.tags[] | "--tag", .' <<< "$DOCKER_METADATA_OUTPUT_JSON")
+          sources=()
+          for digest in *; do
+            sources+=("$IMAGE@sha256:$digest")
+          done
+          docker buildx imagetools create "${tags[@]}" "${sources[@]}"
 
       - name: Inspect image
         env:
