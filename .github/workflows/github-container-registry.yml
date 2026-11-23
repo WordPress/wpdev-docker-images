@@ -106,10 +106,11 @@ jobs:
             PR_TAG=${{ env.PR_TAG }}
 
       - name: Export digest
+        env:
+          DIGEST: ${{ steps.build.outputs.digest }}
         run: |
-          mkdir -p ${{ runner.temp }}/digests
-          digest="${{ steps.build.outputs.digest }}"
-          touch "${{ runner.temp }}/digests/${digest#sha256:}"
+          mkdir -p "$RUNNER_TEMP/digests"
+          touch "$RUNNER_TEMP/digests/${DIGEST#sha256:}"
 
       - name: Upload digest
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # 4.6.2
@@ -163,13 +164,18 @@ jobs:
 
       - name: Create manifest list and push
         working-directory: ${{ runner.temp }}/digests
+        env:
+          IMAGE: ${{ vars.GHCR_PHP_IMAGE }}
         run: |
           docker buildx imagetools create "$(jq -cr '.tags | map("-t " + .) | join(" ")' <<< "$DOCKER_METADATA_OUTPUT_JSON")" \
-            $(printf '${{ vars.GHCR_PHP_IMAGE }}@sha256:%s ' *)
+            $(printf "$IMAGE@sha256:%s " *)
 
       - name: Inspect image
+        env:
+          IMAGE: ${{ vars.GHCR_PHP_IMAGE }}
+          VERSION: ${{ steps.meta.outputs.version }}
         run: |
-          docker buildx imagetools inspect ${{ vars.GHCR_PHP_IMAGE }}:${{ steps.meta.outputs.version }}
+          docker buildx imagetools inspect "$IMAGE:$VERSION"
 
   build-cli-images:
     name: Build CLI on PHP ${{ matrix.php }} (${{ matrix.arch.type }})
@@ -226,10 +232,11 @@ jobs:
             PR_TAG=${{ env.PR_TAG }}
 
       - name: Export digest
+        env:
+          DIGEST: ${{ steps.build.outputs.digest }}
         run: |
-          mkdir -p ${{ runner.temp }}/digests
-          digest="${{ steps.build.outputs.digest }}"
-          touch "${{ runner.temp }}/digests/${digest#sha256:}"
+          mkdir -p "$RUNNER_TEMP/digests"
+          touch "$RUNNER_TEMP/digests/${DIGEST#sha256:}"
 
       - name: Upload digest
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # 4.6.2
@@ -284,10 +291,15 @@ jobs:
 
       - name: Create manifest list and push
         working-directory: ${{ runner.temp }}/digests
+        env:
+          IMAGE: ${{ vars.GHCR_CLI_IMAGE }}
         run: |
           docker buildx imagetools create "$(jq -cr '.tags | map("-t " + .) | join(" ")' <<< "$DOCKER_METADATA_OUTPUT_JSON")" \
-            $(printf '${{ vars.GHCR_CLI_IMAGE }}@sha256:%s ' *)
+            $(printf "$IMAGE@sha256:%s " *)
 
       - name: Inspect image
+        env:
+          IMAGE: ${{ vars.GHCR_CLI_IMAGE }}
+          VERSION: ${{ steps.meta.outputs.version }}
         run: |
-          docker buildx imagetools inspect ${{ vars.GHCR_CLI_IMAGE }}:${{ steps.meta.outputs.version }}
+          docker buildx imagetools inspect "$IMAGE:$VERSION"
