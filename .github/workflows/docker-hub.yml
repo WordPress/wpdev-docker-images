@@ -61,7 +61,7 @@ jobs:
       - name: Prepare
         run: |
           platform="php-${PHP_VERSION}-${ARCH_TYPE}"
-          echo "PLATFORM_PAIR=${platform//\//-}" >> $GITHUB_ENV
+          echo "PLATFORM_PAIR=${platform//\//-}" >> "$GITHUB_ENV"
       - name: Docker meta
         id: meta
         uses: docker/metadata-action@902fa8ec7d6ecbf8d84d538b9b233a880e428804 # 5.7.0
@@ -185,7 +185,7 @@ jobs:
       - name: Prepare
         run: |
           platform="cli-${PHP_VERSION}-${ARCH_TYPE}"
-          echo "PLATFORM_PAIR=${platform//\//-}" >> $GITHUB_ENV
+          echo "PLATFORM_PAIR=${platform//\//-}" >> "$GITHUB_ENV"
       - name: Docker meta
         id: meta
         uses: docker/metadata-action@902fa8ec7d6ecbf8d84d538b9b233a880e428804 # 5.7.0
