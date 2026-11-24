@@ -44,7 +44,7 @@ jobs:
 
   build-php-images:
     name: PHP ${{ matrix.php }} Image
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     
     strategy:
       matrix:
@@ -92,7 +92,7 @@ jobs:
 
   build-cli-images:
     name: CLI on PHP ${{ matrix.php }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     needs: build-php-images
     strategy:
       matrix:

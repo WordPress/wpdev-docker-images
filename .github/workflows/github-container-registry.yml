@@ -34,7 +34,7 @@ jobs:
 
   check-for-changes:
     name: Check for uncommitted changes
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     permissions:
       contents: read
 
@@ -57,7 +57,7 @@ jobs:
 
   build-php-images:
     name: PHP ${{ matrix.php }} Image
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     needs: [ check-for-changes ]
     strategy:
       matrix:
@@ -105,7 +105,7 @@ jobs:
 
   build-cli-images:
     name: CLI on PHP ${{ matrix.php }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     needs: build-php-images
     strategy:
       matrix:
