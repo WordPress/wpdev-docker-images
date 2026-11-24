@@ -52,7 +52,7 @@ jobs:
 %%GITHUB%%
   check-for-changes:
     name: Check for uncommitted changes
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     permissions:
       contents: read
 
@@ -75,7 +75,7 @@ jobs:
 %%/GITHUB%%
   build-php-images:
     name: PHP ${{ matrix.php }} Image
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     %%GITHUB%%needs: [ check-for-changes ]%%/GITHUB%%
     strategy:
       matrix:
@@ -99,7 +99,10 @@ jobs:
 
       - name: Build Docker image
         run: |
+          # Disable provenance attestations so a single-platform image manifest is pushed instead of an image
+          # index. arm64 hosts cannot fall back to running the amd64 image when an index lacks an arm64 entry.
           docker build \
+            --provenance=false \
             --build-arg PACKAGE_REGISTRY="$PACKAGE_REGISTRY" \
             --build-arg PR_TAG="$PR_TAG" \
             -t "$PACKAGE_REGISTRY/php:$PHP_VERSION-fpm$PR_TAG" \
@@ -120,7 +123,7 @@ jobs:
 
   build-cli-images:
     name: CLI on PHP ${{ matrix.php }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     needs: build-php-images
     strategy:
       matrix:
@@ -145,7 +148,10 @@ jobs:
 
       - name: Build Docker image
         run: |
+          # Disable provenance attestations so a single-platform image manifest is pushed instead of an image
+          # index. arm64 hosts cannot fall back to running the amd64 image when an index lacks an arm64 entry.
           docker build \
+            --provenance=false \
             --build-arg PACKAGE_REGISTRY="$PACKAGE_REGISTRY" \
             --build-arg PR_TAG="$PR_TAG" \
             -t "$PACKAGE_REGISTRY/cli:$PHP_VERSION-fpm$PR_TAG" \
