@@ -44,7 +44,7 @@ jobs:
 %%GITHUB%%
   check-for-changes:
     name: Check for uncommitted changes
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     permissions:
       contents: read
 
