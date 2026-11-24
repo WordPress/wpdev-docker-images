@@ -63,9 +63,9 @@ jobs:
         php: [ '7.4', '8.0', '8.1', '8.2', '8.3', '8.4', '8.5', '8.6' ]
         arch:
           - type: linux/amd64
-            runner: ubuntu-24.04
+            runner: ubuntu-26.04
           - type: linux/arm64
-            runner: ubuntu-24.04-arm
+            runner: ubuntu-26.04-arm
     env:
       PHP_VERSION: ${{ matrix.php }}
       ARCH_TYPE: ${{ matrix.arch.type }}
@@ -122,7 +122,7 @@ jobs:
 
   complete-php-images-platform:
     name: Package multi-arch container image for PHP ${{ matrix.php }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     strategy:
       fail-fast: false
       matrix:
@@ -193,9 +193,9 @@ jobs:
         php: [ '7.4', '8.0', '8.1', '8.2', '8.3', '8.4', '8.5', '8.6' ]
         arch:
           - type: linux/amd64
-            runner: ubuntu-24.04
+            runner: ubuntu-26.04
           - type: linux/arm64
-            runner: ubuntu-24.04-arm
+            runner: ubuntu-26.04-arm
     env:
       PHP_VERSION: ${{ matrix.php }}
       ARCH_TYPE: ${{ matrix.arch.type }}
@@ -253,7 +253,7 @@ jobs:
 
   complete-cli-images-platform:
     name: Package multi-arch container image for CLI ${{ matrix.php }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     strategy:
       fail-fast: false
       matrix:
