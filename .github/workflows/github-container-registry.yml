@@ -46,180 +46,158 @@ jobs:
 
       - name: Ensure version-controlled files are not modified or deleted
         run: git diff --exit-code
-
-  php-7-4:
-    name: PHP 7.4
+  build-php-images:
+    name: PHP ${{ matrix.php }}
     needs: [ check-for-changes ]
     permissions:
       contents: read
       packages: write
+    strategy:
+      fail-fast: false
+      matrix:
+        php: [ '7.4', '8.0', '8.1', '8.2', '8.3', '8.4', '8.5', '8.6' ]
     uses: ./.github/workflows/reusable-build-image-github-container-registry.yml
     with:
-      php-version: '7.4'
+      php-version: ${{ matrix.php }}
       image-type: php
+      platforms: >-
+        [
+          { "type": "linux/amd64", "runner": "ubuntu-26.04" },
+          { "type": "linux/arm64", "runner": "ubuntu-26.04-arm" }
+        ]
 
-  cli-7-4:
-    name: CLI 7.4
-    needs: [ php-7-4 ]
+  package-php-images:
+    name: Package & Publish PHP Images
+    runs-on: ubuntu-26.04
+    needs: [ build-php-images ]
+    permissions:
+      packages: write
+    strategy:
+      fail-fast: false
+      matrix:
+        php: [ '7.4', '8.0', '8.1', '8.2', '8.3', '8.4', '8.5', '8.6' ]
+    env:
+      IMAGE_TYPE: php
+      PHP_VERSION: ${{ matrix.php }}
+      IMAGE: ${{ vars.GHCR_PHP_IMAGE }}
+
+    steps:
+      - name: Download digests
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          path: ${{ runner.temp }}/digests
+          pattern: digests-${{ env.IMAGE_TYPE }}-${{ env.PHP_VERSION }}-*
+          merge-multiple: true
+
+      - name: Login to Registry
+        uses: docker/login-action@8aa5831fb8d48d8f76594c7ddde61ae58019f550 # v4.8.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069 # v4.4.1
+
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@dc802804100637a589fabce1cb79ff13a1411302 # v6.2.0
+        with:
+          images: ${{ env.IMAGE }}
+          tags: |
+            type=raw,value=${{ env.PHP_VERSION }}-fpm${{ env.PR_TAG }}
+            type=raw,value=latest${{ env.PR_TAG }},enable=${{ '8.3' == env.PHP_VERSION }}
+
+      - name: Create manifest list and push
+        working-directory: ${{ runner.temp }}/digests
+        run: |
+          mapfile -t tags < <(jq -r '.tags[] | "--tag", .' <<< "$DOCKER_METADATA_OUTPUT_JSON")
+          sources=()
+          for digest in *; do
+            sources+=("$IMAGE@sha256:$digest")
+          done
+          docker buildx imagetools create "${tags[@]}" "${sources[@]}"
+
+      - name: Inspect image
+        env:
+          VERSION: ${{ steps.meta.outputs.version }}
+        run: |
+          docker buildx imagetools inspect "$IMAGE:$VERSION"
+
+  build-cli-images:
+    name: CLI on PHP ${{ matrix.php }}
+    needs: [ package-php-images ]
     permissions:
       contents: read
       packages: write
+    strategy:
+      fail-fast: false
+      matrix:
+        php: [ '7.4', '8.0', '8.1', '8.2', '8.3', '8.4', '8.5', '8.6' ]
     uses: ./.github/workflows/reusable-build-image-github-container-registry.yml
     with:
-      php-version: '7.4'
+      php-version: ${{ matrix.php }}
       image-type: cli
+      platforms: >-
+        [
+          { "type": "linux/amd64", "runner": "ubuntu-26.04" },
+          { "type": "linux/arm64", "runner": "ubuntu-26.04-arm" }
+        ]
 
-  php-8-0:
-    name: PHP 8.0
-    needs: [ check-for-changes ]
+  package-cli-images:
+    name: Package & Publish CLI Images
+    runs-on: ubuntu-26.04
+    needs: [ build-cli-images ]
     permissions:
-      contents: read
       packages: write
-    uses: ./.github/workflows/reusable-build-image-github-container-registry.yml
-    with:
-      php-version: '8.0'
-      image-type: php
+    strategy:
+      fail-fast: false
+      matrix:
+        php: [ '7.4', '8.0', '8.1', '8.2', '8.3', '8.4', '8.5', '8.6' ]
+    env:
+      IMAGE_TYPE: cli
+      PHP_VERSION: ${{ matrix.php }}
+      IMAGE: ${{ vars.GHCR_CLI_IMAGE }}
 
-  cli-8-0:
-    name: CLI 8.0
-    needs: [ php-8-0 ]
-    permissions:
-      contents: read
-      packages: write
-    uses: ./.github/workflows/reusable-build-image-github-container-registry.yml
-    with:
-      php-version: '8.0'
-      image-type: cli
+    steps:
+      - name: Download digests
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          path: ${{ runner.temp }}/digests
+          pattern: digests-${{ env.IMAGE_TYPE }}-${{ env.PHP_VERSION }}-*
+          merge-multiple: true
 
-  php-8-1:
-    name: PHP 8.1
-    needs: [ check-for-changes ]
-    permissions:
-      contents: read
-      packages: write
-    uses: ./.github/workflows/reusable-build-image-github-container-registry.yml
-    with:
-      php-version: '8.1'
-      image-type: php
+      - name: Login to Registry
+        uses: docker/login-action@8aa5831fb8d48d8f76594c7ddde61ae58019f550 # v4.8.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
-  cli-8-1:
-    name: CLI 8.1
-    needs: [ php-8-1 ]
-    permissions:
-      contents: read
-      packages: write
-    uses: ./.github/workflows/reusable-build-image-github-container-registry.yml
-    with:
-      php-version: '8.1'
-      image-type: cli
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069 # v4.4.1
 
-  php-8-2:
-    name: PHP 8.2
-    needs: [ check-for-changes ]
-    permissions:
-      contents: read
-      packages: write
-    uses: ./.github/workflows/reusable-build-image-github-container-registry.yml
-    with:
-      php-version: '8.2'
-      image-type: php
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@dc802804100637a589fabce1cb79ff13a1411302 # v6.2.0
+        with:
+          images: ${{ env.IMAGE }}
+          tags: |
+            type=raw,value=${{ env.PHP_VERSION }}-fpm${{ env.PR_TAG }}
+            type=raw,value=latest${{ env.PR_TAG }},enable=${{ '8.3' == env.PHP_VERSION }}
 
-  cli-8-2:
-    name: CLI 8.2
-    needs: [ php-8-2 ]
-    permissions:
-      contents: read
-      packages: write
-    uses: ./.github/workflows/reusable-build-image-github-container-registry.yml
-    with:
-      php-version: '8.2'
-      image-type: cli
+      - name: Create manifest list and push
+        working-directory: ${{ runner.temp }}/digests
+        run: |
+          mapfile -t tags < <(jq -r '.tags[] | "--tag", .' <<< "$DOCKER_METADATA_OUTPUT_JSON")
+          sources=()
+          for digest in *; do
+            sources+=("$IMAGE@sha256:$digest")
+          done
+          docker buildx imagetools create "${tags[@]}" "${sources[@]}"
 
-  php-8-3:
-    name: PHP 8.3
-    needs: [ check-for-changes ]
-    permissions:
-      contents: read
-      packages: write
-    uses: ./.github/workflows/reusable-build-image-github-container-registry.yml
-    with:
-      php-version: '8.3'
-      image-type: php
-
-  cli-8-3:
-    name: CLI 8.3
-    needs: [ php-8-3 ]
-    permissions:
-      contents: read
-      packages: write
-    uses: ./.github/workflows/reusable-build-image-github-container-registry.yml
-    with:
-      php-version: '8.3'
-      image-type: cli
-
-  php-8-4:
-    name: PHP 8.4
-    needs: [ check-for-changes ]
-    permissions:
-      contents: read
-      packages: write
-    uses: ./.github/workflows/reusable-build-image-github-container-registry.yml
-    with:
-      php-version: '8.4'
-      image-type: php
-
-  cli-8-4:
-    name: CLI 8.4
-    needs: [ php-8-4 ]
-    permissions:
-      contents: read
-      packages: write
-    uses: ./.github/workflows/reusable-build-image-github-container-registry.yml
-    with:
-      php-version: '8.4'
-      image-type: cli
-
-  php-8-5:
-    name: PHP 8.5
-    needs: [ check-for-changes ]
-    permissions:
-      contents: read
-      packages: write
-    uses: ./.github/workflows/reusable-build-image-github-container-registry.yml
-    with:
-      php-version: '8.5'
-      image-type: php
-
-  cli-8-5:
-    name: CLI 8.5
-    needs: [ php-8-5 ]
-    permissions:
-      contents: read
-      packages: write
-    uses: ./.github/workflows/reusable-build-image-github-container-registry.yml
-    with:
-      php-version: '8.5'
-      image-type: cli
-
-  php-8-6:
-    name: PHP 8.6
-    needs: [ check-for-changes ]
-    permissions:
-      contents: read
-      packages: write
-    uses: ./.github/workflows/reusable-build-image-github-container-registry.yml
-    with:
-      php-version: '8.6'
-      image-type: php
-
-  cli-8-6:
-    name: CLI 8.6
-    needs: [ php-8-6 ]
-    permissions:
-      contents: read
-      packages: write
-    uses: ./.github/workflows/reusable-build-image-github-container-registry.yml
-    with:
-      php-version: '8.6'
-      image-type: cli
-
+      - name: Inspect image
+        env:
+          VERSION: ${{ steps.meta.outputs.version }}
+        run: |
+          docker buildx imagetools inspect "$IMAGE:$VERSION"

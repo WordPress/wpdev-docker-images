@@ -391,9 +391,9 @@ foreach ( $php_versions as $version => $images ) {
 /*
  * Generate the GitHub Actions workflows.
  *
- * Each registry gets a top-level workflow with a "PHP X.Y" and a "CLI X.Y" job for each version of PHP.
- * Those jobs call a reusable workflow that builds each platform and then packages and publishes the
- * multi-platform image, so the GitHub Actions UI groups every job for an image under its version.
+ * Each registry gets a workflow that builds the images for every version of PHP, and a reusable workflow
+ * that it calls to build one image on each platform. The GitHub Actions UI groups the jobs of each call
+ * to the reusable workflow under the calling job, so each platform build is listed under its version.
  *
  * The key of each registry is the template section that is removed when generating its workflows.
  */
@@ -402,67 +402,24 @@ $workflow_registries = array(
 	'github-container-registry' => 'DOCKER_HUB',
 );
 
-// The platforms each image is built for. Each is built in a separate job.
-$workflow_platforms = array(
-	'arm64' => array(
-		'type'   => 'linux/arm64',
-		'runner' => 'ubuntu-26.04-arm',
-	),
-	'amd64' => array(
-		'type'   => 'linux/amd64',
-		'runner' => 'ubuntu-26.04',
-	),
-);
+$workflow_template = file_get_contents( 'templates/workflow.yml-template' );
+$workflow_template = str_replace( '%%PACKAGE_STEPS%%', rtrim( file_get_contents( 'templates/workflow-package-steps.yml-template' ) ), $workflow_template );
+$workflow_template = str_replace( '%%PHP_VERSION_LIST%%', "'" . implode( "', '", array_keys( $php_versions ) ) . "'", $workflow_template );
 
-$workflow_template          = file_get_contents( 'templates/workflow.yml-template' );
-$workflow_jobs_template     = file_get_contents( 'templates/workflow-image-jobs.yml-template' );
 $reusable_workflow_template = file_get_contents( 'templates/reusable-build-image.yml-template' );
-
-// Generate a build job for each platform in the reusable workflow.
-preg_match( '/%%ARCH_JOB%%\n([\s\S]+?)%%\/ARCH_JOB%%\n/', $reusable_workflow_template, $arch_job_template );
-$arch_jobs = '';
-foreach ( $workflow_platforms as $arch_id => $platform ) {
-	$arch_jobs .= str_replace(
-		array( '%%ARCH_ID%%', '%%ARCH_TYPE%%', '%%ARCH_RUNNER%%' ),
-		array( $arch_id, $platform['type'], $platform['runner'] ),
-		$arch_job_template[1]
-	) . "\n";
-}
-$reusable_workflow_template = str_replace( $arch_job_template[0], $arch_jobs, $reusable_workflow_template );
-$reusable_workflow_template = str_replace(
-	'%%ARCH_JOB_IDS%%',
-	implode( ', ', array_map( function ( $arch_id ) { return "build-$arch_id"; }, array_keys( $workflow_platforms ) ) ),
-	$reusable_workflow_template
-);
-$reusable_workflow_template = str_replace( '%%PHP_LATEST%%', $latest, $reusable_workflow_template );
 
 foreach ( $workflow_registries as $registry => $remove_pattern ) {
 	$reusable_workflow_name = "reusable-build-image-$registry.yml";
 
-	// Generate the PHP and CLI jobs for each version of PHP.
-	$image_jobs = '';
-	foreach ( $php_versions as $version => $images ) {
-		$jobs = str_replace(
-			array( '%%JOB_ID%%', '%%PHP_VERSION%%', '%%REUSABLE_WORKFLOW%%' ),
-			array( str_replace( '.', '-', $version ), $version, $reusable_workflow_name ),
-			$workflow_jobs_template
-		);
-
-		// Not every version of PHP has a CLI image.
-		if ( ! isset( $images['cli'] ) ) {
-			$jobs = preg_replace( '/%%CLI%%[\s\S]+?%%\/CLI%%/', '', $jobs );
-		}
-
-		$image_jobs .= $jobs;
-	}
-
 	$workflows = array(
-		$registry . '.yml'      => str_replace( '%%IMAGE_JOBS%%', $image_jobs, $workflow_template ),
+		"$registry.yml"         => str_replace( '%%REUSABLE_WORKFLOW%%', $reusable_workflow_name, $workflow_template ),
 		$reusable_workflow_name => $reusable_workflow_template,
 	);
 
 	foreach ( $workflows as $name => $workflow_contents ) {
 		$workflow_contents = str_replace( '%%GENERATED_WARNING%%', $generated_warning, $workflow_contents );
+		$workflow_contents = str_replace( '%%PHP_LATEST%%', $latest, $workflow_contents );
+
 		// Remove the sections for the other registry, both full-line and inline.
 		$workflow_contents = preg_replace( "/^%%$remove_pattern%%[ \t]*\n[\s\S]*?^%%\/$remove_pattern%%[ \t]*\n/m", '', $workflow_contents );
 		$workflow_contents = preg_replace( "/%%$remove_pattern%%[\s\S]+?%%\/$remove_pattern%%/", '', $workflow_contents );
