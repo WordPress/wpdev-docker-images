@@ -1,0 +1,38 @@
+
+  php-%%JOB_ID%%:
+    name: PHP %%PHP_VERSION%%
+%%GITHUB%%
+    needs: [ check-for-changes ]
+%%/GITHUB%%
+    permissions:
+      contents: read
+%%GITHUB%%
+      packages: write
+%%/GITHUB%%
+    uses: ./.github/workflows/%%REUSABLE_WORKFLOW%%
+    with:
+      php-version: '%%PHP_VERSION%%'
+      image-type: php
+%%DOCKER_HUB%%
+    secrets:
+      DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+%%/DOCKER_HUB%%
+%%CLI%%
+
+  cli-%%JOB_ID%%:
+    name: CLI %%PHP_VERSION%%
+    needs: [ php-%%JOB_ID%% ]
+    permissions:
+      contents: read
+%%GITHUB%%
+      packages: write
+%%/GITHUB%%
+    uses: ./.github/workflows/%%REUSABLE_WORKFLOW%%
+    with:
+      php-version: '%%PHP_VERSION%%'
+      image-type: cli
+%%DOCKER_HUB%%
+    secrets:
+      DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+%%/DOCKER_HUB%%
+%%/CLI%%
