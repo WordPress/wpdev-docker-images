@@ -70,7 +70,10 @@ jobs:
     runs-on: ${{ matrix.arch.runner }}
     %%GITHUB%%needs: [ check-for-changes ]%%/GITHUB%%
     permissions:
-        contents: read
+      contents: read
+%%GITHUB%%
+      packages: write
+%%/GITHUB%%
     strategy:
       fail-fast: false
       matrix:
@@ -146,6 +149,10 @@ jobs:
         php: [ %%PHP_VERSION_LIST%% ]
     needs:
       - build-php-images
+%%GITHUB%%
+    permissions:
+      packages: write
+%%/GITHUB%%
     env:
       PHP_VERSION: ${{ matrix.php }}
 
@@ -207,6 +214,9 @@ jobs:
     needs: complete-php-images-platform
     permissions:
       contents: read
+%%GITHUB%%
+      packages: write
+%%/GITHUB%%
     strategy:
       fail-fast: false
       matrix:
@@ -283,6 +293,10 @@ jobs:
         php: [ %%PHP_VERSION_LIST%% ]
     needs:
       - build-cli-images
+%%GITHUB%%
+    permissions:
+      packages: write
+%%/GITHUB%%
     env:
       PHP_VERSION: ${{ matrix.php }}
 
