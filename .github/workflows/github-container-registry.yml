@@ -4,8 +4,6 @@
 #
 # You can find the relevant template in the `/templates` folder.
 #
-
-
 name: Build test images
 
 on:
@@ -13,12 +11,7 @@ on:
   workflow_dispatch:
 
 env:
-  REGISTRY_USERNAME: desrosj
-  REGISTRY_PASSWORD: ${{ secrets.GHCR_TOKEN }}
-  PACKAGE_REGISTRY_HOST: ghcr.io
-  PACKAGE_REGISTRY: ghcr.io/wordpress/wpdev-docker-images
   PR_TAG: -${{ github.event.number }}
-
 # Cancels all previous workflow runs for pull requests that have not completed.
 concurrency:
   # The concurrency group contains the workflow name and the branch name for pull requests
@@ -31,7 +24,6 @@ concurrency:
 permissions: {}
 
 jobs:
-
   check-for-changes:
     name: Check for uncommitted changes
     runs-on: ubuntu-26.04
@@ -54,99 +46,102 @@ jobs:
 
       - name: Ensure version-controlled files are not modified or deleted
         run: git diff --exit-code
-
   build-php-images:
-    name: PHP ${{ matrix.php }} Image
-    runs-on: ubuntu-26.04
+    name: PHP ${{ matrix.php }}
     needs: [ check-for-changes ]
-    strategy:
-      matrix:
-        php: [ '7.4', '8.0', '8.1', '8.2', '8.3', '8.4', '8.5', '8.6' ]
-      fail-fast: false
-    env:
-      PHP_VERSION: ${{ matrix.php }}
-      PHP_LATEST: '8.3'
     permissions:
       contents: read
+      packages: write
+    strategy:
+      fail-fast: false
+      matrix:
+        php: [ '7.4', '8.0', '8.1', '8.2', '8.3', '8.4', '8.5', '8.6' ]
+    uses: ./.github/workflows/reusable-build-image-github-container-registry.yml
+    with:
+      php-version: ${{ matrix.php }}
+      image-type: php
+      platforms: >-
+        [
+          { "type": "linux/amd64", "runner": "ubuntu-26.04" },
+          { "type": "linux/arm64", "runner": "ubuntu-26.04-arm" }
+        ]
 
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          persist-credentials: false
-
-      - name: Login to the package registry
-        run: |
-          echo "$REGISTRY_PASSWORD" | docker login "$PACKAGE_REGISTRY_HOST" -u "$REGISTRY_USERNAME" --password-stdin
-
-      - name: Build Docker image
-        run: |
-          # Disable provenance attestations so a single-platform image manifest is pushed instead of an image
-          # index. arm64 hosts cannot fall back to running the amd64 image when an index lacks an arm64 entry.
-          docker build \
-            --provenance=false \
-            --build-arg PACKAGE_REGISTRY="$PACKAGE_REGISTRY" \
-            --build-arg PR_TAG="$PR_TAG" \
-            -t "$PACKAGE_REGISTRY/php:$PHP_VERSION-fpm$PR_TAG" \
-            "images/$PHP_VERSION/php"
-
-      - name: Log Docker images
-        run: docker images
-
-      - name: Push Docker image
-        run: docker push "$PACKAGE_REGISTRY/php:$PHP_VERSION-fpm$PR_TAG"
-
-      - name: Push image as latest
-        if: ${{ env.PHP_LATEST == env.PHP_VERSION }}
-        run: |
-          docker image tag "$PACKAGE_REGISTRY/php:$PHP_VERSION-fpm$PR_TAG" "$PACKAGE_REGISTRY/php:latest$PR_TAG"
-          docker images
-          docker push "$PACKAGE_REGISTRY/php:latest$PR_TAG"
+  package-php-images:
+    name: Package & Publish PHP Images
+    needs: [ build-php-images ]
+    permissions:
+      packages: write
+    uses: ./.github/workflows/reusable-package-images-github-container-registry.yml
+    with:
+      image-type: php
+      php-versions: >-
+        [ "7.4", "8.0", "8.1", "8.2", "8.3", "8.4", "8.5", "8.6" ]
 
   build-cli-images:
     name: CLI on PHP ${{ matrix.php }}
-    runs-on: ubuntu-26.04
-    needs: build-php-images
-    strategy:
-      matrix:
-        php: [ '7.4', '8.0', '8.1', '8.2', '8.3', '8.4', '8.5', '8.6' ]
-      fail-fast: false
+    needs: [ package-php-images ]
     permissions:
       contents: read
+      packages: write
+    strategy:
+      fail-fast: false
+      matrix:
+        php: [ '7.4', '8.0', '8.1', '8.2', '8.3', '8.4', '8.5', '8.6' ]
+    uses: ./.github/workflows/reusable-build-image-github-container-registry.yml
+    with:
+      php-version: ${{ matrix.php }}
+      image-type: cli
+      platforms: >-
+        [
+          { "type": "linux/amd64", "runner": "ubuntu-26.04" },
+          { "type": "linux/arm64", "runner": "ubuntu-26.04-arm" }
+        ]
 
-    env:
-      PHP_VERSION: ${{ matrix.php }}
-      PHP_LATEST: '8.3'
+  package-cli-images:
+    name: Package & Publish CLI Images
+    needs: [ build-cli-images ]
+    permissions:
+      packages: write
+    uses: ./.github/workflows/reusable-package-images-github-container-registry.yml
+    with:
+      image-type: cli
+      php-versions: >-
+        [ "7.4", "8.0", "8.1", "8.2", "8.3", "8.4", "8.5", "8.6" ]
+
+  summary:
+    name: Summary
+    runs-on: ubuntu-26.04
+    needs: [ package-php-images, package-cli-images ]
+    # Summarize the images that were published, even when some failed.
+    if: ${{ !cancelled() }}
+    permissions: {}
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Download image details
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
-          persist-credentials: false
+          path: ${{ runner.temp }}/image-details
+          pattern: image-details-*
+          merge-multiple: true
 
-      - name: Login to the package registry
+      - name: Write the summary
         run: |
-          echo "$REGISTRY_PASSWORD" | docker login "$PACKAGE_REGISTRY_HOST" -u "$REGISTRY_USERNAME" --password-stdin
+          shopt -s nullglob
+          files=( "$RUNNER_TEMP"/image-details/*.json )
 
-      - name: Build Docker image
-        run: |
-          # Disable provenance attestations so a single-platform image manifest is pushed instead of an image
-          # index. arm64 hosts cannot fall back to running the amd64 image when an index lacks an arm64 entry.
-          docker build \
-            --provenance=false \
-            --build-arg PACKAGE_REGISTRY="$PACKAGE_REGISTRY" \
-            --build-arg PR_TAG="$PR_TAG" \
-            -t "$PACKAGE_REGISTRY/cli:$PHP_VERSION-fpm$PR_TAG" \
-            "images/$PHP_VERSION/cli"
+          {
+            echo '## Published images'
+            echo
 
-      - name: Log Docker images
-        run: docker images
-
-      - name: Push Docker image
-        run: docker push "$PACKAGE_REGISTRY/cli:$PHP_VERSION-fpm$PR_TAG"
-
-      - name: Push image as latest
-        if: ${{ env.PHP_LATEST == env.PHP_VERSION }}
-        run: |
-          docker image tag "$PACKAGE_REGISTRY/cli:$PHP_VERSION-fpm$PR_TAG" "$PACKAGE_REGISTRY/cli:latest$PR_TAG"
-          docker push "$PACKAGE_REGISTRY/cli:latest$PR_TAG"
+            if (( ${#files[@]} == 0 )); then
+              echo 'No images were published.'
+            else
+              echo '| Image | Platforms | Digest |'
+              echo '| --- | --- | --- |'
+              jq -rs '
+                sort_by( ( .type != "php" ), ( .php | split( "." ) | map( tonumber ) ) )
+                | .[]
+                | "| \( .url as $url | .tags | map( "[`\( . )`](\( $url ))" ) | join( "<br>" ) ) | \( .platforms | join( ", " ) ) | `\( .digest[0:19] )` |"
+              ' "${files[@]}"
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"

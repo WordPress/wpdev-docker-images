@@ -1,5 +1,6 @@
-# actionlint does not recognize the `ubuntu-26.04` GitHub-hosted runner label yet.
-# This can be removed once the pinned actionlint version includes it in its list of known labels.
+# actionlint does not recognize the `ubuntu-26.04` and `ubuntu-26.04-arm` GitHub-hosted runner labels yet.
+# This can be removed once the pinned actionlint version includes them in its list of known labels.
 self-hosted-runner:
   labels:
     - ubuntu-26.04
+    - ubuntu-26.04-arm

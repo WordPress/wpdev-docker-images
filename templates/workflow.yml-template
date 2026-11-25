@@ -11,16 +11,14 @@ on:
       - 'entrypoint/**'
       - 'images/**'
       - '.github/workflows/docker-hub.yml'
+      - '.github/workflows/reusable-build-image-docker-hub.yml'
+      - '.github/workflows/reusable-package-images-docker-hub.yml'
   workflow_dispatch:
   # Once weekly On Sundays at 00:00 UTC.
   schedule:
     - cron: '0 0 * * 0'
 
 env:
-  REGISTRY_USERNAME: garypendergast
-  REGISTRY_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-  PACKAGE_REGISTRY_HOST:
-  PACKAGE_REGISTRY: wordpressdevelop
   PR_TAG:
 %%/DOCKER_HUB%%
 %%GITHUB%%
@@ -31,10 +29,6 @@ on:
   workflow_dispatch:
 
 env:
-  REGISTRY_USERNAME: desrosj
-  REGISTRY_PASSWORD: ${{ secrets.GHCR_TOKEN }}
-  PACKAGE_REGISTRY_HOST: ghcr.io
-  PACKAGE_REGISTRY: ghcr.io/wordpress/wpdev-docker-images
   PR_TAG: -${{ github.event.number }}
 %%/GITHUB%%
 # Cancels all previous workflow runs for pull requests that have not completed.
@@ -74,97 +68,127 @@ jobs:
         run: git diff --exit-code
 %%/GITHUB%%
   build-php-images:
-    name: PHP ${{ matrix.php }} Image
-    runs-on: ubuntu-26.04
-    %%GITHUB%%needs: [ check-for-changes ]%%/GITHUB%%
-    strategy:
-      matrix:
-        php: [ %%PHP_VERSION_LIST%% ]
-      fail-fast: false
-    env:
-      PHP_VERSION: ${{ matrix.php }}
-      PHP_LATEST: '%%PHP_LATEST%%'
+    name: PHP ${{ matrix.php }}
+%%GITHUB%%
+    needs: [ check-for-changes ]
+%%/GITHUB%%
     permissions:
       contents: read
+%%GITHUB%%
+      packages: write
+%%/GITHUB%%
+    strategy:
+      fail-fast: false
+      matrix:
+        php: [ %%PHP_VERSION_LIST%% ]
+    uses: ./.github/workflows/%%REUSABLE_WORKFLOW%%
+    with:
+      php-version: ${{ matrix.php }}
+      image-type: php
+      platforms: >-
+        [
+          { "type": "linux/amd64", "runner": "ubuntu-26.04" },
+          { "type": "linux/arm64", "runner": "ubuntu-26.04-arm" }
+        ]
+%%DOCKER_HUB%%
+    secrets:
+      DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+%%/DOCKER_HUB%%
 
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          persist-credentials: false
-
-      - name: Login to the package registry
-        run: |
-          echo "$REGISTRY_PASSWORD" | docker login "$PACKAGE_REGISTRY_HOST" -u "$REGISTRY_USERNAME" --password-stdin
-
-      - name: Build Docker image
-        run: |
-          # Disable provenance attestations so a single-platform image manifest is pushed instead of an image
-          # index. arm64 hosts cannot fall back to running the amd64 image when an index lacks an arm64 entry.
-          docker build \
-            --provenance=false \
-            --build-arg PACKAGE_REGISTRY="$PACKAGE_REGISTRY" \
-            --build-arg PR_TAG="$PR_TAG" \
-            -t "$PACKAGE_REGISTRY/php:$PHP_VERSION-fpm$PR_TAG" \
-            "images/$PHP_VERSION/php"
-
-      - name: Log Docker images
-        run: docker images
-
-      - name: Push Docker image
-        run: docker push "$PACKAGE_REGISTRY/php:$PHP_VERSION-fpm$PR_TAG"
-
-      - name: Push image as latest
-        if: ${{ env.PHP_LATEST == env.PHP_VERSION }}
-        run: |
-          docker image tag "$PACKAGE_REGISTRY/php:$PHP_VERSION-fpm$PR_TAG" "$PACKAGE_REGISTRY/php:latest$PR_TAG"
-          docker images
-          docker push "$PACKAGE_REGISTRY/php:latest$PR_TAG"
+  package-php-images:
+    name: Package & Publish PHP Images
+    needs: [ build-php-images ]
+%%GITHUB%%
+    permissions:
+      packages: write
+%%/GITHUB%%
+    uses: ./.github/workflows/%%REUSABLE_PACKAGE_WORKFLOW%%
+    with:
+      image-type: php
+      php-versions: >-
+        [ %%PHP_VERSION_JSON%% ]
+%%DOCKER_HUB%%
+    secrets:
+      DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+%%/DOCKER_HUB%%
 
   build-cli-images:
     name: CLI on PHP ${{ matrix.php }}
-    runs-on: ubuntu-26.04
-    needs: build-php-images
-    strategy:
-      matrix:
-        php: [ %%PHP_VERSION_LIST%% ]
-      fail-fast: false
+    needs: [ package-php-images ]
     permissions:
       contents: read
+%%GITHUB%%
+      packages: write
+%%/GITHUB%%
+    strategy:
+      fail-fast: false
+      matrix:
+        php: [ %%PHP_VERSION_LIST%% ]
+    uses: ./.github/workflows/%%REUSABLE_WORKFLOW%%
+    with:
+      php-version: ${{ matrix.php }}
+      image-type: cli
+      platforms: >-
+        [
+          { "type": "linux/amd64", "runner": "ubuntu-26.04" },
+          { "type": "linux/arm64", "runner": "ubuntu-26.04-arm" }
+        ]
+%%DOCKER_HUB%%
+    secrets:
+      DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+%%/DOCKER_HUB%%
 
-    env:
-      PHP_VERSION: ${{ matrix.php }}
-      PHP_LATEST: '%%PHP_LATEST%%'
+  package-cli-images:
+    name: Package & Publish CLI Images
+    needs: [ build-cli-images ]
+%%GITHUB%%
+    permissions:
+      packages: write
+%%/GITHUB%%
+    uses: ./.github/workflows/%%REUSABLE_PACKAGE_WORKFLOW%%
+    with:
+      image-type: cli
+      php-versions: >-
+        [ %%PHP_VERSION_JSON%% ]
+%%DOCKER_HUB%%
+    secrets:
+      DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+%%/DOCKER_HUB%%
+
+  summary:
+    name: Summary
+    runs-on: ubuntu-26.04
+    needs: [ package-php-images, package-cli-images ]
+    # Summarize the images that were published, even when some failed.
+    if: ${{ !cancelled() }}
+    permissions: {}
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Download image details
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
-          persist-credentials: false
+          path: ${{ runner.temp }}/image-details
+          pattern: image-details-*
+          merge-multiple: true
 
-      - name: Login to the package registry
+      - name: Write the summary
         run: |
-          echo "$REGISTRY_PASSWORD" | docker login "$PACKAGE_REGISTRY_HOST" -u "$REGISTRY_USERNAME" --password-stdin
+          shopt -s nullglob
+          files=( "$RUNNER_TEMP"/image-details/*.json )
 
-      - name: Build Docker image
-        run: |
-          # Disable provenance attestations so a single-platform image manifest is pushed instead of an image
-          # index. arm64 hosts cannot fall back to running the amd64 image when an index lacks an arm64 entry.
-          docker build \
-            --provenance=false \
-            --build-arg PACKAGE_REGISTRY="$PACKAGE_REGISTRY" \
-            --build-arg PR_TAG="$PR_TAG" \
-            -t "$PACKAGE_REGISTRY/cli:$PHP_VERSION-fpm$PR_TAG" \
-            "images/$PHP_VERSION/cli"
+          {
+            echo '## Published images'
+            echo
 
-      - name: Log Docker images
-        run: docker images
-
-      - name: Push Docker image
-        run: docker push "$PACKAGE_REGISTRY/cli:$PHP_VERSION-fpm$PR_TAG"
-
-      - name: Push image as latest
-        if: ${{ env.PHP_LATEST == env.PHP_VERSION }}
-        run: |
-          docker image tag "$PACKAGE_REGISTRY/cli:$PHP_VERSION-fpm$PR_TAG" "$PACKAGE_REGISTRY/cli:latest$PR_TAG"
-          docker push "$PACKAGE_REGISTRY/cli:latest$PR_TAG"
+            if (( ${#files[@]} == 0 )); then
+              echo 'No images were published.'
+            else
+              echo '| Image | Platforms | Digest |'
+              echo '| --- | --- | --- |'
+              jq -rs '
+                sort_by( ( .type != "php" ), ( .php | split( "." ) | map( tonumber ) ) )
+                | .[]
+                | "| \( .url as $url | .tags | map( "[`\( . )`](\( $url ))" ) | join( "<br>" ) ) | \( .platforms | join( ", " ) ) | `\( .digest[0:19] )` |"
+              ' "${files[@]}"
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"

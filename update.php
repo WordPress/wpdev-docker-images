@@ -386,25 +386,59 @@ foreach ( $php_versions as $version => $images ) {
 
 		echo "✅\n";
 	}
+}
 
-	$workflow_templates = array(
-		'docker-hub.yml' => 'GITHUB',
-		'github-container-registry.yml' => 'DOCKER_HUB',
+/*
+ * Generate the GitHub Actions workflows.
+ *
+ * Each registry gets a workflow that builds the images for every version of PHP, and two reusable workflows
+ * that it calls: one that builds an image for one version of PHP on each platform, and one that packages and
+ * publishes the images for every version of PHP. The GitHub Actions UI groups the jobs of each call to a
+ * reusable workflow under the calling job.
+ *
+ * The key of each registry is the template section that is removed when generating its workflows.
+ */
+$workflow_registries = array(
+	'docker-hub'                => 'GITHUB',
+	'github-container-registry' => 'DOCKER_HUB',
+);
+
+$workflow_template = file_get_contents( 'templates/workflow.yml-template' );
+$workflow_template = str_replace( '%%PHP_VERSION_LIST%%', "'" . implode( "', '", array_keys( $php_versions ) ) . "'", $workflow_template );
+$workflow_template = str_replace( '%%PHP_VERSION_JSON%%', '"' . implode( '", "', array_keys( $php_versions ) ) . '"', $workflow_template );
+
+$build_workflow_template   = file_get_contents( 'templates/reusable-build-image.yml-template' );
+$package_workflow_template = file_get_contents( 'templates/reusable-package-images.yml-template' );
+
+foreach ( $workflow_registries as $registry => $remove_pattern ) {
+	$build_workflow_name   = "reusable-build-image-$registry.yml";
+	$package_workflow_name = "reusable-package-images-$registry.yml";
+
+	$workflows = array(
+		"$registry.yml"        => str_replace(
+			array( '%%REUSABLE_WORKFLOW%%', '%%REUSABLE_PACKAGE_WORKFLOW%%' ),
+			array( $build_workflow_name, $package_workflow_name ),
+			$workflow_template
+		),
+		$build_workflow_name   => $build_workflow_template,
+		$package_workflow_name => $package_workflow_template,
 	);
 
-	// Load the GitHub Actions template.
-	$workflow_template = file_get_contents( 'templates/workflow.yml-template' );
-	$workflow_template = str_replace( '%%GENERATED_WARNING%%', $generated_warning, $workflow_template );
+	foreach ( $workflows as $name => $workflow_contents ) {
+		$workflow_contents = str_replace( '%%GENERATED_WARNING%%', $generated_warning, $workflow_contents );
+		$workflow_contents = str_replace( '%%PHP_LATEST%%', $latest, $workflow_contents );
 
-	$php_version_list = "'" . implode( "', '", array_keys( $php_versions ) ) . "'";
-	$workflow_template = str_replace( '%%PHP_VERSION_LIST%%', $php_version_list, $workflow_template );
+		// Remove the sections for the other registry, both full-line and inline.
+		$workflow_contents = preg_replace( "/^%%$remove_pattern%%[ \t]*\n[\s\S]*?^%%\/$remove_pattern%%[ \t]*\n/m", '', $workflow_contents );
+		$workflow_contents = preg_replace( "/%%$remove_pattern%%[\s\S]+?%%\/$remove_pattern%%/", '', $workflow_contents );
 
-	$workflow_template = str_replace( '%%PHP_LATEST%%', $latest, $workflow_template );
-
-	foreach ( $workflow_templates as $name => $remove_pattern ) {
-		// Save two GitHub Action workflows.
-		$workflow_contents = preg_replace( "/%%$remove_pattern%%[\s\S]+?%%\/$remove_pattern%%/", '', $workflow_template );
+		// Remove the remaining markers, including lines containing only a marker.
+		$workflow_contents = preg_replace( '/^%%[^%\n]+%%[ \t]*\n/m', '', $workflow_contents );
 		$workflow_contents = preg_replace( '/%%[^%]+%%/', '', $workflow_contents );
+
+		// Clean up whitespace left behind by removed inline sections.
+		$workflow_contents = preg_replace( '/[ \t]+\n/', "\n", $workflow_contents );
+		$workflow_contents = preg_replace( '/\n{3,}/', "\n\n", $workflow_contents );
 
 		write_file( '.github/workflows/' . $name, $workflow_contents );
 	}

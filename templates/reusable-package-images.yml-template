@@ -1,0 +1,145 @@
+%%GENERATED_WARNING%%
+# Combines the per-platform digests of an image (PHP or CLI) into a multi-platform manifest list for each
+# version of PHP, then publishes it to the registry.
+#
+# Details of each published image are uploaded as artifacts so that the calling workflow can summarize them.
+name: Package and publish images
+
+on:
+  workflow_call:
+    inputs:
+      image-type:
+        description: 'The type of image to package. Accepts "php" or "cli".'
+        required: true
+        type: string
+      php-versions:
+        description: 'A JSON array of the PHP versions to package the image for.'
+        required: true
+        type: string
+%%DOCKER_HUB%%
+    secrets:
+      DOCKERHUB_TOKEN:
+        description: 'A token for logging in to Docker Hub.'
+        required: true
+%%/DOCKER_HUB%%
+
+env:
+%%GITHUB%%
+  PR_TAG: -${{ github.event.number }}
+  IMAGE: ${{ inputs.image-type == 'cli' && vars.GHCR_CLI_IMAGE || vars.GHCR_PHP_IMAGE }}
+%%/GITHUB%%
+%%DOCKER_HUB%%
+  PR_TAG: ''
+  IMAGE: ${{ inputs.image-type == 'cli' && vars.DOCKERHUB_CLI_IMAGE || vars.DOCKERHUB_PHP_IMAGE }}
+%%/DOCKER_HUB%%
+  IMAGE_TYPE: ${{ inputs.image-type }}
+
+# Disable permissions for all available scopes by default.
+# Any needed permissions should be configured at the job level.
+permissions: {}
+
+jobs:
+  package:
+    name: PHP ${{ matrix.php }}
+    runs-on: ubuntu-26.04
+%%GITHUB%%
+    permissions:
+      packages: write
+%%/GITHUB%%
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ${{ fromJSON( inputs.php-versions ) }}
+    env:
+      PHP_VERSION: ${{ matrix.php }}
+
+    steps:
+      - name: Download digests
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          path: ${{ runner.temp }}/digests
+          pattern: digests-${{ env.IMAGE_TYPE }}-${{ env.PHP_VERSION }}-*
+          merge-multiple: true
+
+      - name: Login to Registry
+        uses: docker/login-action@8aa5831fb8d48d8f76594c7ddde61ae58019f550 # v4.8.0
+        with:
+%%GITHUB%%
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+%%/GITHUB%%
+%%DOCKER_HUB%%
+          username: ${{ vars.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+%%/DOCKER_HUB%%
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069 # v4.4.1
+
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@dc802804100637a589fabce1cb79ff13a1411302 # v6.2.0
+        with:
+          images: ${{ env.IMAGE }}
+          tags: |
+            type=raw,value=${{ env.PHP_VERSION }}-fpm${{ env.PR_TAG }}
+            type=raw,value=latest${{ env.PR_TAG }},enable=${{ '%%PHP_LATEST%%' == env.PHP_VERSION }}
+
+      - name: Create manifest list and push
+        working-directory: ${{ runner.temp }}/digests
+        run: |
+          mapfile -t tags < <(jq -r '.tags[] | "--tag", .' <<< "$DOCKER_METADATA_OUTPUT_JSON")
+          sources=()
+          for digest in *; do
+            sources+=("$IMAGE@sha256:$digest")
+          done
+          docker buildx imagetools create "${tags[@]}" "${sources[@]}"
+
+      - name: Inspect image
+        env:
+          VERSION: ${{ steps.meta.outputs.version }}
+        run: |
+          docker buildx imagetools inspect "$IMAGE:$VERSION"
+
+      - name: Save image details for the summary
+        env:
+          VERSION: ${{ steps.meta.outputs.version }}
+          TAGS: ${{ steps.meta.outputs.tags }}
+        run: |
+%%GITHUB%%
+          # For example, ghcr.io/wordpress/wpdev-docker-images/php is the wpdev-docker-images/php package of the wordpress organization.
+          IFS=/ read -r owner package <<< "${IMAGE#ghcr.io/}"
+          url="https://github.com/orgs/${owner}/packages/container/package/${package//\//%2F}"
+%%/GITHUB%%
+%%DOCKER_HUB%%
+          url="https://hub.docker.com/r/${IMAGE}/tags?name=${VERSION}"
+%%/DOCKER_HUB%%
+          manifest="$(docker buildx imagetools inspect "$IMAGE:$VERSION" --format '{{json .Manifest}}')"
+          mkdir -p "$RUNNER_TEMP/image-details"
+          jq -n \
+            --arg type "$IMAGE_TYPE" \
+            --arg php "$PHP_VERSION" \
+            --arg url "$url" \
+            --arg tags "$TAGS" \
+            --argjson manifest "$manifest" \
+            '{
+              type: $type,
+              php: $php,
+              url: $url,
+              tags: ( $tags | split( "\n" ) | map( select( length > 0 ) ) ),
+              digest: $manifest.digest,
+              platforms: [
+                ( $manifest.manifests // [] )[].platform
+                | select( .os != "unknown" )
+                | "\( .os )/\( .architecture )\( if .variant then "/\( .variant )" else "" end )"
+              ]
+            }' > "$RUNNER_TEMP/image-details/${IMAGE_TYPE}-${PHP_VERSION}.json"
+
+      - name: Upload image details
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: image-details-${{ env.IMAGE_TYPE }}-${{ env.PHP_VERSION }}
+          path: ${{ runner.temp }}/image-details/*
+          if-no-files-found: error
+          retention-days: 1
