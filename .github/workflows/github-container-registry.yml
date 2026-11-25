@@ -56,8 +56,7 @@ jobs:
     runs-on: ${{ matrix.arch.runner }}
     needs: [ check-for-changes ]
     permissions:
-      contents: read
-      packages: write
+        contents: read
     strategy:
       fail-fast: false
       matrix:
@@ -128,8 +127,6 @@ jobs:
       fail-fast: false
       matrix:
         php: [ '7.4', '8.0', '8.1', '8.2', '8.3', '8.4', '8.5', '8.6' ]
-    permissions:
-      packages: write
     needs:
       - build-php-images
     env:
@@ -190,7 +187,6 @@ jobs:
     needs: complete-php-images-platform
     permissions:
       contents: read
-      packages: write
     strategy:
       fail-fast: false
       matrix:
@@ -262,8 +258,6 @@ jobs:
       fail-fast: false
       matrix:
         php: [ '7.4', '8.0', '8.1', '8.2', '8.3', '8.4', '8.5', '8.6' ]
-    permissions:
-      packages: write
     needs:
       - build-cli-images
     env:
