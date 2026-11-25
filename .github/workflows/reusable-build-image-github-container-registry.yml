@@ -51,6 +51,8 @@ jobs:
         platform: ${{ fromJSON( inputs.platforms ) }}
     env:
       ARCH_TYPE: ${{ matrix.platform.type }}
+      # A single summary of every published image is added by the calling workflow instead.
+      DOCKER_BUILD_SUMMARY: false
 
     steps:
       - name: Prepare

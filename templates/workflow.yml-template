@@ -12,6 +12,7 @@ on:
       - 'images/**'
       - '.github/workflows/docker-hub.yml'
       - '.github/workflows/reusable-build-image-docker-hub.yml'
+      - '.github/workflows/reusable-package-images-docker-hub.yml'
   workflow_dispatch:
   # Once weekly On Sundays at 00:00 UTC.
   schedule:
@@ -96,23 +97,20 @@ jobs:
 
   package-php-images:
     name: Package & Publish PHP Images
-    runs-on: ubuntu-26.04
     needs: [ build-php-images ]
 %%GITHUB%%
     permissions:
       packages: write
 %%/GITHUB%%
-    strategy:
-      fail-fast: false
-      matrix:
-        php: [ %%PHP_VERSION_LIST%% ]
-    env:
-      IMAGE_TYPE: php
-      PHP_VERSION: ${{ matrix.php }}
-      IMAGE: %%GITHUB%%${{ vars.GHCR_PHP_IMAGE }}%%/GITHUB%%%%DOCKER_HUB%%${{ vars.DOCKERHUB_PHP_IMAGE }}%%/DOCKER_HUB%%
-
-    steps:
-%%PACKAGE_STEPS%%
+    uses: ./.github/workflows/%%REUSABLE_PACKAGE_WORKFLOW%%
+    with:
+      image-type: php
+      php-versions: >-
+        [ %%PHP_VERSION_JSON%% ]
+%%DOCKER_HUB%%
+    secrets:
+      DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+%%/DOCKER_HUB%%
 
   build-cli-images:
     name: CLI on PHP ${{ matrix.php }}
@@ -142,20 +140,55 @@ jobs:
 
   package-cli-images:
     name: Package & Publish CLI Images
-    runs-on: ubuntu-26.04
     needs: [ build-cli-images ]
 %%GITHUB%%
     permissions:
       packages: write
 %%/GITHUB%%
-    strategy:
-      fail-fast: false
-      matrix:
-        php: [ %%PHP_VERSION_LIST%% ]
-    env:
-      IMAGE_TYPE: cli
-      PHP_VERSION: ${{ matrix.php }}
-      IMAGE: %%GITHUB%%${{ vars.GHCR_CLI_IMAGE }}%%/GITHUB%%%%DOCKER_HUB%%${{ vars.DOCKERHUB_CLI_IMAGE }}%%/DOCKER_HUB%%
+    uses: ./.github/workflows/%%REUSABLE_PACKAGE_WORKFLOW%%
+    with:
+      image-type: cli
+      php-versions: >-
+        [ %%PHP_VERSION_JSON%% ]
+%%DOCKER_HUB%%
+    secrets:
+      DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+%%/DOCKER_HUB%%
+
+  summary:
+    name: Summary
+    runs-on: ubuntu-26.04
+    needs: [ package-php-images, package-cli-images ]
+    # Summarize the images that were published, even when some failed.
+    if: ${{ !cancelled() }}
+    permissions: {}
 
     steps:
-%%PACKAGE_STEPS%%
+      - name: Download image details
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          path: ${{ runner.temp }}/image-details
+          pattern: image-details-*
+          merge-multiple: true
+
+      - name: Write the summary
+        run: |
+          shopt -s nullglob
+          files=( "$RUNNER_TEMP"/image-details/*.json )
+
+          {
+            echo '## Published images'
+            echo
+
+            if (( ${#files[@]} == 0 )); then
+              echo 'No images were published.'
+            else
+              echo '| Image | Platforms | Digest |'
+              echo '| --- | --- | --- |'
+              jq -rs '
+                sort_by( ( .type != "php" ), ( .php | split( "." ) | map( tonumber ) ) )
+                | .[]
+                | "| \( .url as $url | .tags | map( "[`\( . )`](\( $url ))" ) | join( "<br>" ) ) | \( .platforms | join( ", " ) ) | `\( .digest[0:19] )` |"
+              ' "${files[@]}"
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"

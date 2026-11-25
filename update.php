@@ -391,9 +391,10 @@ foreach ( $php_versions as $version => $images ) {
 /*
  * Generate the GitHub Actions workflows.
  *
- * Each registry gets a workflow that builds the images for every version of PHP, and a reusable workflow
- * that it calls to build one image on each platform. The GitHub Actions UI groups the jobs of each call
- * to the reusable workflow under the calling job, so each platform build is listed under its version.
+ * Each registry gets a workflow that builds the images for every version of PHP, and two reusable workflows
+ * that it calls: one that builds an image for one version of PHP on each platform, and one that packages and
+ * publishes the images for every version of PHP. The GitHub Actions UI groups the jobs of each call to a
+ * reusable workflow under the calling job.
  *
  * The key of each registry is the template section that is removed when generating its workflows.
  */
@@ -403,17 +404,24 @@ $workflow_registries = array(
 );
 
 $workflow_template = file_get_contents( 'templates/workflow.yml-template' );
-$workflow_template = str_replace( '%%PACKAGE_STEPS%%', rtrim( file_get_contents( 'templates/workflow-package-steps.yml-template' ) ), $workflow_template );
 $workflow_template = str_replace( '%%PHP_VERSION_LIST%%', "'" . implode( "', '", array_keys( $php_versions ) ) . "'", $workflow_template );
+$workflow_template = str_replace( '%%PHP_VERSION_JSON%%', '"' . implode( '", "', array_keys( $php_versions ) ) . '"', $workflow_template );
 
-$reusable_workflow_template = file_get_contents( 'templates/reusable-build-image.yml-template' );
+$build_workflow_template   = file_get_contents( 'templates/reusable-build-image.yml-template' );
+$package_workflow_template = file_get_contents( 'templates/reusable-package-images.yml-template' );
 
 foreach ( $workflow_registries as $registry => $remove_pattern ) {
-	$reusable_workflow_name = "reusable-build-image-$registry.yml";
+	$build_workflow_name   = "reusable-build-image-$registry.yml";
+	$package_workflow_name = "reusable-package-images-$registry.yml";
 
 	$workflows = array(
-		"$registry.yml"         => str_replace( '%%REUSABLE_WORKFLOW%%', $reusable_workflow_name, $workflow_template ),
-		$reusable_workflow_name => $reusable_workflow_template,
+		"$registry.yml"        => str_replace(
+			array( '%%REUSABLE_WORKFLOW%%', '%%REUSABLE_PACKAGE_WORKFLOW%%' ),
+			array( $build_workflow_name, $package_workflow_name ),
+			$workflow_template
+		),
+		$build_workflow_name   => $build_workflow_template,
+		$package_workflow_name => $package_workflow_template,
 	);
 
 	foreach ( $workflows as $name => $workflow_contents ) {

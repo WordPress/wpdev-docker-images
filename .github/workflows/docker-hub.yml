@@ -16,6 +16,7 @@ on:
       - 'images/**'
       - '.github/workflows/docker-hub.yml'
       - '.github/workflows/reusable-build-image-docker-hub.yml'
+      - '.github/workflows/reusable-package-images-docker-hub.yml'
   workflow_dispatch:
   # Once weekly On Sundays at 00:00 UTC.
   schedule:
@@ -57,58 +58,14 @@ jobs:
 
   package-php-images:
     name: Package & Publish PHP Images
-    runs-on: ubuntu-26.04
     needs: [ build-php-images ]
-    strategy:
-      fail-fast: false
-      matrix:
-        php: [ '7.4', '8.0', '8.1', '8.2', '8.3', '8.4', '8.5', '8.6' ]
-    env:
-      IMAGE_TYPE: php
-      PHP_VERSION: ${{ matrix.php }}
-      IMAGE: ${{ vars.DOCKERHUB_PHP_IMAGE }}
-
-    steps:
-      - name: Download digests
-        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
-        with:
-          path: ${{ runner.temp }}/digests
-          pattern: digests-${{ env.IMAGE_TYPE }}-${{ env.PHP_VERSION }}-*
-          merge-multiple: true
-
-      - name: Login to Registry
-        uses: docker/login-action@8aa5831fb8d48d8f76594c7ddde61ae58019f550 # v4.8.0
-        with:
-          username: ${{ vars.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069 # v4.4.1
-
-      - name: Docker meta
-        id: meta
-        uses: docker/metadata-action@dc802804100637a589fabce1cb79ff13a1411302 # v6.2.0
-        with:
-          images: ${{ env.IMAGE }}
-          tags: |
-            type=raw,value=${{ env.PHP_VERSION }}-fpm${{ env.PR_TAG }}
-            type=raw,value=latest${{ env.PR_TAG }},enable=${{ '8.3' == env.PHP_VERSION }}
-
-      - name: Create manifest list and push
-        working-directory: ${{ runner.temp }}/digests
-        run: |
-          mapfile -t tags < <(jq -r '.tags[] | "--tag", .' <<< "$DOCKER_METADATA_OUTPUT_JSON")
-          sources=()
-          for digest in *; do
-            sources+=("$IMAGE@sha256:$digest")
-          done
-          docker buildx imagetools create "${tags[@]}" "${sources[@]}"
-
-      - name: Inspect image
-        env:
-          VERSION: ${{ steps.meta.outputs.version }}
-        run: |
-          docker buildx imagetools inspect "$IMAGE:$VERSION"
+    uses: ./.github/workflows/reusable-package-images-docker-hub.yml
+    with:
+      image-type: php
+      php-versions: >-
+        [ "7.4", "8.0", "8.1", "8.2", "8.3", "8.4", "8.5", "8.6" ]
+    secrets:
+      DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
 
   build-cli-images:
     name: CLI on PHP ${{ matrix.php }}
@@ -133,55 +90,49 @@ jobs:
 
   package-cli-images:
     name: Package & Publish CLI Images
-    runs-on: ubuntu-26.04
     needs: [ build-cli-images ]
-    strategy:
-      fail-fast: false
-      matrix:
-        php: [ '7.4', '8.0', '8.1', '8.2', '8.3', '8.4', '8.5', '8.6' ]
-    env:
-      IMAGE_TYPE: cli
-      PHP_VERSION: ${{ matrix.php }}
-      IMAGE: ${{ vars.DOCKERHUB_CLI_IMAGE }}
+    uses: ./.github/workflows/reusable-package-images-docker-hub.yml
+    with:
+      image-type: cli
+      php-versions: >-
+        [ "7.4", "8.0", "8.1", "8.2", "8.3", "8.4", "8.5", "8.6" ]
+    secrets:
+      DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+
+  summary:
+    name: Summary
+    runs-on: ubuntu-26.04
+    needs: [ package-php-images, package-cli-images ]
+    # Summarize the images that were published, even when some failed.
+    if: ${{ !cancelled() }}
+    permissions: {}
 
     steps:
-      - name: Download digests
+      - name: Download image details
         uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
-          path: ${{ runner.temp }}/digests
-          pattern: digests-${{ env.IMAGE_TYPE }}-${{ env.PHP_VERSION }}-*
+          path: ${{ runner.temp }}/image-details
+          pattern: image-details-*
           merge-multiple: true
 
-      - name: Login to Registry
-        uses: docker/login-action@8aa5831fb8d48d8f76594c7ddde61ae58019f550 # v4.8.0
-        with:
-          username: ${{ vars.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069 # v4.4.1
-
-      - name: Docker meta
-        id: meta
-        uses: docker/metadata-action@dc802804100637a589fabce1cb79ff13a1411302 # v6.2.0
-        with:
-          images: ${{ env.IMAGE }}
-          tags: |
-            type=raw,value=${{ env.PHP_VERSION }}-fpm${{ env.PR_TAG }}
-            type=raw,value=latest${{ env.PR_TAG }},enable=${{ '8.3' == env.PHP_VERSION }}
-
-      - name: Create manifest list and push
-        working-directory: ${{ runner.temp }}/digests
+      - name: Write the summary
         run: |
-          mapfile -t tags < <(jq -r '.tags[] | "--tag", .' <<< "$DOCKER_METADATA_OUTPUT_JSON")
-          sources=()
-          for digest in *; do
-            sources+=("$IMAGE@sha256:$digest")
-          done
-          docker buildx imagetools create "${tags[@]}" "${sources[@]}"
+          shopt -s nullglob
+          files=( "$RUNNER_TEMP"/image-details/*.json )
 
-      - name: Inspect image
-        env:
-          VERSION: ${{ steps.meta.outputs.version }}
-        run: |
-          docker buildx imagetools inspect "$IMAGE:$VERSION"
+          {
+            echo '## Published images'
+            echo
+
+            if (( ${#files[@]} == 0 )); then
+              echo 'No images were published.'
+            else
+              echo '| Image | Platforms | Digest |'
+              echo '| --- | --- | --- |'
+              jq -rs '
+                sort_by( ( .type != "php" ), ( .php | split( "." ) | map( tonumber ) ) )
+                | .[]
+                | "| \( .url as $url | .tags | map( "[`\( . )`](\( $url ))" ) | join( "<br>" ) ) | \( .platforms | join( ", " ) ) | `\( .digest[0:19] )` |"
+              ' "${files[@]}"
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
